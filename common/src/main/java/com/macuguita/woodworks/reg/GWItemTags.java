@@ -27,12 +27,17 @@ import com.macuguita.woodworks.GuitaWoodworks;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 
 public class GWItemTags {
 
 	public static TagKey<Item> STUMP = createTag("stump");
+	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
 
 	private static TagKey<Item> createTag(String name) {
 		return TagKey.of(RegistryKeys.ITEM, GuitaWoodworks.id(name));
+	}
+	private static TagKey<Item> createCommonTag(String name) {
+		return TagKey.of(RegistryKeys.ITEM, Identifier.of("c", name));
 	}
 }

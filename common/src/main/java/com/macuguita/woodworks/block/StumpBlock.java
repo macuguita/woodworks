@@ -25,6 +25,8 @@ package com.macuguita.woodworks.block;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.macuguita.woodworks.reg.GWItemTags;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -36,6 +38,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -96,6 +99,7 @@ public class StumpBlock extends Block implements SittableBlock, Waterloggable {
 				return ActionResult.SUCCESS;
 			}
 		}
+		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
 		return this.sitOn(world, pos, player, null) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 

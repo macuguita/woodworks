@@ -25,6 +25,7 @@ package com.macuguita.woodworks.fabric;
 import com.macuguita.woodworks.GuitaWoodworks;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
 public final class GuitaWoodworksFabric implements ModInitializer {
 
