@@ -13,7 +13,7 @@ object BuildConfig {
     val mavenGroup: String = "com.macuguita.woodworks"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
-    val description: String = "guita's woodworks"
+    val description: String = "Mod that adds all kinds of wood blocks! "
     val license: String = "MIT"
     val website: String = "https://macuguita.com/"
     val source: String = "https://github.com/macuguita/woodworks"
