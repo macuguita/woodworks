@@ -67,7 +67,7 @@ public class GWModelProvider extends FabricModelProvider {
 			Optional.empty(),
 			TextureKey.TOP, TextureKey.SIDE);
 
-	public void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block) {
+	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block) {
 		Identifier log = Registries.BLOCK.getId(block);
 		boolean isNether = log.getPath().matches(".*(crimson|warped).*");
 		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, isNether ? getWoodTypeId(block, "stump", "stem") : getWoodTypeId(block, "stump", "log")).put(TextureKey.TOP, TextureMap.getSubId(block, "_top"));
@@ -76,7 +76,7 @@ public class GWModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.registerParentedItemModel(block, identifier);
 	}
 
-	public static Identifier getWoodTypeId(Block block, String target, String replacement) {
+	private static Identifier getWoodTypeId(Block block, String target, String replacement) {
 		Identifier original = Registries.BLOCK.getId(block);
 		String newPath = "block/" + original.getPath().replace(target, replacement);
 		return Identifier.ofVanilla(newPath);

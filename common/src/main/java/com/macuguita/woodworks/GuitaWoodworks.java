@@ -24,7 +24,7 @@ package com.macuguita.woodworks;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.macuguita.woodworks.block.StumpBlock;
+import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
@@ -57,7 +57,7 @@ public final class GuitaWoodworks {
 			Block strippedBlock = null;
 			if (isPresent)
 				strippedBlock = GWObjects.STRIPPED_STUMP_BLOCKS.stream().skip(index.get()).findFirst().get().get();
-			if (strippedBlock != null) StumpBlock.STRIPPED_STUMPS.put(regEntry.get(), strippedBlock);
+			if (strippedBlock != null) StumpSeatBlock.STRIPPED_STUMPS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
 			}

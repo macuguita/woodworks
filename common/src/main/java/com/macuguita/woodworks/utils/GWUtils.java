@@ -22,7 +22,7 @@
 
 package com.macuguita.woodworks.utils;
 
-import com.macuguita.woodworks.block.StumpBlock;
+import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.mixin.AxeItemAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
@@ -45,11 +45,11 @@ public class GWUtils {
 	}
 
 	public static Block getStrippedLog(Block log) {
-		return ((AxeItemAccessor) Items.DIAMOND_AXE).branches$getStrippedBlocks().get(log);
+		return AxeItemAccessor.branches$getStrippedBlocks().get(log);
 	}
 
 	public static Block getStrippedStump(Block stump) {
-		return StumpBlock.STRIPPED_STUMPS.get(stump);
+		return StumpSeatBlock.STRIPPED_STUMPS.get(stump);
 	}
 
 	public static Block getLogFromStump(Block stump) {

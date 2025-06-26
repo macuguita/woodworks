@@ -35,7 +35,7 @@ public class ClientPlatformUtils {
 
 	@ExpectPlatform
 	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererFactory<T> factory) {
-		throw new NotImplementedException();
+		throw new AssertionError();
 	}
 
 }

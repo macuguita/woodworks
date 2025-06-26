@@ -24,6 +24,7 @@ package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
@@ -42,6 +43,12 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+		});
+		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.CONNECTING).add(regEntry.get());
+		});
+		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.CONNECTING).add(regEntry.get());
 		});
 	}
 }

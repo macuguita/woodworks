@@ -31,6 +31,7 @@ import net.minecraft.registry.tag.TagKey;
 public class GWBlockTags {
 
 	public static TagKey<Block> STUMP = createTag("stump");
+	public static TagKey<Block> CONNECTING= createTag("connecting");
 
 	private static TagKey<Block> createTag(String name) {
 		return TagKey.of(RegistryKeys.BLOCK, GuitaWoodworks.id(name));

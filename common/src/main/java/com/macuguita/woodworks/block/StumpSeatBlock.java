@@ -55,14 +55,14 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class StumpBlock extends Block implements SittableBlock, Waterloggable {
+public class StumpSeatBlock extends Block implements SittableBlock, Waterloggable {
 
 	public static final Map<Block, Block> STRIPPED_STUMPS = new HashMap<>();
 	public static final Box SEAT = new Box(0.125, 0, 0.125, 0.875, 0.5, 0.875);
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 	public static final VoxelShape VOXEL_SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 8.0, 14.0);
 
-	public StumpBlock(Settings settings) {
+	public StumpSeatBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
 				.with(WATERLOGGED, false));

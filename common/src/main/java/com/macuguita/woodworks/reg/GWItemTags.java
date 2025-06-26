@@ -32,7 +32,9 @@ import net.minecraft.util.Identifier;
 public class GWItemTags {
 
 	public static TagKey<Item> STUMP = createTag("stump");
+	public static TagKey<Item> CONNECTING = createCommonTag("connecting");
 	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
+	public static TagKey<Item> SHEARS = createCommonTag("tools/shear");
 
 	private static TagKey<Item> createTag(String name) {
 		return TagKey.of(RegistryKeys.ITEM, GuitaWoodworks.id(name));

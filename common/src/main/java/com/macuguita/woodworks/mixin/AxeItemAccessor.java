@@ -34,5 +34,7 @@ import net.minecraft.item.AxeItem;
 public interface AxeItemAccessor {
 
 	@Accessor("STRIPPED_BLOCKS")
-	Map<Block, Block> branches$getStrippedBlocks();
+	static Map<Block, Block> branches$getStrippedBlocks() {
+		throw new AssertionError();
+	}
 }
