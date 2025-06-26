@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
-
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
@@ -36,8 +35,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-
-import net.minecraft.registry.tag.TagKey;
 
 public class GWLangProvider extends FabricLanguageProvider {
 

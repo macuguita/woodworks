@@ -27,8 +27,6 @@ import com.macuguita.woodworks.mixin.AxeItemAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.client.TextureKey;
-import net.minecraft.data.client.TextureMap;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;

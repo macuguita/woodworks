@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.reg.GWObjects;
-
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;

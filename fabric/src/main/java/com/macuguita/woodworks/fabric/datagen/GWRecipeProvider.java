@@ -22,12 +22,10 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.macuguita.woodworks.reg.GWObjects;
-
 import com.macuguita.woodworks.utils.GWUtils;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeExporter;
@@ -35,7 +33,8 @@ import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 
-import java.util.concurrent.CompletableFuture;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
 public class GWRecipeProvider extends FabricRecipeProvider {
 
