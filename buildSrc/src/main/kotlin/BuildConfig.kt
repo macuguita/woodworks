@@ -21,4 +21,6 @@ object BuildConfig {
 
     val fabricVersion: String = "0.116.3+" + minecraftVersion
     val macuLibVersion: String = "1.0.5"
+    val modmenuVersion: String = "11.0.3"
+    val reiVersion: String = "16.0.799"
 }

@@ -27,6 +27,8 @@ import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
+import com.macuguita.woodworks.utils.GWUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -34,6 +36,8 @@ import net.minecraft.registry.RegistryWrapper;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+
+import net.minecraft.registry.tag.TagKey;
 
 public class GWLangProvider extends FabricLanguageProvider {
 
@@ -43,9 +47,14 @@ public class GWLangProvider extends FabricLanguageProvider {
 
 	@Override
 	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
-		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> generateBlockTranslations(translationBuilder, regEntry.get()));
+		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateBlockTranslations(translationBuilder, GWUtils.getStrippedStump(regEntry.get()));
+		});
 
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
+		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
+		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");
 	}
 
 	private String capitalizeString(String string) {

@@ -28,7 +28,6 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -43,8 +42,6 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
-			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*"))
-				getOrCreateTagBuilder(BlockTags.LOGS_THAT_BURN).add(regEntry.get());
 		});
 	}
 }

@@ -35,5 +35,6 @@ public class GuitaWoodworksDatagen implements DataGeneratorEntrypoint {
 		pack.addProvider(GWItemTagProvider::new);
 		pack.addProvider(GWLangProvider::new);
 		pack.addProvider(GWModelProvider::new);
+		pack.addProvider(GWRecipeProvider::new);
 	}
 }

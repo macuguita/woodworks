@@ -61,6 +61,9 @@ dependencies {
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-fabric")
+
+    modApi("com.terraformersmc:modmenu:${BuildConfig.modmenuVersion}")
+    modApi("me.shedaniel:RoughlyEnoughItems-fabric:${BuildConfig.reiVersion}")
 }
 
 tasks.processResources {

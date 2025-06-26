@@ -20,28 +20,19 @@
  * SOFTWARE.
  */
 
-package com.macuguita.woodworks.fabric.datagen;
+package com.macuguita.woodworks.mixin;
 
-import java.util.concurrent.CompletableFuture;
+import net.minecraft.block.Block;
+import net.minecraft.item.AxeItem;
 
-import com.macuguita.woodworks.reg.GWItemTags;
-import com.macuguita.woodworks.reg.GWObjects;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.registry.RegistryWrapper;
+import java.util.Map;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+@Mixin(AxeItem.class)
+public interface AxeItemAccessor {
 
-public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
-
-	public GWItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
-		super(output, completableFuture);
-	}
-
-	@Override
-	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
-		});
-	}
+	@Accessor("STRIPPED_BLOCKS")
+	Map<Block, Block> branches$getStrippedBlocks();
 }

@@ -24,8 +24,18 @@ allprojects {
         flatDir {
             dirs("mods")
         }
-        maven("https://api.modrinth.com/maven")
-        maven("https://maven.terraformersmc.com/releases/")
+        maven {
+            name = "Modrinth maven"
+            url = uri("https://api.modrinth.com/maven")
+        }
+        maven {
+            name = "Terraformers MC"
+            url = uri("https://maven.terraformersmc.com/releases/")
+        }
+        maven {
+            name = "Shedaniel's maven"
+            url = uri("https://maven.shedaniel.me/")
+        }
     }
 }
 

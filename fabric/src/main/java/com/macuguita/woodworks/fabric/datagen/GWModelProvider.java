@@ -27,6 +27,8 @@ import java.util.Optional;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.reg.GWObjects;
 
+import com.macuguita.woodworks.utils.GWUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.BlockStateVariant;
@@ -44,30 +46,27 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 public class GWModelProvider extends FabricModelProvider {
 
-	private static final Model STUMP = new Model(
-			Optional.of(GuitaWoodworks.id("block/template_stump")),
-			Optional.empty(),
-			TextureKey.TOP, TextureKey.SIDE);
-
 	public GWModelProvider(FabricDataOutput output) {
 		super(output);
 	}
 
-	public static Identifier getWoodTypeId(Block block, String target, String replacement) {
-		Identifier original = Registries.BLOCK.getId(block);
-		String newPath = "block/" + original.getPath().replace(target, replacement);
-		return Identifier.ofVanilla(newPath);
-	}
-
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> registerStump(blockStateModelGenerator, regEntry.get()));
+		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
+			registerStump(blockStateModelGenerator, regEntry.get());
+			registerStump(blockStateModelGenerator, GWUtils.getStrippedStump(regEntry.get()));
+		});
 	}
 
 	@Override
 	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 
 	}
+
+	private static final Model STUMP = new Model(
+			Optional.of(GuitaWoodworks.id("block/template_stump")),
+			Optional.empty(),
+			TextureKey.TOP, TextureKey.SIDE);
 
 	public void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block) {
 		Identifier log = Registries.BLOCK.getId(block);
@@ -78,4 +77,9 @@ public class GWModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.registerParentedItemModel(block, identifier);
 	}
 
+	public static Identifier getWoodTypeId(Block block, String target, String replacement) {
+		Identifier original = Registries.BLOCK.getId(block);
+		String newPath = "block/" + original.getPath().replace(target, replacement);
+		return Identifier.ofVanilla(newPath);
+	}
 }

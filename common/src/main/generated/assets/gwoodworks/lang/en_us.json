@@ -19,5 +19,7 @@
   "block.gwoodworks.stripped_spruce_stump": "Stripped Spruce Stump",
   "block.gwoodworks.stripped_warped_stump": "Stripped Warped Stump",
   "block.gwoodworks.warped_stump": "Warped Stump",
-  "itemGroup.gwoodworks.gwoodworks": "guita's Woodworks"
+  "itemGroup.gwoodworks.gwoodworks": "guita's Woodworks",
+  "tag.block.gwoodworks.stump": "Stump",
+  "tag.item.gwoodworks.stump": "Stump"
 }
