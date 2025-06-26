@@ -117,24 +117,9 @@ jobs:
             echo "Warning: No neoforge JAR found in neoforge/build/libs/"
           fi
 
-      # Create a single ZIP archive of all the renamed artifacts
-      - name: Create combined ZIP archive
-        id: create_zip # Add an ID to this step to check its success
-        run: |
-          # Check if the combined-artifacts directory is not empty before zipping
-          if [ "$(ls -A combined-artifacts/)" ]; then
-            zip -r all-mod-artifacts.zip combined-artifacts/
-            echo "Created all-mod-artifacts.zip"
-            echo "zip_created=true" >> $GITHUB_OUTPUT # Set output for conditional upload
-          else
-            echo "No artifacts found to zip. Skipping ZIP creation."
-            echo "zip_created=false" >> $GITHUB_OUTPUT
-          fi
-
       # Upload the single combined ZIP file
       - name: Upload combined artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
-          name: all-mod-artifacts-zip
-          path: all-mod-artifacts.zip
-        if: success() && steps.create_zip.outputs.zip_created == 'true' # Moved 'if' here
+          name: Artifacts.zip
+          path: combined-artifacts/
