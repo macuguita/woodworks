@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "${modId}",
+  "version": "${version}-fabric",
+  "name": "${modName}",
+  "description": "${description}",
+  "authors": [
+    "macuguita"
+  ],
+  "contact": {
+    "homepage": "${website}",
+    "sources": "${source}",
+    "issues": "${issues}"
+  },
+  "license": "${license}",
+  "icon": "assets/${modId}/logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.macuguita.woodworks.fabric.GuitaWoodworksFabric"
+    ],
+    "client": [
+      "com.macuguita.woodworks.client.fabric.GuitaWoodworksFabricClient"
+    ],
+    "fabric-datagen": [
+      "com.macuguita.woodworks.fabric.datagen.GuitaWoodworksDatagen"
+    ]
+  },
+  "mixins": [
+    "${modId}.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loaderVersion}",
+    "minecraft": "${minecraftVersionRange}",
+    "java": ">=21",
+    "macu_lib": ">=${macuLibVersion}-${minecraftVersion}",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "everycomp": "*"
+  }
+}

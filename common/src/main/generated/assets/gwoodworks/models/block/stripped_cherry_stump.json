@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/stripped_cherry_log",
+    "top": "gwoodworks:block/stripped_cherry_stump_top"
+  }
+}

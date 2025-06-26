@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/stripped_crimson_stem",
+    "top": "gwoodworks:block/stripped_crimson_stump_top"
+  }
+}

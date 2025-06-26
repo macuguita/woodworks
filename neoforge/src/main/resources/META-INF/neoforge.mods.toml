@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "${issues}"
+license = "${license}"
+
+[[mods]]
+modId = "${modId}"
+version = "${version}-neoforge"
+displayName = "${modName}"
+authors = "macuguita"
+description = '''
+${description}
+'''
+displayURL = "${website}"
+logoFile = "assets/${modId}/logo.png"
+
+[[dependencies.${ modId }]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${loaderVersion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraftVersion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "macu_lib"
+type = "required"
+versionRange = "[${macuLibVersion}-${minecraftVersion},)"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "everycomp"
+type = "optional"
+versionRange = "*"
+ordering = "BEFORE"
+side = "BOTH"
+
+[[mixins]]
+config = "${modId}.mixins.json"

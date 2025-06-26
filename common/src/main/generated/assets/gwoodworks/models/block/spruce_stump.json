@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/spruce_log",
+    "top": "gwoodworks:block/spruce_stump_top"
+  }
+}

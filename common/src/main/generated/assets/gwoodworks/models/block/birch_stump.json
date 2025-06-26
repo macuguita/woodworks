@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/birch_log",
+    "top": "gwoodworks:block/birch_stump_top"
+  }
+}
