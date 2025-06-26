@@ -1,37 +1,140 @@
-# Automatically build the project and run any configured tests for every push
-# and submitted pull request. This can help catch issues that only occur on
-# certain platforms or Java versions, and provides a first line of defence
-# against bad commits.
+name: Publish
+on: [ pull_request, push ] # Changed trigger to run on push and pull_request events
 
-name: build
-on: [ pull_request, push ]
+permissions:
+  contents: write
+  packages: write
 
 jobs:
-  build:
-    runs-on: ubuntu-24.04
+  mod-build:
+    name: 📦 Build and Zip Mod Artifacts
+    runs-on: macos-14
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
-      - name: validate gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4
-      - name: setup jdk
-        uses: actions/setup-java@v4
+        uses: actions/checkout@v4.1.1 # This is effectively git clone
+
+      - name: setup JDK 21
+        uses: actions/setup-java@v4.0.0
         with:
-          java-version: '21'
-          distribution: 'microsoft'
+          java-version: 21
+          distribution: 'temurin' # Installs java
+
       - name: make gradle wrapper executable
-        run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build --warning-mode all
-      - uses: actions/upload-artifact@v4.3.0
+        run: chmod +x ./gradlew # Execution workaround for unix-based systems
+
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v3 # Speeds up build time by about 5 mins :P
+
+      - name: Execute Gradle build
+        run: ./gradlew build --warning-mode all # Builds the mod into a jar file
+
+      - name: Get BuildConfig values
+        id: get_build_config_values # <--- Step ID for referencing outputs
+        run: |
+          # --- IMPORTANT: Adjust this path to your BuildConfig.kt file ---
+          # Example assumes it's in buildSrc/src/main/kotlin/BuildConfig.kt
+          BUILD_CONFIG_FILE="./buildSrc/src/main/kotlin/BuildConfig.kt"
+
+          if [ ! -f "$BUILD_CONFIG_FILE" ]; then
+              echo "Error: BuildConfig.kt not found at '$BUILD_CONFIG_FILE'. Please check the path."
+              exit 1
+          fi
+
+          # Extract values using grep and sed, adjusted for Kotlin syntax
+          RAW_MOD_ID=$(grep "val modId: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)"/\1/p')
+          RAW_MC_VERSION=$(grep "val minecraftVersion: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)"/\1/p')
+          
+          # This assumes modVersion is either a direct string or concatenated with minecraftVersion
+          RAW_MOD_VERSION_BASE=$(grep "val modVersion: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)" + minecraftVersion/\1/p')
+
+          if [ -z "$RAW_MOD_VERSION_BASE" ]; then
+            MOD_VERSION=$(grep "val modVersion: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)"/\1/p')
+          else
+            MOD_VERSION="${RAW_MOD_VERSION_BASE}${RAW_MC_VERSION}"
+          fi
+
+          echo "Detected modId: $RAW_MOD_ID"
+          echo "Detected modVersion: $MOD_VERSION"
+          echo "Detected minecraftVersion: $RAW_MC_VERSION"
+
+          # Set outputs for the job
+          echo "mod_name=$RAW_MOD_ID" >> $GITHUB_OUTPUT # Renamed to mod_name for consistency with previous outputs
+          echo "mod_version=$MOD_VERSION" >> $GITHUB_OUTPUT
+          echo "mc_version=$RAW_MC_VERSION" >> $GITHUB_OUTPUT
+
+      # Create a directory to stage all artifacts before zipping
+      - name: Create combined artifacts directory
+        run: mkdir combined-artifacts
+
+      # Locate and rename the common JAR
+      - name: Copy and rename common artifact
+        run: |
+          MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
+          MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          PLATFORM="common"
+          
+          JAR_PATH=$(find common/build/libs -name "*.jar" | head -n 1)
+          if [ -n "$JAR_PATH" ]; then
+            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
+            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
+            echo "Copied common artifact to combined-artifacts/$NEW_FILENAME"
+          else
+            echo "Warning: No common JAR found in common/build/libs/"
+          fi
+
+      # Locate and rename the fabric JAR
+      - name: Copy and rename fabric artifact
+        run: |
+          MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
+          MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          PLATFORM="fabric"
+
+          JAR_PATH=$(find fabric/build/libs -name "*.jar" | head -n 1)
+          if [ -n "$JAR_PATH" ]; then
+            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
+            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
+            echo "Copied fabric artifact to combined-artifacts/$NEW_FILENAME"
+          else
+            echo "Warning: No fabric JAR found in fabric/build/libs/"
+          fi
+
+      # Locate and rename the neoforge JAR
+      - name: Copy and rename neoforge artifact
+        run: |
+          MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
+          MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          PLATFORM="neoforge"
+
+          JAR_PATH=$(find neoforge/build/libs -name "*.jar" | head -n 1)
+          if [ -n "$JAR_PATH" ]; then
+            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
+            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
+            echo "Copied neoforge artifact to combined-artifacts/$NEW_FILENAME"
+          else
+            echo "Warning: No neoforge JAR found in neoforge/build/libs/"
+          fi
+
+      # Create a single ZIP archive of all the renamed artifacts
+      - name: Create combined ZIP archive
+        id: create_zip # Add an ID to this step to check its success
+        run: |
+          # Check if the combined-artifacts directory is not empty before zipping
+          if [ "$(ls -A combined-artifacts/)" ]; then
+            zip -r all-mod-artifacts.zip combined-artifacts/
+            echo "Created all-mod-artifacts.zip"
+            echo "zip_created=true" >> $GITHUB_OUTPUT # Set output for conditional upload
+          else
+            echo "No artifacts found to zip. Skipping ZIP creation."
+            echo "zip_created=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Upload the single combined ZIP file
+      - name: Upload combined artifacts
+        uses: actions/upload-artifact@v4.3.0
         with:
-          name: build-common
-          path: common/build/libs/
-      - uses: actions/upload-artifact@v4.3.0
-        with:
-          name: build-fabric
-          path: fabric/build/libs/
-      - uses: actions/upload-artifact@v4.3.0
-        with:
-          name: build-forge
-          path: forge/build/libs/
+          name: all-mod-artifacts-zip
+          path: all-mod-artifacts.zip
+        if: success() && steps.create_zip.outputs.zip_created == 'true' # Moved 'if' here
