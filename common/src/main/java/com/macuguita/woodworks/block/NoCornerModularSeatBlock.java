@@ -6,6 +6,7 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -89,8 +90,9 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 	@Override
 	public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
 		BlockPos pos = ctx.getBlockPos();
+		Direction dir = ctx.getHorizontalPlayerFacing().getOpposite();
 		BlockState state = this.getDefaultState()
-				.with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())
+				.with(FACING, dir)
 				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
 		return state.with(SHAPE, getShape(state, ctx.getWorld(), pos));
 	}
@@ -101,8 +103,8 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);
 		Direction right = dir.rotateClockwise(Direction.Axis.Y);
 
-		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.CONNECTING);
-		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.CONNECTING);
+		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.CONNECTING) && world.getBlockState(pos.offset(left)).get(FACING) == dir;
+		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.CONNECTING) && world.getBlockState(pos.offset(right)).get(FACING) == dir;
 
 		if (hasLeft && hasRight) {
 			return NoCornerModularSeatProperty.MIDDLE;
@@ -113,6 +115,11 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		} else {
 			return NoCornerModularSeatProperty.SINGLE;
 		}
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState state) {
+		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
 
 	@Override
