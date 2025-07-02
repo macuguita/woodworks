@@ -36,6 +36,21 @@ allprojects {
             name = "Shedaniel's maven"
             url = uri("https://maven.shedaniel.me/")
         }
+        maven {
+            name = "Forge"
+            url = uri("https://maven.minecraftforge.net/")
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Curse maven"
+                    url = uri("https://cursemaven.com")
+                }
+            }
+            filter {
+                includeGroup("curse.maven")
+            }
+        }
     }
 }
 

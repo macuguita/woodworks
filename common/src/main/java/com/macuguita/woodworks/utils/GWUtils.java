@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.utils;
 
+import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.mixin.AxeItemAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
@@ -52,11 +53,8 @@ public class GWUtils {
 		return StumpSeatBlock.STRIPPED_STUMPS.get(stump);
 	}
 
-	public static Block getLogFromStump(Block stump) {
-		Identifier stumpId = Registries.BLOCK.getId(stump);
-		boolean isNether = stumpId.getPath().matches(".*(crimson|warped).*");
-		Identifier log = isNether ? getWoodTypeId(stump, "stump", "stem") : getWoodTypeId(stump, "stump", "log");
-		return Registries.BLOCK.get(log);
+	public static Block getStrippedCarvedLog(Block carvedLog) {
+		return CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.get(carvedLog);
 	}
 
 	public static Identifier getWoodTypeId(Block block, String target, String replacement) {

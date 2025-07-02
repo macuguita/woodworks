@@ -11,6 +11,7 @@
   "block.gwoodworks.spruce_stump": "Spruce Stump",
   "block.gwoodworks.stripped_acacia_stump": "Stripped Acacia Stump",
   "block.gwoodworks.stripped_birch_stump": "Stripped Birch Stump",
+  "block.gwoodworks.stripped_carved_oak_log": "Stripped Carved Oak Log",
   "block.gwoodworks.stripped_cherry_stump": "Stripped Cherry Stump",
   "block.gwoodworks.stripped_crimson_stump": "Stripped Crimson Stump",
   "block.gwoodworks.stripped_dark_oak_stump": "Stripped Dark Oak Stump",
@@ -20,6 +21,10 @@
   "block.gwoodworks.stripped_spruce_stump": "Stripped Spruce Stump",
   "block.gwoodworks.stripped_warped_stump": "Stripped Warped Stump",
   "block.gwoodworks.warped_stump": "Warped Stump",
+  "block_type.gwoodworks.carved_log": "Carved %s Log",
+  "block_type.gwoodworks.stripped_carved_log": "Stripped Carved %s Log",
+  "block_type.gwoodworks.stripped_stump": "Stripped %s Stump",
+  "block_type.gwoodworks.stump": "%s Stump",
   "itemGroup.gwoodworks.gwoodworks": "guita's Woodworks",
   "tag.block.gwoodworks.stump": "Stump",
   "tag.item.gwoodworks.stump": "Stump"

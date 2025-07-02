@@ -3,14 +3,16 @@
   "category": "misc",
   "key": {
     "#": {
-      "item": "minecraft:jungle_log"
+      "item": "minecraft:oak_log"
     }
   },
   "pattern": [
+    "#  ",
+    "#  ",
     "###"
   ],
   "result": {
     "count": 6,
-    "id": "gwoodworks:stripped_jungle_stump"
+    "id": "gwoodworks:stripped_carved_oak_log"
   }
 }

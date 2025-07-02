@@ -50,8 +50,13 @@ public class GWLangProvider extends FabricLanguageProvider {
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateBlockTranslations(translationBuilder, GWUtils.getStrippedCarvedLog(regEntry.get()));
 		});
 
+		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
+		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");
+		translationBuilder.add("block_type.gwoodworks.carved_log", "Carved %s Log");
+		translationBuilder.add("block_type.gwoodworks.stripped_carved_log", "Stripped Carved %s Log");
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
 		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
 		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");

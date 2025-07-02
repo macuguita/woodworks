@@ -20,19 +20,14 @@
  * SOFTWARE.
  */
 
-package com.macuguita.woodworks.fabric;
+package com.macuguita.woodworks.compat;
 
 import com.macuguita.woodworks.GuitaWoodworks;
+import net.mehvahdjukaar.every_compat.api.EveryCompatAPI;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+public class ModCompat {
 
-public final class GuitaWoodworksFabric implements ModInitializer {
-
-	@Override
-	public void onInitialize() {
-		GuitaWoodworks.init();
-		GuitaWoodworks.commonSetup();
-		ConventionalItemTags.BUCKETS
+	public static void init() {
+		EveryCompatAPI.registerModule(new WoodGood(GuitaWoodworks.MOD_ID));
 	}
 }

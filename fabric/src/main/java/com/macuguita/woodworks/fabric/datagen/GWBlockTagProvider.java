@@ -43,6 +43,9 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
 		});
+		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
+		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWBlockTags.CONNECTING).add(regEntry.get());
 		});

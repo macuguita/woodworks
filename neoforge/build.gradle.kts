@@ -55,6 +55,11 @@ dependencies {
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-neoforge")
+    modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
+    modImplementation("net.mehvahdjukaar:moonlight-neoforge:${BuildConfig.moonlightLibVersion}")
+
+    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
+    modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
 
     modApi("me.shedaniel:RoughlyEnoughItems-neoforge:${BuildConfig.reiVersion}")
 }

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_stripped_crimson_stem": {
+    "has_crimson_stem": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:stripped_crimson_stem"
+            "items": "minecraft:crimson_stem"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_stripped_crimson_stem"
+      "has_crimson_stem"
     ]
   ],
   "rewards": {

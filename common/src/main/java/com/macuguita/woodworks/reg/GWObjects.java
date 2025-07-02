@@ -87,6 +87,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> STRIPPED_WARPED_STUMP = createStrippedStump("stripped_warped_stump", Blocks.STRIPPED_WARPED_HYPHAE);
 
 	public static final GuitaRegistryEntry<Block> CARVED_OAK_LOG = createCarvedLog("carved_oak_log", Blocks.OAK_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_OAK_LOG = createStrippedCarvedLog("stripped_carved_oak_log", Blocks.STRIPPED_OAK_WOOD);
 
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
 		return registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
@@ -98,6 +99,10 @@ public class GWObjects {
 
 	public static GuitaRegistryEntry<Block> createCarvedLog(String name, Block wood) {
 		return registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), CARVED_LOG_BLOCKS, CARVED_LOG_ITEMS);
+	}
+
+	public static GuitaRegistryEntry<Block> createStrippedCarvedLog(String name, Block wood) {
+		return registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_CARVED_LOG_BLOCKS, STRIPPED_CARVED_LOG_ITEMS);
 	}
 
 	public static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Supplier<T> block, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {

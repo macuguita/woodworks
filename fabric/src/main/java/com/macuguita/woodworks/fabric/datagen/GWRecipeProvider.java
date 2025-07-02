@@ -23,6 +23,7 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
@@ -30,6 +31,7 @@ import com.macuguita.woodworks.utils.GWUtils;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -44,7 +46,26 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 
 	@Override
 	public void generate(RecipeExporter recipeExporter) {
-		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> createStumpRecipe(recipeExporter, regEntry.get(), GWUtils.getLogFromStump(regEntry.get())));
+		AtomicInteger iterator = new AtomicInteger();
+		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
+			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			iterator.getAndIncrement();
+		});
+		iterator.set(0);
+		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			iterator.getAndIncrement();
+		});
+		iterator.set(0);
+		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			iterator.getAndIncrement();
+		});
+		iterator.set(0);
+		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			iterator.getAndIncrement();
+		});
 	}
 
 	private void createStumpRecipe(RecipeExporter exporter, Block stump, Block log) {
@@ -53,14 +74,15 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 				.input('#', log)
 				.criterion(hasItem(log), conditionsFromItem(log))
 				.offerTo(exporter);
+	}
 
-		Block strippedStump = GWUtils.getStrippedStump(stump);
-		Block strippedLog = GWUtils.getStrippedLog(log);
-
-		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, strippedStump, 6)
+	private void createCarvedLogRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
+		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 6)
+				.pattern("#  ")
+				.pattern("#  ")
 				.pattern("###")
-				.input('#', strippedLog)
-				.criterion(hasItem(strippedLog), conditionsFromItem(strippedLog))
+				.input('#', log)
+				.criterion(hasItem(log), conditionsFromItem(log))
 				.offerTo(exporter);
 	}
 }

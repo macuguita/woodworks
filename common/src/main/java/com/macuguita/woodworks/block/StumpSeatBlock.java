@@ -98,7 +98,7 @@ public class StumpSeatBlock extends Block implements SittableBlock, Waterloggabl
 				return ActionResult.SUCCESS;
 			}
 		}
-		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
+		if (stack.isIn(GWItemTags.WATER_BUCKETS) || stack.isIn(GWItemTags.EMPTY_BUCKETS)) return ActionResult.FAIL;
 		return this.sitOn(world, pos, player, null) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 

@@ -44,6 +44,9 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
 		});
+		GWObjects.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+		});
 		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.CONNECTING).add(regEntry.get());
 		});

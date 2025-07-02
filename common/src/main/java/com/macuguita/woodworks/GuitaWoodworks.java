@@ -24,7 +24,9 @@ package com.macuguita.woodworks;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
+import com.macuguita.woodworks.compat.ModCompat;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
@@ -35,20 +37,30 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class GuitaWoodworks {
 
 	public static final String MOD_ID = "gwoodworks";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static void init() {
 		GWObjects.init();
 		GWEntityTypes.init();
 		GWItemGroups.init();
+		everyCompatModule();
 	}
 
 	public static void commonSetup() {
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				GWUtils.registerFuel(200, regEntry.get());
+			}
+		});
+		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				GWUtils.registerFuel(125, regEntry.get());
 			}
 		});
 		AtomicInteger index = new AtomicInteger();
@@ -63,6 +75,30 @@ public final class GuitaWoodworks {
 			}
 			index.getAndIncrement();
 		});
+		index.set(0);
+		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			boolean isPresent = GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().skip(index.get()).findFirst().isPresent();
+			Block strippedBlock = null;
+			if (isPresent)
+				strippedBlock = GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().skip(index.get()).findFirst().get().get();
+			if (strippedBlock != null) CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(regEntry.get(), strippedBlock);
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
+			}
+			index.getAndIncrement();
+		});
+	}
+
+	private static void everyCompatModule() {
+		try {
+			if (GWUtils.isModLoaded("everycomp")) {
+				ModCompat.init();
+			} else {
+				LOGGER.info("EveryCompat module is not loaded");
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to start EveryComp module", e);
+		}
 	}
 
 	public static Identifier id(String name) {
