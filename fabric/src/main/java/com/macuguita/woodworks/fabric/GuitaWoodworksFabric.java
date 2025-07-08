@@ -33,6 +33,5 @@ public final class GuitaWoodworksFabric implements ModInitializer {
 	public void onInitialize() {
 		GuitaWoodworks.init();
 		GuitaWoodworks.commonSetup();
-		ConventionalItemTags.BUCKETS
 	}
 }

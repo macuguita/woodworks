@@ -63,16 +63,18 @@ public class WoodGood extends SimpleModule {
 		Identifier tab = modRes("main");
 
 		stumpBlock = SimpleEntrySet.builder(WoodType.class, "stump",
-				GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
-				w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
-		)
+						GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: log
+				.createPaletteFromChild("log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/oak_stump_top"))
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)
-				.addTexture(Identifier.ofVanilla("block/oak_log"))
-				.addTexture(modRes("block/oak_stump_top"))
-				.excludeBlockTypes("natures_spirit", "joshua") // They appear with invisible pixels
-				.excludeBlockTypes("terrestria", "sakura")     // being excluded for now
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
@@ -83,13 +85,15 @@ public class WoodGood extends SimpleModule {
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				.requiresChildren("stripped_log")
+				//TEXTURE: stripped_log
+				.createPaletteFromChild("stripped_log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/stripped_oak_stump_top"))
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)
-				.addTexture(Identifier.ofVanilla("block/stripped_oak_log"))
-				.addTexture(modRes("block/stripped_oak_stump_top"))
-				.excludeBlockTypes("natures_spirit", "joshua") // They appear with invisible pixels
-				.excludeBlockTypes("terrestria", "sakura")     // being excluded for now
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
@@ -99,13 +103,15 @@ public class WoodGood extends SimpleModule {
 						GWObjects.CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
+				//TEXTURE: log
+				.createPaletteFromChild("log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/carved_oak_log_inside"))
 				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
 				.setTabKey(tab)
-				.addTexture(Identifier.ofVanilla("block/oak_log"))
-				.addTexture(modRes("block/carved_oak_log_inside"))
-				.excludeBlockTypes("natures_spirit", "joshua") // They appear with invisible pixels
-				.excludeBlockTypes("terrestria", "sakura")     // being excluded for now
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
@@ -115,13 +121,15 @@ public class WoodGood extends SimpleModule {
 						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
+				//TEXTURE: stripped_log
+				.createPaletteFromChild("stripped_log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/stripped_carved_oak_log_inside"))
 				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
 				.setTabKey(tab)
-				.addTexture(Identifier.ofVanilla("block/stripped_oak_log"))
-				.addTexture(modRes("block/stripped_carved_oak_log_inside"))
-				.excludeBlockTypes("natures_spirit", "joshua") // They appear with invisible pixels
-				.excludeBlockTypes("terrestria", "sakura")     // being excluded for now
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
@@ -162,7 +170,7 @@ public class WoodGood extends SimpleModule {
 				Identifier id = Utils.getID(block);
 
 				try (TextureImage topTexture = TextureImage.open(manager,
-							 RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+						RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
 					String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak");
 
@@ -206,7 +214,7 @@ public class WoodGood extends SimpleModule {
 				try (TextureImage carvedLogInsideTexture = TextureImage.open(manager,
 						RPUtils.findFirstBlockTextureLocation(manager, block));
 					 TextureImage sideTexture = TextureImage.open(manager,
-						RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE))) {
+							 RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE))) {
 
 					String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/carved_oak_log_inside", w, id, "oak");
 
