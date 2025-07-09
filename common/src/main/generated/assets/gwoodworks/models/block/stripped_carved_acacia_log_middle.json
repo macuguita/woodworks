@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_middle",
+  "textures": {
+    "inside": "gwoodworks:block/stripped_carved_acacia_log_inside",
+    "side": "minecraft:block/stripped_acacia_log"
+  }
+}

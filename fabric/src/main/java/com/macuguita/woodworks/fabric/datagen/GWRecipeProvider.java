@@ -53,7 +53,7 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 		});
 		iterator.set(0);
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
 			iterator.getAndIncrement();
 		});
 		iterator.set(0);
@@ -63,7 +63,7 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 		});
 		iterator.set(0);
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
+			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
 			iterator.getAndIncrement();
 		});
 	}

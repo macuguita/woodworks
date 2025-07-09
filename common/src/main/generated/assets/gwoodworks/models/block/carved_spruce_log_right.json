@@ -1,0 +1,8 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_right",
+  "textures": {
+    "inside": "gwoodworks:block/carved_spruce_log_inside",
+    "side": "minecraft:block/spruce_log",
+    "top": "minecraft:block/spruce_log_top"
+  }
+}

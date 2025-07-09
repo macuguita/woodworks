@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cherry_log": {
+    "has_stripped_cherry_log": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:cherry_log"
+            "items": "minecraft:stripped_cherry_log"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_cherry_log"
+      "has_stripped_cherry_log"
     ]
   ],
   "rewards": {

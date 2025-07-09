@@ -68,6 +68,7 @@ public class GWModelProvider extends FabricModelProvider {
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			registerCarvedLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
 			registerCarvedLog(blockStateModelGenerator, GWUtils.getStrippedCarvedLog(regEntry.get()), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
+			iterator.getAndIncrement();
 		});
 	}
 
