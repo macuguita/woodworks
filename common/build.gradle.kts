@@ -25,5 +25,10 @@ dependencies {
         // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.4-fabric")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
-    modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
+    val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
+    if (isMyPc) {
+        modImplementation("net.mehvahdjukaar:moonlight:${BuildConfig.moonlightLibVersion}")
+    } else {
+        modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
+    }
 }

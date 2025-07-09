@@ -60,12 +60,16 @@ dependencies {
     "shadowBundle"(project(":common", "transformProductionFabric"))
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
-//    modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
 
         // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-fabric")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
-    modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
+    val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
+    if (isMyPc) {
+        modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
+    } else {
+        modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
+    }
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
 
         // Other Mavens
