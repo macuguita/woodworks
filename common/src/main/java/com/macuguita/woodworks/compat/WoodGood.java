@@ -324,7 +324,7 @@ public class WoodGood extends SimpleModule {
 			shortenedIdenfity = shortenedId;
 
 			/// ========== INCLUDE VANILLA TYPE ========== \\\
-			if (isWoodFrom(MOD_ID, "", "", "minecraft:(acacia|jungle|dark_oak|spruce|mangrove|cherry)", "(stripped_)?carved_\\w+_log")) return false;
+			//if (isWoodFrom(MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?carved_\\w+_log")) return false;
 
 			return null;
 		}
