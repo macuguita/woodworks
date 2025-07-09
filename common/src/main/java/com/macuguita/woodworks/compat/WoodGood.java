@@ -110,6 +110,7 @@ public class WoodGood extends SimpleModule {
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
+				//TEXTURE: manually generated texture below (carved_oak_log_inside.png)
 				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
 				.setTabKey(tab)
@@ -126,6 +127,7 @@ public class WoodGood extends SimpleModule {
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
+				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
 				.setTabKey(tab)
