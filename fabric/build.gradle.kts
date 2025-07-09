@@ -60,12 +60,16 @@ dependencies {
     "shadowBundle"(project(":common", "transformProductionFabric"))
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
+//    modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
+
+        // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-fabric")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
-    modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
-
-    modImplementation("com.github.glitchfiend:TerraBlender-fabric:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
+    modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
+
+        // Other Mavens
+    modImplementation("com.github.glitchfiend:TerraBlender-fabric:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
 
     modApi("com.terraformersmc:modmenu:${BuildConfig.modmenuVersion}")
     modApi("me.shedaniel:RoughlyEnoughItems-fabric:${BuildConfig.reiVersion}")

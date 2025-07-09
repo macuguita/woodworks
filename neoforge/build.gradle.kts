@@ -54,12 +54,15 @@ dependencies {
     "shadowBundle"(project(":common", "transformProductionNeoForge"))
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
+//    modImplementation("net.mehvahdjukaar:moonlight-neoforge:${BuildConfig.moonlightLibVersion}")
+
+        // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-neoforge")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
-    modImplementation("net.mehvahdjukaar:moonlight-neoforge:${BuildConfig.moonlightLibVersion}")
-
-    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
+    modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-neoforge")
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
+        // Other Mavens
+    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
 
     modApi("me.shedaniel:RoughlyEnoughItems-neoforge:${BuildConfig.reiVersion}")
 }
