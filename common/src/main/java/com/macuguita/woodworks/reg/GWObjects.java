@@ -89,6 +89,33 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CARVED_OAK_LOG = createCarvedLog("carved_oak_log", Blocks.OAK_WOOD);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_OAK_LOG = createStrippedCarvedLog("stripped_carved_oak_log", Blocks.STRIPPED_OAK_WOOD);
 
+	public static final GuitaRegistryEntry<Block> CARVED_SPRUCE_LOG = createCarvedLog("carved_spruce_log", Blocks.SPRUCE_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_SPRUCE_LOG = createStrippedCarvedLog("stripped_carved_spruce_log", Blocks.STRIPPED_SPRUCE_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_BIRCH_LOG = createCarvedLog("carved_birch_log", Blocks.BIRCH_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_BIRCH_LOG = createStrippedCarvedLog("stripped_carved_birch_log", Blocks.STRIPPED_BIRCH_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_JUNGLE_LOG = createCarvedLog("carved_jungle_log", Blocks.JUNGLE_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_JUNGLE_LOG = createStrippedCarvedLog("stripped_carved_jungle_log", Blocks.STRIPPED_JUNGLE_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_ACACIA_LOG = createCarvedLog("carved_acacia_log", Blocks.ACACIA_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_ACACIA_LOG = createStrippedCarvedLog("stripped_carved_acacia_log", Blocks.STRIPPED_ACACIA_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_DARK_OAK_LOG = createCarvedLog("carved_dark_oak_log", Blocks.DARK_OAK_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_DARK_OAK_LOG = createStrippedCarvedLog("stripped_carved_dark_oak_log", Blocks.STRIPPED_DARK_OAK_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_MANGROVE_LOG = createCarvedLog("carved_mangrove_log", Blocks.MANGROVE_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_MANGROVE_LOG = createStrippedCarvedLog("stripped_carved_mangrove_log", Blocks.STRIPPED_MANGROVE_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_CHERRY_LOG = createCarvedLog("carved_cherry_log", Blocks.CHERRY_WOOD);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CHERRY_LOG = createStrippedCarvedLog("stripped_carved_cherry_log", Blocks.STRIPPED_CHERRY_WOOD);
+
+	public static final GuitaRegistryEntry<Block> CARVED_CRIMSON_STEM = createCarvedLog("carved_crimson_stem", Blocks.CRIMSON_HYPHAE);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CRIMSON_STEM = createStrippedCarvedLog("stripped_carved_crimson_stem", Blocks.STRIPPED_CRIMSON_HYPHAE);
+
+	public static final GuitaRegistryEntry<Block> CARVED_WARPED_STEM = createCarvedLog("carved_warped_stem", Blocks.WARPED_HYPHAE);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_WARPED_STEM = createStrippedCarvedLog("stripped_carved_warped_stem", Blocks.STRIPPED_WARPED_HYPHAE);
+
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
 		return registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
 	}
