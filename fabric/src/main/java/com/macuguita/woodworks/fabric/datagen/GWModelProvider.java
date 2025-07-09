@@ -41,14 +41,11 @@ import net.minecraft.data.client.TextureKey;
 import net.minecraft.data.client.TextureMap;
 import net.minecraft.data.client.VariantSettings;
 import net.minecraft.data.client.VariantsBlockStateSupplier;
-import net.minecraft.registry.Registries;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-
-import net.minecraft.util.math.Direction;
 
 public class GWModelProvider extends FabricModelProvider {
 
@@ -138,11 +135,5 @@ public class GWModelProvider extends FabricModelProvider {
 						)
 		);
 		blockStateModelGenerator.registerParentedItemModel(block, singleModel);
-	}
-
-	private static Identifier getWoodTypeId(Block block, String target, String replacement) {
-		Identifier original = Registries.BLOCK.getId(block);
-		String newPath = "block/" + original.getPath().replace(target, replacement);
-		return Identifier.ofVanilla(newPath);
 	}
 }

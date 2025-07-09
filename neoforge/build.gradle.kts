@@ -55,7 +55,7 @@ dependencies {
 
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
 
-        // Modrinth
+    // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-neoforge")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
     val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
@@ -65,7 +65,7 @@ dependencies {
         modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-neoforge")
     }
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
-        // Other Mavens
+    // Other Mavens
     modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
 
     modApi("me.shedaniel:RoughlyEnoughItems-neoforge:${BuildConfig.reiVersion}")

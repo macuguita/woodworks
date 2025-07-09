@@ -24,14 +24,10 @@ package com.macuguita.woodworks.utils;
 
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
-import com.macuguita.woodworks.mixin.AxeItemAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 
 public class GWUtils {
 
@@ -45,21 +41,11 @@ public class GWUtils {
 		throw new AssertionError();
 	}
 
-	public static Block getStrippedLog(Block log) {
-		return AxeItemAccessor.branches$getStrippedBlocks().get(log);
-	}
-
 	public static Block getStrippedStump(Block stump) {
 		return StumpSeatBlock.STRIPPED_STUMPS.get(stump);
 	}
 
 	public static Block getStrippedCarvedLog(Block carvedLog) {
 		return CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.get(carvedLog);
-	}
-
-	public static Identifier getWoodTypeId(Block block, String target, String replacement) {
-		Identifier original = Registries.BLOCK.getId(block);
-		String newPath = original.getPath().replace(target, replacement);
-		return Identifier.ofVanilla(newPath);
 	}
 }

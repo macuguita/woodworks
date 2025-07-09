@@ -40,6 +40,7 @@ public class GWItemTags {
 	private static TagKey<Item> createTag(String name) {
 		return TagKey.of(RegistryKeys.ITEM, GuitaWoodworks.id(name));
 	}
+
 	private static TagKey<Item> createCommonTag(String name) {
 		return TagKey.of(RegistryKeys.ITEM, Identifier.of("c", name));
 	}

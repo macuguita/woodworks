@@ -1,10 +1,10 @@
 package com.macuguita.woodworks.block.property;
 
-import net.minecraft.util.StringIdentifiable;
+import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+import net.minecraft.util.StringIdentifiable;
 
 public enum NoCornerModularSeatProperty implements StringIdentifiable {
 	SINGLE,

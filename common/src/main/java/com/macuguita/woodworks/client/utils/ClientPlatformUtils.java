@@ -25,7 +25,6 @@ package com.macuguita.woodworks.client.utils;
 import java.util.function.Supplier;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import org.apache.commons.lang3.NotImplementedException;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.entity.Entity;

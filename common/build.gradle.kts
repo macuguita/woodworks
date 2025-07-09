@@ -20,9 +20,8 @@ dependencies {
     modCompileOnly("dev.architectury:architectury:${BuildConfig.architectureApiVersion}")
 
     //modImplementation "com.macuguita.lib:macu_lib-common:${project.macu_lib_version}-${project.minecraft_version}"
-//    modImplementation("net.mehvahdjukaar:moonlight:${BuildConfig.moonlightLibVersion}")
 
-        // Modrinth
+    // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.4-fabric")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
     val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true

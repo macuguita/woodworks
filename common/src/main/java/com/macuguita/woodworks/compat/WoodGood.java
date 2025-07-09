@@ -22,7 +22,6 @@
 
 package com.macuguita.woodworks.compat;
 
-import static com.macuguita.woodworks.GuitaWoodworks.MOD_ID;
 import static com.macuguita.woodworks.GuitaWoodworks.id;
 
 import com.macuguita.woodworks.GuitaWoodworks;

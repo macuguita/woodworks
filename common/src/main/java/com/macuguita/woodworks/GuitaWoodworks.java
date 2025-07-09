@@ -32,13 +32,12 @@ import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class GuitaWoodworks {
 
