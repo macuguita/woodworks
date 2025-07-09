@@ -1,5 +1,6 @@
 name: Publish
 on: [ pull_request, push ] # Changed trigger to run on push and pull_request events
+# TODO: Cleanup this mess because there's definitely a better way to do this...
 
 permissions:
   contents: write
@@ -31,8 +32,6 @@ jobs:
       - name: Get BuildConfig values
         id: get_build_config_values # <--- Step ID for referencing outputs
         run: |
-          # --- IMPORTANT: Adjust this path to your BuildConfig.kt file ---
-          # Example assumes it's in buildSrc/src/main/kotlin/BuildConfig.kt
           BUILD_CONFIG_FILE="./buildSrc/src/main/kotlin/BuildConfig.kt"
 
           if [ ! -f "$BUILD_CONFIG_FILE" ]; then
@@ -40,11 +39,9 @@ jobs:
               exit 1
           fi
 
-          # Extract values using grep and sed, adjusted for Kotlin syntax
           RAW_MOD_ID=$(grep "val modId: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)"/\1/p')
           RAW_MC_VERSION=$(grep "val minecraftVersion: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)"/\1/p')
           
-          # This assumes modVersion is either a direct string or concatenated with minecraftVersion
           RAW_MOD_VERSION_BASE=$(grep "val modVersion: String =" "$BUILD_CONFIG_FILE" | sed -n 's/.*"\(.*\)" + minecraftVersion/\1/p')
 
           if [ -z "$RAW_MOD_VERSION_BASE" ]; then
@@ -57,7 +54,6 @@ jobs:
           echo "Detected modVersion: $MOD_VERSION"
           echo "Detected minecraftVersion: $RAW_MC_VERSION"
 
-          # Set outputs for the job
           echo "mod_name=$RAW_MOD_ID" >> $GITHUB_OUTPUT # Renamed to mod_name for consistency with previous outputs
           echo "mod_version=$MOD_VERSION" >> $GITHUB_OUTPUT
           echo "mc_version=$RAW_MC_VERSION" >> $GITHUB_OUTPUT
