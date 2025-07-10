@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -113,27 +114,23 @@ public class GWModelProvider extends FabricModelProvider {
 		Identifier leftModel = CARVED_LOG_LEFT.upload(block, "_left", textureMapCommon, blockStateModelGenerator.modelCollector);
 		Identifier rightModel = CARVED_LOG_RIGHT.upload(block, "_right", textureMapCommon, blockStateModelGenerator.modelCollector);
 		Identifier singleModel = CARVED_LOG_SINGLE.upload(block, "_single", textureMapCommon, blockStateModelGenerator.modelCollector);
-		blockStateModelGenerator.blockStateCollector.accept(
-				VariantsBlockStateSupplier.create(block)
-						.coordinate(BlockStateVariantMap.create(NoCornerModularSeatBlock.SHAPE, NoCornerModularSeatBlock.FACING)
-								.register(NoCornerModularSeatProperty.MIDDLE, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, middleModel))
-								.register(NoCornerModularSeatProperty.MIDDLE, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, middleModel).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-								.register(NoCornerModularSeatProperty.MIDDLE, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, middleModel).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-								.register(NoCornerModularSeatProperty.MIDDLE, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, middleModel).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-								.register(NoCornerModularSeatProperty.LEFT, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, leftModel))
-								.register(NoCornerModularSeatProperty.LEFT, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, leftModel).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-								.register(NoCornerModularSeatProperty.LEFT, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, leftModel).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-								.register(NoCornerModularSeatProperty.LEFT, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, leftModel).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-								.register(NoCornerModularSeatProperty.RIGHT, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, rightModel))
-								.register(NoCornerModularSeatProperty.RIGHT, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, rightModel).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-								.register(NoCornerModularSeatProperty.RIGHT, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, rightModel).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-								.register(NoCornerModularSeatProperty.RIGHT, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, rightModel).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-								.register(NoCornerModularSeatProperty.SINGLE, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, singleModel))
-								.register(NoCornerModularSeatProperty.SINGLE, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, singleModel).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-								.register(NoCornerModularSeatProperty.SINGLE, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, singleModel).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-								.register(NoCornerModularSeatProperty.SINGLE, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, singleModel).put(VariantSettings.Y, VariantSettings.Rotation.R270))
-						)
+		Map<NoCornerModularSeatProperty, Identifier> modelMap = Map.of(
+				NoCornerModularSeatProperty.SINGLE, singleModel,
+				NoCornerModularSeatProperty.LEFT, leftModel,
+				NoCornerModularSeatProperty.MIDDLE, middleModel,
+				NoCornerModularSeatProperty.RIGHT, rightModel
 		);
+
+		BlockStateVariantMap.DoubleProperty<NoCornerModularSeatProperty, Direction> map = BlockStateVariantMap.create(NoCornerModularSeatBlock.SHAPE, NoCornerModularSeatBlock.FACING);
+		for (var entry : modelMap.entrySet()) {
+			var shape = entry.getKey();
+			var model = entry.getValue();
+			map.register(shape, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model))
+					.register(shape, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+					.register(shape, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+					.register(shape, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R270));
+		}
+		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
 		blockStateModelGenerator.registerParentedItemModel(block, singleModel);
 	}
 }
