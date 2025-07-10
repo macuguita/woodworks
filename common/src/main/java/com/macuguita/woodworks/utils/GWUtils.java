@@ -23,6 +23,7 @@
 package com.macuguita.woodworks.utils;
 
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
@@ -47,5 +48,9 @@ public class GWUtils {
 
 	public static Block getStrippedCarvedLog(Block carvedLog) {
 		return CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.get(carvedLog);
+	}
+
+	public static Block getStrippedBeamBlock(Block beam) {
+		return ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.get(beam);
 	}
 }

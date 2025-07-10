@@ -25,6 +25,7 @@ package com.macuguita.woodworks;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.compat.ModCompat;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
@@ -62,6 +63,26 @@ public final class GuitaWoodworks {
 				GWUtils.registerFuel(125, regEntry.get());
 			}
 		});
+		GWObjects.BEAM_ITEMS.stream().forEach(regEntry -> {
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				GWUtils.registerFuel(125, regEntry.get());
+			}
+		});
+		GWObjects.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				GWUtils.registerFuel(200, regEntry.get());
+			}
+		});
+		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				GWUtils.registerFuel(125, regEntry.get());
+			}
+		});
+		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				GWUtils.registerFuel(125, regEntry.get());
+			}
+		});
 		AtomicInteger index = new AtomicInteger();
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			boolean isPresent = GWObjects.STRIPPED_STUMP_BLOCKS.stream().skip(index.get()).findFirst().isPresent();
@@ -71,6 +92,7 @@ public final class GuitaWoodworks {
 			if (strippedBlock != null) StumpSeatBlock.STRIPPED_STUMPS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
+				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
 			}
 			index.getAndIncrement();
 		});
@@ -83,6 +105,20 @@ public final class GuitaWoodworks {
 			if (strippedBlock != null) CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
+				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+			}
+			index.getAndIncrement();
+		});
+		index.set(0);
+		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
+			boolean isPresent = GWObjects.STRIPPED_BEAM_BLOCKS.stream().skip(index.get()).findFirst().isPresent();
+			Block strippedBlock = null;
+			if (isPresent)
+				strippedBlock = GWObjects.STRIPPED_BEAM_BLOCKS.stream().skip(index.get()).findFirst().get().get();
+			if (strippedBlock != null) ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(regEntry.get(), strippedBlock);
+			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
+				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
 			}
 			index.getAndIncrement();
 		});

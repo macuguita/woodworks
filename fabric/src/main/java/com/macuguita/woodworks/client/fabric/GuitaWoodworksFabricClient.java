@@ -24,12 +24,19 @@ package com.macuguita.woodworks.client.fabric;
 
 import com.macuguita.woodworks.client.GuitaWoodworksClient;
 
+import com.macuguita.woodworks.reg.GWObjects;
+
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+
+import net.minecraft.client.render.RenderLayer;
 
 public final class GuitaWoodworksFabricClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		BlockRenderLayerMap.INSTANCE.putBlock(GWObjects.OAK_BEAM.get(), RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlock(GWObjects.STRIPPED_OAK_BEAM.get(), RenderLayer.getCutout());
 		GuitaWoodworksClient.init();
 	}
 }
