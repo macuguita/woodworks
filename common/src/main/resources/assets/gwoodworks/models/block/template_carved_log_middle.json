@@ -1,10 +1,6 @@
 {
   "format_version": "1.9.0",
   "parent": "minecraft:block/block",
-  "texture_size": [
-    32,
-    32
-  ],
   "textures": {
     "particle": "#side"
   },
@@ -48,7 +44,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "south"
         },
         "up": {
           "uv": [
@@ -58,7 +55,8 @@
             0
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "up"
         }
       }
     },
@@ -82,7 +80,8 @@
             16
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "north"
         },
         "south": {
           "uv": [
@@ -92,7 +91,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "south"
         },
         "up": {
           "uv": [
@@ -112,7 +112,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "down"
         }
       }
     }

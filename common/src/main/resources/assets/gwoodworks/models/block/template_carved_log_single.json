@@ -1,10 +1,6 @@
 {
   "format_version": "1.9.0",
   "parent": "minecraft:block/block",
-  "texture_size": [
-    32,
-    32
-  ],
   "textures": {
     "particle": "#side"
   },
@@ -47,7 +43,8 @@
             5,
             8
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "east"
         },
         "south": {
           "uv": [
@@ -57,7 +54,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "south"
         },
         "west": {
           "uv": [
@@ -66,7 +64,8 @@
             16,
             8
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "west"
         },
         "up": {
           "uv": [
@@ -76,7 +75,8 @@
             0
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "up"
         }
       }
     },
@@ -100,7 +100,8 @@
             16
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "north"
         },
         "east": {
           "uv": [
@@ -109,7 +110,8 @@
             16,
             16
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "east"
         },
         "south": {
           "uv": [
@@ -119,7 +121,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "south"
         },
         "west": {
           "uv": [
@@ -128,7 +131,8 @@
             16,
             16
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "west"
         },
         "up": {
           "uv": [
@@ -148,7 +152,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "down"
         }
       }
     },
@@ -181,7 +186,8 @@
             16
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "north"
         },
         "east": {
           "uv": [
@@ -199,7 +205,8 @@
             11,
             8
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "west"
         },
         "up": {
           "uv": [
@@ -209,7 +216,8 @@
             16
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "up"
         }
       }
     },
@@ -242,7 +250,8 @@
             2
           ],
           "rotation": 270,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "north"
         },
         "east": {
           "uv": [
@@ -251,7 +260,8 @@
             16,
             8
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "east"
         },
         "west": {
           "uv": [
@@ -270,7 +280,8 @@
             2
           ],
           "rotation": 90,
-          "texture": "#side"
+          "texture": "#side",
+          "cullface": "up"
         }
       }
     }

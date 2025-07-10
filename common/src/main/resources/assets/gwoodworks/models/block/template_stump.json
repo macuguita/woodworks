@@ -78,7 +78,8 @@
             14,
             14
           ],
-          "texture": "#top"
+          "texture": "#top",
+          "cullface": "down"
         }
       }
     }
