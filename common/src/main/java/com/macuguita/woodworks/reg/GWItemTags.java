@@ -32,7 +32,8 @@ import net.minecraft.util.Identifier;
 public class GWItemTags {
 
 	public static TagKey<Item> STUMP = createTag("stump");
-	public static TagKey<Item> CONNECTING = createTag("connecting");
+	public static TagKey<Item> CARVED_LOG = createTag("carved_log");
+	public static TagKey<Item> BEAM = createTag("beam");
 	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
 	public static TagKey<Item> SHEARS = createCommonTag("tools/shear");
 	public static TagKey<Item> EMPTY_BUCKETS = createCommonTag("buckets/empty");

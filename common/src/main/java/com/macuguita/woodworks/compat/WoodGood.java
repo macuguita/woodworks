@@ -110,8 +110,8 @@ public class WoodGood extends SimpleModule {
 				)
 				//TEXTURE: log
 				//TEXTURE: manually generated texture below (carved_oak_log_inside.png)
-				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
-				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
+				.addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
@@ -127,8 +127,8 @@ public class WoodGood extends SimpleModule {
 				)
 				//TEXTURE: stripped_log
 				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
-				.addTag(GWItemTags.CONNECTING, RegistryKeys.ITEM)
-				.addTag(GWBlockTags.CONNECTING, RegistryKeys.BLOCK)
+				.addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")

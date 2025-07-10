@@ -47,10 +47,16 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CONNECTING).add(regEntry.get());
+			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CONNECTING).add(regEntry.get());
+			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+		});
+		GWObjects.BEAM_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
+		});
+		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
 		});
 	}
 }

@@ -52,6 +52,10 @@ public class GWLangProvider extends FabricLanguageProvider {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateBlockTranslations(translationBuilder, GWUtils.getStrippedCarvedLog(regEntry.get()));
 		});
+		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateBlockTranslations(translationBuilder, GWUtils.getStrippedBeamBlock(regEntry.get()));
+		});
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
 		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");

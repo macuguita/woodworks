@@ -47,10 +47,16 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.CONNECTING).add(regEntry.get());
+			getOrCreateTagBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.CONNECTING).add(regEntry.get());
+			getOrCreateTagBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
+		});
+		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWBlockTags.BEAM).add(regEntry.get());
+		});
+		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWBlockTags.BEAM).add(regEntry.get());
 		});
 	}
 }
