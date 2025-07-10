@@ -1,7 +1,9 @@
 {
   "multipart": [
     {
-      "apply": { "model": "gwoodworks:block/beam" }
+      "apply": {
+        "model": "gwoodworks:block/beam"
+      }
     }
   ]
 }

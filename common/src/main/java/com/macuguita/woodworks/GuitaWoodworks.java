@@ -92,7 +92,9 @@ public final class GuitaWoodworks {
 			if (strippedBlock != null) StumpSeatBlock.STRIPPED_STUMPS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
-				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				if (strippedBlock != null) {
+					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				}
 			}
 			index.getAndIncrement();
 		});
@@ -105,7 +107,9 @@ public final class GuitaWoodworks {
 			if (strippedBlock != null) CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
-				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				if (strippedBlock != null) {
+					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				}
 			}
 			index.getAndIncrement();
 		});
@@ -118,7 +122,9 @@ public final class GuitaWoodworks {
 			if (strippedBlock != null) ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(regEntry.get(), strippedBlock);
 			if (!regEntry.getId().getPath().matches(".*(crimson|warped).*")) {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(regEntry.get(), 5, 5);
-				if (strippedBlock != null) ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				if (strippedBlock != null) {
+					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				}
 			}
 			index.getAndIncrement();
 		});

@@ -46,5 +46,5 @@ public interface SittableBlock {
 		return false;
 	}
 
-	public Box getSeatSize(BlockState state);
+	Box getSeatSize(BlockState state);
 }

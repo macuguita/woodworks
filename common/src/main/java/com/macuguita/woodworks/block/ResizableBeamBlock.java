@@ -27,7 +27,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
 import com.macuguita.woodworks.reg.GWBlockTags;
 
 import net.minecraft.block.Block;
@@ -126,15 +125,21 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	}
 
 	private BlockState shouldConnectWithNeighbor(BlockState state, BlockState neighborState, Direction dir) {
-		if (!neighborState.isIn(GWBlockTags.BEAM) || !(neighborState.getBlock() instanceof ResizableBeamBlock)) return state;
+		if (!neighborState.isIn(GWBlockTags.BEAM) || !(neighborState.getBlock() instanceof ResizableBeamBlock)) {
+			return state;
+		}
 
-		if (neighborState.get(FACING_PROPERTIES.get(dir.getOpposite()))) return state.with(FACING_PROPERTIES.get(dir), true);
+		if (neighborState.get(FACING_PROPERTIES.get(dir.getOpposite()))) {
+			return state.with(FACING_PROPERTIES.get(dir), true);
+		}
 		return state;
 	}
 
 	private BlockState shouldConnectWithNeighbors(BlockState state, BlockPos pos, World world) {
 		BlockState temp = state;
-		for (Direction direction: Direction.values()) temp = shouldConnectWithNeighbor(temp, world.getBlockState(pos.offset(direction)), direction);
+		for (Direction direction : Direction.values()) {
+			temp = shouldConnectWithNeighbor(temp, world.getBlockState(pos.offset(direction)), direction);
+		}
 		return temp;
 	}
 
