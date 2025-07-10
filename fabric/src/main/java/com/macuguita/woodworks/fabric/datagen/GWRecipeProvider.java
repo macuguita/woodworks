@@ -44,35 +44,23 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 
 	@Override
 	public void generate(RecipeExporter recipeExporter) {
-		AtomicInteger iterator = new AtomicInteger();
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
-		iterator.set(0);
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
-		iterator.set(0);
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
-		iterator.set(0);
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
-		iterator.set(0);
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
-		iterator.set(0);
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
 	}
 

@@ -24,7 +24,6 @@ package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.NoCornerModularSeatBlock;
@@ -56,17 +55,15 @@ public class GWModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		AtomicInteger iterator = new AtomicInteger();
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			registerStump(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
-			registerStump(blockStateModelGenerator, GWUtils.getStrippedStump(regEntry.get()), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			registerStump(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			Block stripped = GWUtils.getStrippedStump(regEntry.get());
+			registerStump(blockStateModelGenerator, stripped, GWObjects.WOOD_ASSOCIATIONS.get(stripped));
 		});
-		iterator.set(0);
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			registerCarvedLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_LOGS[iterator.get()]);
-			registerCarvedLog(blockStateModelGenerator, GWUtils.getStrippedCarvedLog(regEntry.get()), GWObjects.STRIPPED_WOOD_LOGS[iterator.get()]);
-			iterator.getAndIncrement();
+			registerCarvedLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			Block stripped = GWUtils.getStrippedCarvedLog(regEntry.get());
+			registerCarvedLog(blockStateModelGenerator, stripped, GWObjects.WOOD_ASSOCIATIONS.get(stripped));
 		});
 	}
 
