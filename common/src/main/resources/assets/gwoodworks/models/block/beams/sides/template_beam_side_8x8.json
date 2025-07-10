@@ -1,0 +1,18 @@
+{
+	"format_version": "1.9.0",
+	"elements": [
+		{
+			"from": [4, 4, 0],
+			"to": [12, 12, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7, 0]},
+			"color": 6,
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#missing", "cullface": "north"},
+				"east": {"uv": [0, 0, 4, 8], "texture": "#missing"},
+				"west": {"uv": [0, 0, 4, 8], "texture": "#missing"},
+				"up": {"uv": [0, 0, 8, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 8, 4], "texture": "#missing"}
+			}
+		}
+	]
+}
