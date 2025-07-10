@@ -31,6 +31,7 @@ public class GuitaWoodworksDatagen implements DataGeneratorEntrypoint {
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
+		pack.addProvider(GWBlockLootTableProvider::new);
 		pack.addProvider(GWBlockTagProvider::new);
 		pack.addProvider(GWItemTagProvider::new);
 		pack.addProvider(GWLangProvider::new);
