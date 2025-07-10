@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2025 macuguita.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.macuguita.woodworks.block;
 
 import com.macuguita.woodworks.block.property.NoCornerModularSeatProperty;
@@ -71,7 +93,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		Hand hand = player.getActiveHand();
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
-		if (stack.isIn(GWItemTags.CONNECTING)) return ActionResult.FAIL;
+		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
 		return this.sitOn(world, pos, player, state.get(FACING)) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 
@@ -100,8 +122,8 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);
 		Direction right = dir.rotateClockwise(Direction.Axis.Y);
 
-		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.CONNECTING) && world.getBlockState(pos.offset(left)).get(FACING) == dir;
-		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.CONNECTING) && world.getBlockState(pos.offset(right)).get(FACING) == dir;
+		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.BEAM) && world.getBlockState(pos.offset(left)).get(FACING) == dir;
+		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.BEAM) && world.getBlockState(pos.offset(right)).get(FACING) == dir;
 
 		if (hasLeft && hasRight) {
 			return NoCornerModularSeatProperty.MIDDLE;
