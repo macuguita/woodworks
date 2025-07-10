@@ -24,26 +24,40 @@ package com.macuguita.woodworks.block;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.reg.GWBlockTags;
+import com.macuguita.woodworks.reg.GWItemTags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -86,7 +100,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		super(settings);
 		this.radiusToFacingsShape = this.generateRadiusToFacingsShapeMap();
 		this.setDefaultState(this.getStateManager().getDefaultState()
-				.with(RADIUS, 1)
+				.with(RADIUS, 4)
 				.with(NORTH, false)
 				.with(EAST, false)
 				.with(SOUTH, false)
@@ -101,18 +115,16 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		builder.add(RADIUS, NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
 	}
 
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction side = ctx.getSide();
-		PlayerEntity player = ctx.getPlayer();
-
-		BlockState state = this.getDefaultState()
-				.with(FACING_PROPERTIES.get(side.getOpposite()), true)
-				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
-
-		if (player != null) state.with(FACING_PROPERTIES.get(side), player.isSneaking());
-
-		return shouldConnectWithNeighbors(state, ctx.getBlockPos(), ctx.getWorld());
+	private static Optional<Direction> getDirectionByVec(Vec3d hit, BlockPos pos, BlockState state) {
+		int radius = state.get(RADIUS);
+		var relativePos = hit.add(-pos.getX(), -pos.getY(), -pos.getZ()).multiply(16);
+		if (relativePos.x < (8.0f - radius)) return Optional.of(Direction.WEST);
+		else if (relativePos.x > (8.0f + radius)) return Optional.of(Direction.EAST);
+		else if (relativePos.z < (8.0f - radius)) return Optional.of(Direction.NORTH);
+		else if (relativePos.z > (8.0f + radius)) return Optional.of(Direction.SOUTH);
+		else if (relativePos.y < (8.0f - radius)) return Optional.of(Direction.DOWN);
+		else if (relativePos.y > (8.0f + radius)) return Optional.of(Direction.UP);
+		return Optional.empty();
 	}
 
 	@Override
@@ -141,6 +153,76 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			temp = shouldConnectWithNeighbor(temp, world.getBlockState(pos.offset(direction)), direction);
 		}
 		return temp;
+	}
+
+	@Override
+	public BlockState getPlacementState(ItemPlacementContext ctx) {
+		Direction side = ctx.getSide();
+
+		BlockState state = this.getDefaultState()
+				.with(FACING_PROPERTIES.get(side.getOpposite()), true)
+				.with(FACING_PROPERTIES.get(side), ctx.getPlayer() != null ? ctx.getPlayer().isSneaking() : false)
+				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+
+		return shouldConnectWithNeighbors(state, ctx.getBlockPos(), ctx.getWorld());
+	}
+
+	@Override
+	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+		Hand hand = player.getActiveHand();
+		ItemStack stack = player.getStackInHand(hand);
+		if (stack.getItem() instanceof AxeItem) {
+			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
+			if (strippedBlock != null) {
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+				if (world instanceof ServerWorld serverWorld) {
+					BlockState strippedState = strippedBlock.getDefaultState()
+							.with(RADIUS, state.get(RADIUS))
+							.with(NORTH, state.get(NORTH))
+							.with(EAST, state.get(EAST))
+							.with(SOUTH, state.get(SOUTH))
+							.with(WEST, state.get(WEST))
+							.with(UP, state.get(UP))
+							.with(DOWN, state.get(DOWN))
+							.with(WATERLOGGED, state.get(WATERLOGGED));
+
+					serverWorld.setBlockState(pos, strippedState);
+				}
+				return ActionResult.SUCCESS;
+			}
+		}
+		if (stack.isIn(GWItemTags.SHEARS)) {
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+			if (world instanceof ServerWorld serverWorld) {
+				// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
+				BlockState newState = shiftRadius(state, 1);
+
+				serverWorld.setBlockState(pos, newState);
+			}
+			return ActionResult.SUCCESS;
+		}
+		if (stack.isOf(Items.STICK)) {
+			Optional<Direction> oDir = getDirectionByVec(hit.getPos(), pos, state);
+			oDir.ifPresent(direction -> GuitaWoodworks.LOGGER.info(String.format("Direction hit: %s", direction)));
+		}
+		return super.onUse(state, world, pos, player, hit);
+	}
+
+	private BlockState shiftRadius(BlockState state, int amount) {
+		int radius = state.get(RADIUS);
+		int newRadius = radius + amount;
+
+		if (newRadius > 7) {
+			newRadius -= 7;
+		} else if (newRadius < 1) {
+			newRadius += 7;
+		}
+
+		return state.with(RADIUS, newRadius);
 	}
 
 	private VoxelShape[][] generateRadiusToFacingsShapeMap() {
@@ -198,6 +280,12 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	protected int getConnectionMask(BlockState state) {
 		int mask = 0;
 
+		/*
+		 * representation of the int mask where 1 would be connected
+		 * 0 0 0 0 0 0
+		 * ^ ^ ^ ^ ^ ^
+		 * N E S W U D
+		 */
 		for (int i = 0; i < FACINGS.length; i++) {
 			if (state.get(FACING_PROPERTIES.get(FACINGS[i]))) {
 				mask |= 1 << i;
