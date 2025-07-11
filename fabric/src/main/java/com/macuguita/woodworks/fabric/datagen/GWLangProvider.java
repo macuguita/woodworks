@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
-import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -68,9 +67,16 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");
 		translationBuilder.add("block_type.gwoodworks.carved_log", "Carved %s Log");
 		translationBuilder.add("block_type.gwoodworks.stripped_carved_log", "Stripped Carved %s Log");
+		translationBuilder.add("block_type.gwoodworks.beam", "%s Beam");
+		translationBuilder.add("block_type.gwoodworks.stripped_beam", "Stripped %s Beam");
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
 		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
 		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");
+		translationBuilder.add("tag.item.gwoodworks.carved_log", "Carved Log");
+		translationBuilder.add("tag.block.gwoodworks.carved_log", "Carved Log");
+		translationBuilder.add("tag.item.gwoodworks.beam", "Beam");
+		translationBuilder.add("tag.block.gwoodworks.beam", "Beam");
+		translationBuilder.add("tag.item.gwoodworks.secateurs", "Secateurs");
 	}
 
 	private String capitalizeString(String string) {
