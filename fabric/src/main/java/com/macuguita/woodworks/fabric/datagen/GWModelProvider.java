@@ -325,10 +325,11 @@ public class GWModelProvider extends FabricModelProvider {
 		MultipartBlockStateSupplier blockStateSupplier = MultipartBlockStateSupplier.create(block);
 
 		IntProperty radiusProp = ResizableBeamBlock.RADIUS;
+		Map<Direction, BooleanProperty> facingProperties = ResizableBeamBlock.FACING_PROPERTIES;
 		for (int size : radiusProp.getValues()) {
-			blockStateSupplier.with(When.create().set(radiusProp, size), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
+			generateRotatedCoreModels(blockStateSupplier, coreModelMap, size);
 			for (Direction dir : Direction.values()) {
-				BooleanProperty sideProp = ResizableBeamBlock.FACING_PROPERTIES.get(dir);
+				BooleanProperty sideProp = facingProperties.get(dir);
 				blockStateSupplier.with(When.create().set(radiusProp, size).set(sideProp, true), rotateBeamModel(BlockStateVariant.create().put(VariantSettings.MODEL, getSidedModel(sideUpModelMap.get(size), sideDownModelMap.get(size), dir)), dir));
 			}
 		}
@@ -337,6 +338,68 @@ public class GWModelProvider extends FabricModelProvider {
 
 		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, textureMapSide8x8, blockStateModelGenerator.modelCollector);
 		blockStateModelGenerator.registerParentedItemModel(block, inventoryModel);
+	}
+
+	private void generateRotatedCoreModels(MultipartBlockStateSupplier blockStateSupplier, Map<Integer, Identifier> coreModelMap, int size) {
+		blockStateSupplier.with(When.allOf(
+				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.anyOf(
+						When.create().set(ResizableBeamBlock.UP, true),
+						When.create().set(ResizableBeamBlock.DOWN, true),
+						When.allOf(
+								When.create().set(ResizableBeamBlock.UP, false),
+								When.create().set(ResizableBeamBlock.DOWN, false),
+								When.create().set(ResizableBeamBlock.NORTH, false),
+								When.create().set(ResizableBeamBlock.SOUTH, false),
+								When.create().set(ResizableBeamBlock.EAST, false),
+								When.create().set(ResizableBeamBlock.WEST, false)
+						)
+				)
+		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
+
+		blockStateSupplier.with(When.allOf(
+				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.allOf(
+						When.create().set(ResizableBeamBlock.UP, false),
+						When.create().set(ResizableBeamBlock.DOWN, false),
+						When.anyOf(
+								When.create().set(ResizableBeamBlock.NORTH, false),
+								When.create().set(ResizableBeamBlock.SOUTH, false)
+						),
+						When.anyOf(
+								When.create().set(ResizableBeamBlock.WEST, false),
+								When.create().set(ResizableBeamBlock.EAST, false)
+						)
+				)
+		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
+
+		blockStateSupplier.with(When.allOf(
+				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.allOf(
+						When.create().set(ResizableBeamBlock.UP, false),
+						When.create().set(ResizableBeamBlock.DOWN, false),
+						When.anyOf(
+								When.allOf(
+										When.create().set(ResizableBeamBlock.NORTH, true),
+										When.create().set(ResizableBeamBlock.SOUTH, true)
+								)
+						)
+				)
+		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90));
+
+		blockStateSupplier.with(When.allOf(
+				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.allOf(
+						When.create().set(ResizableBeamBlock.UP, false),
+						When.create().set(ResizableBeamBlock.DOWN, false),
+						When.anyOf(
+								When.allOf(
+										When.create().set(ResizableBeamBlock.EAST, true),
+										When.create().set(ResizableBeamBlock.WEST, true)
+								)
+						)
+				)
+		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90));
 	}
 
 	private Identifier getSidedModel(Identifier sideUp, Identifier sideDown, Direction dir) {

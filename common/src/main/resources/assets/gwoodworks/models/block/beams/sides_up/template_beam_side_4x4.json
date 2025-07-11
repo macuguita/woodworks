@@ -44,7 +44,7 @@
             10,
             6
           ],
-          "rotation": 90,
+          "rotation": 270,
           "texture": "#side"
         },
         "up": {
@@ -63,6 +63,7 @@
             10,
             6
           ],
+          "rotation": 180,
           "texture": "#side"
         }
       }

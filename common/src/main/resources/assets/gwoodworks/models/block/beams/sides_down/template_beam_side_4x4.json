@@ -34,7 +34,7 @@
             10,
             16
           ],
-          "rotation": 90,
+          "rotation": 270,
           "texture": "#side"
         },
         "west": {
@@ -54,6 +54,7 @@
             10,
             16
           ],
+          "rotation": 180,
           "texture": "#side"
         },
         "down": {

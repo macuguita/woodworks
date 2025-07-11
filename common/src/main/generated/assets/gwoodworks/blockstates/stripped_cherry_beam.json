@@ -5,7 +5,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_2x2"
       },
       "when": {
-        "radius": "1"
+        "AND": [
+          {
+            "radius": "1"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_2x2"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "1"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_2x2",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "1"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_2x2",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "1"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -72,7 +225,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_4x4"
       },
       "when": {
-        "radius": "2"
+        "AND": [
+          {
+            "radius": "2"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_4x4"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "2"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_4x4",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "2"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_4x4",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "2"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -139,7 +445,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_6x6"
       },
       "when": {
-        "radius": "3"
+        "AND": [
+          {
+            "radius": "3"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_6x6"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "3"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_6x6",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "3"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_6x6",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "3"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -206,7 +665,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_8x8"
       },
       "when": {
-        "radius": "4"
+        "AND": [
+          {
+            "radius": "4"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_8x8"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "4"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_8x8",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "4"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_8x8",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "4"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -273,7 +885,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_10x10"
       },
       "when": {
-        "radius": "5"
+        "AND": [
+          {
+            "radius": "5"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_10x10"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "5"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_10x10",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "5"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_10x10",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "5"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -340,7 +1105,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_12x12"
       },
       "when": {
-        "radius": "6"
+        "AND": [
+          {
+            "radius": "6"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_12x12"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "6"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_12x12",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "6"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_12x12",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "6"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -407,7 +1325,160 @@
         "model": "gwoodworks:block/stripped_cherry_beam_core_14x14"
       },
       "when": {
-        "radius": "7"
+        "AND": [
+          {
+            "radius": "7"
+          },
+          {
+            "OR": [
+              {
+                "up": "true"
+              },
+              {
+                "down": "true"
+              },
+              {
+                "AND": [
+                  {
+                    "up": "false"
+                  },
+                  {
+                    "down": "false"
+                  },
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  },
+                  {
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_14x14"
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "7"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
+                  }
+                ]
+              },
+              {
+                "OR": [
+                  {
+                    "west": "false"
+                  },
+                  {
+                    "east": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_14x14",
+        "x": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "7"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "north": "true"
+                      },
+                      {
+                        "south": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/stripped_cherry_beam_core_14x14",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "radius": "7"
+          },
+          {
+            "AND": [
+              {
+                "up": "false"
+              },
+              {
+                "down": "false"
+              },
+              {
+                "OR": [
+                  {
+                    "AND": [
+                      {
+                        "east": "true"
+                      },
+                      {
+                        "west": "true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
