@@ -70,7 +70,7 @@ jobs:
           MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="common"
 
-          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
           JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
@@ -87,7 +87,7 @@ jobs:
           MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="fabric"
 
-          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
           JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
@@ -105,7 +105,7 @@ jobs:
           MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="neoforge"
 
-          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
           JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
