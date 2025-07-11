@@ -51,23 +51,6 @@ allprojects {
                 includeGroup("curse.maven")
             }
         }
-        maven {
-            name = "Greenhouse Maven"
-            url = uri("https://repo.greenhouse.house/releases/")
-        }
-        maven { url = uri("https://mvn.devos.one/releases/") } // Porting Lib
-        maven {
-            url  = uri("https://maven.jamieswhiteshirt.com/libs-release") // Reach Entity Attributes (Required by Porting Lib)
-            content {
-                includeGroup("com.jamieswhiteshirt")
-            }
-        }
-        maven {
-            url = uri("https://jitpack.io/") // Fabric ASM
-            content {
-                excludeGroup("io.github.fabricators_of_create")
-            }
-        }
     }
 }
 

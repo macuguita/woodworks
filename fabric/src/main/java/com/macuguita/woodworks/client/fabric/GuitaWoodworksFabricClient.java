@@ -23,12 +23,8 @@
 package com.macuguita.woodworks.client.fabric;
 
 import com.macuguita.woodworks.client.GuitaWoodworksClient;
-import com.macuguita.woodworks.reg.GWObjects;
-
-import net.minecraft.client.render.RenderLayer;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 
 public final class GuitaWoodworksFabricClient implements ClientModInitializer {
 

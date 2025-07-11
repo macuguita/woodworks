@@ -64,7 +64,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 public class ResizableBeamBlock extends Block implements Waterloggable {
-	//TODO: add the severing mechanism
 	//TODO: fix some textures not connecting on the side model
 
 	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
@@ -204,6 +203,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			return ActionResult.SUCCESS;
 		}
 		if (stack.isIn(GWItemTags.SECATEURS)) {
+			//TODO: add the severing mechanism
 			Optional<Direction> oDir = getDirectionByVec(hit.getPos(), pos, state);
 			oDir.ifPresent(direction -> GuitaWoodworks.LOGGER.info(String.format("Direction hit: %s", direction)));
 		}
