@@ -71,13 +71,13 @@ jobs:
           PLATFORM="common"
 
           FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
-          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+          JAR_PATH=$(find $PLATFORM/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
             cp "$JAR_PATH" "combined-artifacts/$FILENAME"
-            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
+            echo "Copied $PLATFORM artifact to combined-artifacts/$FILENAME"
           else
-            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
+            echo "Warning: No $PLATFORM JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
       # Locate and rename the fabric JAR
       - name: Copy fabric artifact
@@ -88,13 +88,13 @@ jobs:
           PLATFORM="fabric"
 
           FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
-          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+          JAR_PATH=$(find $PLATFORM/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
             cp "$JAR_PATH" "combined-artifacts/$FILENAME"
-            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
+            echo "Copied $PLATFORM artifact to combined-artifacts/$FILENAME"
           else
-            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
+            echo "Warning: No $PLATFORM JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
 
       # Locate and rename the neoforge JAR
@@ -106,13 +106,13 @@ jobs:
           PLATFORM="neoforge"
 
           FILENAME="${MOD_ID}-${MOD_VERSION}-${PLATFORM}.jar"
-          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+          JAR_PATH=$(find $PLATFORM/build/libs -name "$FILENAME" | head -n 1)
 
           if [ -n "$JAR_PATH" ]; then
             cp "$JAR_PATH" "combined-artifacts/$FILENAME"
-            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
+            echo "Copied $PLATFORM artifact to combined-artifacts/$FILENAME"
           else
-            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
+            echo "Warning: No $PLATFORM JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
 
 # Upload the single combined ZIP file
