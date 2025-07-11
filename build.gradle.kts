@@ -16,7 +16,6 @@ allprojects {
     apply(plugin = "maven-publish")
 
     group = BuildConfig.mavenGroup
-    version = BuildConfig.modVersion
 
     repositories {
         mavenCentral()

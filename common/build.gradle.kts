@@ -2,6 +2,8 @@ architectury {
     common(BuildConfig.enabledPlatforms.split(','))
 }
 
+version = BuildConfig.modVersion + "-common"
+
 sourceSets {
     main {
         resources.srcDir("src/main/generated")
