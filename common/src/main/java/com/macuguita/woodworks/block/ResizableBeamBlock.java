@@ -28,7 +28,6 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 
@@ -43,7 +42,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -64,7 +62,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 public class ResizableBeamBlock extends Block implements Waterloggable {
-	//TODO: fix some textures not connecting on the side model
 
 	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
 
@@ -174,19 +171,17 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
-				if (world instanceof ServerWorld serverWorld) {
-					BlockState strippedState = strippedBlock.getDefaultState()
-							.with(RADIUS, state.get(RADIUS))
-							.with(NORTH, state.get(NORTH))
-							.with(EAST, state.get(EAST))
-							.with(SOUTH, state.get(SOUTH))
-							.with(WEST, state.get(WEST))
-							.with(UP, state.get(UP))
-							.with(DOWN, state.get(DOWN))
-							.with(WATERLOGGED, state.get(WATERLOGGED));
+				BlockState strippedState = strippedBlock.getDefaultState()
+						.with(RADIUS, state.get(RADIUS))
+						.with(NORTH, state.get(NORTH))
+						.with(EAST, state.get(EAST))
+						.with(SOUTH, state.get(SOUTH))
+						.with(WEST, state.get(WEST))
+						.with(UP, state.get(UP))
+						.with(DOWN, state.get(DOWN))
+						.with(WATERLOGGED, state.get(WATERLOGGED));
 
-					serverWorld.setBlockState(pos, strippedState);
-				}
+				world.setBlockState(pos, strippedState);
 				return ActionResult.SUCCESS;
 			}
 		}
@@ -194,18 +189,41 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
 			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
-			if (world instanceof ServerWorld serverWorld) {
-				// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
-				BlockState newState = shiftRadius(state, 1);
+			// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
+			BlockState newState = shiftRadius(state, 1);
 
-				serverWorld.setBlockState(pos, newState);
-			}
+			world.setBlockState(pos, newState);
 			return ActionResult.SUCCESS;
 		}
 		if (stack.isIn(GWItemTags.SECATEURS)) {
-			//TODO: add the severing mechanism
 			Optional<Direction> oDir = getDirectionByVec(hit.getPos(), pos, state);
-			oDir.ifPresent(direction -> GuitaWoodworks.LOGGER.info(String.format("Direction hit: %s", direction)));
+			if (oDir.isPresent()) {
+				Direction dir = oDir.get();
+				BlockState newState = state.with(FACING_PROPERTIES.get(dir), false);
+
+				BlockPos neighborPos = pos.offset(dir);
+				BlockState neighborState = world.getBlockState(neighborPos);
+
+				world.setBlockState(pos, newState, NOTIFY_ALL);
+				if (neighborState.getBlock() instanceof ResizableBeamBlock && neighborState.isIn(GWBlockTags.BEAM)) {
+					BlockState newNeighborState = neighborState.with(FACING_PROPERTIES.get(dir.getOpposite()), false);
+					world.setBlockState(neighborPos, newNeighborState, NOTIFY_ALL);
+				}
+
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return ActionResult.SUCCESS;
+			}
+
+			Direction dir = hit.getSide();
+
+			BlockState newState = state.with(FACING_PROPERTIES.get(dir), true);
+
+			world.setBlockState(pos, newState);
+
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			return ActionResult.SUCCESS;
 		}
 		return super.onUse(state, world, pos, player, hit);
 	}
