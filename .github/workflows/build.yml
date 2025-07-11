@@ -63,57 +63,59 @@ jobs:
         run: mkdir combined-artifacts
 
       # Locate and rename the common JAR
-      - name: Copy and rename common artifact
+      - name: Copy common artifact
         run: |
           MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
           MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
-          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="common"
-          
-          JAR_PATH=$(find common/build/libs -name "*.jar" | head -n 1)
-          if [ -n "$JAR_PATH" ]; then
-            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
-            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
-            echo "Copied common artifact to combined-artifacts/$NEW_FILENAME"
-          else
-            echo "Warning: No common JAR found in common/build/libs/"
-          fi
 
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+
+          if [ -n "$JAR_PATH" ]; then
+            cp "$JAR_PATH" "combined-artifacts/$FILENAME"
+            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
+          else
+            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
+          fi
       # Locate and rename the fabric JAR
-      - name: Copy and rename fabric artifact
+      - name: Copy fabric artifact
         run: |
           MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
           MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
-          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="fabric"
 
-          JAR_PATH=$(find fabric/build/libs -name "*.jar" | head -n 1)
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+
           if [ -n "$JAR_PATH" ]; then
-            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
-            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
-            echo "Copied fabric artifact to combined-artifacts/$NEW_FILENAME"
+            cp "$JAR_PATH" "combined-artifacts/$FILENAME"
+            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
           else
-            echo "Warning: No fabric JAR found in fabric/build/libs/"
+            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
 
       # Locate and rename the neoforge JAR
-      - name: Copy and rename neoforge artifact
+      - name: Copy neoforge jar
         run: |
           MOD_ID="${{ steps.get_build_config_values.outputs.mod_name }}"
           MOD_VERSION="${{ steps.get_build_config_values.outputs.mod_version }}"
-          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}" # Get Minecraft version
+          MC_VERSION="${{ steps.get_build_config_values.outputs.mc_version }}"
           PLATFORM="neoforge"
 
-          JAR_PATH=$(find neoforge/build/libs -name "*.jar" | head -n 1)
+          FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar"
+          JAR_PATH=$(find common/build/libs -name "$FILENAME" | head -n 1)
+
           if [ -n "$JAR_PATH" ]; then
-            NEW_FILENAME="${MOD_ID}-${MOD_VERSION}-${MC_VERSION}-${PLATFORM}.jar" # Updated naming
-            cp "$JAR_PATH" "combined-artifacts/$NEW_FILENAME"
-            echo "Copied neoforge artifact to combined-artifacts/$NEW_FILENAME"
+            cp "$JAR_PATH" "combined-artifacts/$FILENAME"
+            echo "Copied neoforge artifact to combined-artifacts/$FILENAME"
           else
-            echo "Warning: No neoforge JAR found in neoforge/build/libs/"
+            echo "Warning: No neoforge JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
 
-      # Upload the single combined ZIP file
+# Upload the single combined ZIP file
       - name: Upload combined artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
