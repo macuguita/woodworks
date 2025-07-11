@@ -119,5 +119,5 @@ jobs:
       - name: Upload combined artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
-          name: Artifacts.zip
+          name: Artifacts
           path: combined-artifacts/
