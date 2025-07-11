@@ -116,7 +116,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		return state.with(SHAPE, getShape(state, ctx.getWorld(), pos));
 	}
 
-	public NoCornerModularSeatProperty getShape(BlockState state, WorldAccess world, BlockPos pos) {
+	private NoCornerModularSeatProperty getShape(BlockState state, WorldAccess world, BlockPos pos) {
 		Direction dir = state.get(FACING);
 
 		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);

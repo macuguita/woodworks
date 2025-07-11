@@ -54,6 +54,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 
 	public static final Map<Block, Block> STRIPPED_CARVED_LOGS = new HashMap<>();
 	public static final Box SEAT = new Box(0.125, 0, 0.125, 0.875, 0.5, 0.875);
+	public static final MapCodec<CarvedLogSeatBlock> CODEC = createCodec(CarvedLogSeatBlock::new);
 	protected static final VoxelShape VOXEL_SHAPE = VoxelShapes.combineAndSimplify(
 			VoxelShapes.fullCube(),
 			VoxelShapes.union(
@@ -62,10 +63,25 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 			BooleanBiFunction.ONLY_FIRST
 	);
 
-	public static final MapCodec<CarvedLogSeatBlock> CODEC = createCodec(CarvedLogSeatBlock::new);
-
 	public CarvedLogSeatBlock(Settings settings) {
 		super(settings);
+	}
+
+	private static VoxelShape rotateVoxelShape(VoxelShape shape, int degrees) {
+		int times = ((degrees % 360) + 360) % 360 / 90;
+
+		VoxelShape result = shape;
+		for (int i = 0; i < times; ++i) {
+			VoxelShape rotated = VoxelShapes.empty();
+			for (Box box : result.getBoundingBoxes()) {
+				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(
+						1 - box.maxZ, box.minY, box.minX,
+						1 - box.minZ, box.maxY, box.maxX
+				));
+			}
+			result = rotated;
+		}
+		return result;
 	}
 
 	@Override
@@ -91,23 +107,6 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		}
 		if (stack.isIn(GWItemTags.WATER_BUCKETS) || stack.isIn(GWItemTags.EMPTY_BUCKETS)) return ActionResult.FAIL;
 		return super.onUse(state, world, pos, player, hit);
-	}
-
-	public static VoxelShape rotateVoxelShape(VoxelShape shape, int degrees) {
-		int times = ((degrees % 360) + 360) % 360 / 90;
-
-		VoxelShape result = shape;
-		for (int i = 0; i < times; ++i) {
-			VoxelShape rotated = VoxelShapes.empty();
-			for (Box box : result.getBoundingBoxes()) {
-				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(
-						1 - box.maxZ, box.minY, box.minX,
-						1 - box.minZ, box.maxY, box.maxX
-				));
-			}
-			result = rotated;
-		}
-		return result;
 	}
 
 	@Override

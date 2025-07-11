@@ -124,18 +124,6 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		}
 	}
 
-	private static Optional<Direction> getDirectionByVec(Vec3d hit, BlockPos pos, BlockState state) {
-		int radius = state.get(RADIUS);
-		var relativePos = hit.add(-pos.getX(), -pos.getY(), -pos.getZ()).multiply(16);
-		if (relativePos.x < (8.0f - radius)) return Optional.of(Direction.WEST);
-		else if (relativePos.x > (8.0f + radius)) return Optional.of(Direction.EAST);
-		else if (relativePos.z < (8.0f - radius)) return Optional.of(Direction.NORTH);
-		else if (relativePos.z > (8.0f + radius)) return Optional.of(Direction.SOUTH);
-		else if (relativePos.y < (8.0f - radius)) return Optional.of(Direction.DOWN);
-		else if (relativePos.y > (8.0f + radius)) return Optional.of(Direction.UP);
-		return Optional.empty();
-	}
-
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
@@ -174,6 +162,18 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
 
 		return shouldConnectWithNeighbors(state, ctx.getBlockPos(), ctx.getWorld());
+	}
+
+	private static Optional<Direction> getDirectionByVec(Vec3d hit, BlockPos pos, BlockState state) {
+		int radius = state.get(RADIUS);
+		var relativePos = hit.add(-pos.getX(), -pos.getY(), -pos.getZ()).multiply(16);
+		if (relativePos.x < (8.0f - radius)) return Optional.of(Direction.WEST);
+		else if (relativePos.x > (8.0f + radius)) return Optional.of(Direction.EAST);
+		else if (relativePos.z < (8.0f - radius)) return Optional.of(Direction.NORTH);
+		else if (relativePos.z > (8.0f + radius)) return Optional.of(Direction.SOUTH);
+		else if (relativePos.y < (8.0f - radius)) return Optional.of(Direction.DOWN);
+		else if (relativePos.y > (8.0f + radius)) return Optional.of(Direction.UP);
+		return Optional.empty();
 	}
 
 	@Override
