@@ -73,5 +73,7 @@
   "tag.item.gwoodworks.beam": "Beam",
   "tag.item.gwoodworks.carved_log": "Carved Log",
   "tag.item.gwoodworks.secateurs": "Secateurs",
-  "tag.item.gwoodworks.stump": "Stump"
+  "tag.item.gwoodworks.stump": "Stump",
+  "tooltip.gwoodworks.beam_block": "Strip with axe, resize with shears, link with secateurs.",
+  "tooltip.gwoodworks.more_info": "Press [%s] to see more."
 }
