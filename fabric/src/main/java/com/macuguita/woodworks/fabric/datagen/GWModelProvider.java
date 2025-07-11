@@ -344,6 +344,14 @@ public class GWModelProvider extends FabricModelProvider {
 		blockStateSupplier.with(When.allOf(
 				When.create().set(ResizableBeamBlock.RADIUS, size),
 				When.anyOf(
+						When.create().setNegated(ResizableBeamBlock.UP, true),
+						When.create().setNegated(ResizableBeamBlock.DOWN, true),
+						When.create().setNegated(ResizableBeamBlock.NORTH, true),
+						When.create().setNegated(ResizableBeamBlock.SOUTH, true),
+						When.create().setNegated(ResizableBeamBlock.EAST, true),
+						When.create().setNegated(ResizableBeamBlock.WEST, true)
+				),
+				When.anyOf(
 						When.create().set(ResizableBeamBlock.UP, true),
 						When.create().set(ResizableBeamBlock.DOWN, true),
 						When.allOf(
@@ -353,50 +361,58 @@ public class GWModelProvider extends FabricModelProvider {
 								When.create().set(ResizableBeamBlock.SOUTH, false),
 								When.create().set(ResizableBeamBlock.EAST, false),
 								When.create().set(ResizableBeamBlock.WEST, false)
+						),
+						When.allOf(
+								When.create().set(ResizableBeamBlock.UP, false),
+								When.create().set(ResizableBeamBlock.DOWN, false),
+								When.anyOf(
+										When.create().set(ResizableBeamBlock.NORTH, false),
+										When.create().set(ResizableBeamBlock.SOUTH, false)
+								),
+								When.anyOf(
+										When.create().set(ResizableBeamBlock.WEST, false),
+										When.create().set(ResizableBeamBlock.EAST, false)
+								)
+						),
+						When.allOf(
+								When.create().set(ResizableBeamBlock.UP, false),
+								When.create().set(ResizableBeamBlock.DOWN, false),
+								When.create().set(ResizableBeamBlock.NORTH, true),
+								When.create().set(ResizableBeamBlock.SOUTH, true),
+								When.create().set(ResizableBeamBlock.EAST, true),
+								When.create().set(ResizableBeamBlock.WEST, true)
 						)
 				)
 		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
 
 		blockStateSupplier.with(When.allOf(
 				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.create().set(ResizableBeamBlock.UP, false),
+				When.create().set(ResizableBeamBlock.DOWN, false),
 				When.allOf(
-						When.create().set(ResizableBeamBlock.UP, false),
-						When.create().set(ResizableBeamBlock.DOWN, false),
-						When.anyOf(
-								When.create().set(ResizableBeamBlock.NORTH, false),
-								When.create().set(ResizableBeamBlock.SOUTH, false)
+						When.allOf(
+								When.create().set(ResizableBeamBlock.NORTH, true),
+								When.create().set(ResizableBeamBlock.SOUTH, true)
 						),
 						When.anyOf(
-								When.create().set(ResizableBeamBlock.WEST, false),
-								When.create().set(ResizableBeamBlock.EAST, false)
-						)
-				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
-
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.allOf(
-						When.create().set(ResizableBeamBlock.UP, false),
-						When.create().set(ResizableBeamBlock.DOWN, false),
-						When.anyOf(
-								When.allOf(
-										When.create().set(ResizableBeamBlock.NORTH, true),
-										When.create().set(ResizableBeamBlock.SOUTH, true)
-								)
+								When.create().set(ResizableBeamBlock.EAST, false),
+								When.create().set(ResizableBeamBlock.WEST, false)
 						)
 				)
 		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90));
 
 		blockStateSupplier.with(When.allOf(
 				When.create().set(ResizableBeamBlock.RADIUS, size),
+				When.create().set(ResizableBeamBlock.UP, false),
+				When.create().set(ResizableBeamBlock.DOWN, false),
 				When.allOf(
-						When.create().set(ResizableBeamBlock.UP, false),
-						When.create().set(ResizableBeamBlock.DOWN, false),
+						When.allOf(
+								When.create().set(ResizableBeamBlock.EAST, true),
+								When.create().set(ResizableBeamBlock.WEST, true)
+						),
 						When.anyOf(
-								When.allOf(
-										When.create().set(ResizableBeamBlock.EAST, true),
-										When.create().set(ResizableBeamBlock.WEST, true)
-								)
+								When.create().set(ResizableBeamBlock.NORTH, false),
+								When.create().set(ResizableBeamBlock.SOUTH, false)
 						)
 				)
 		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90));

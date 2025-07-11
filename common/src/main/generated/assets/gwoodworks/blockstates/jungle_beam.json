@@ -12,6 +12,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -38,46 +60,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_2x2"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "1"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -97,24 +129,30 @@
             "radius": "1"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -135,24 +173,30 @@
             "radius": "1"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -232,6 +276,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -258,46 +324,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_4x4"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "2"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -317,24 +393,30 @@
             "radius": "2"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -355,24 +437,30 @@
             "radius": "2"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -452,6 +540,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -478,46 +588,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_6x6"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "3"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -537,24 +657,30 @@
             "radius": "3"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -575,24 +701,30 @@
             "radius": "3"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -672,6 +804,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -698,46 +852,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_8x8"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "4"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -757,24 +921,30 @@
             "radius": "4"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -795,24 +965,30 @@
             "radius": "4"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -892,6 +1068,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -918,46 +1116,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_10x10"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "5"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -977,24 +1185,30 @@
             "radius": "5"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -1015,24 +1229,30 @@
             "radius": "5"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -1112,6 +1332,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -1138,46 +1380,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_12x12"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "6"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -1197,24 +1449,30 @@
             "radius": "6"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -1235,24 +1493,30 @@
             "radius": "6"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
@@ -1332,6 +1596,28 @@
           {
             "OR": [
               {
+                "up": "!true"
+              },
+              {
+                "down": "!true"
+              },
+              {
+                "north": "!true"
+              },
+              {
+                "south": "!true"
+              },
+              {
+                "east": "!true"
+              },
+              {
+                "west": "!true"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
                 "up": "true"
               },
               {
@@ -1358,46 +1644,56 @@
                     "west": "false"
                   }
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "apply": {
-        "model": "gwoodworks:block/jungle_beam_core_14x14"
-      },
-      "when": {
-        "AND": [
-          {
-            "radius": "7"
-          },
-          {
-            "AND": [
-              {
-                "up": "false"
               },
               {
-                "down": "false"
-              },
-              {
-                "OR": [
+                "AND": [
                   {
-                    "north": "false"
+                    "up": "false"
                   },
                   {
-                    "south": "false"
+                    "down": "false"
+                  },
+                  {
+                    "OR": [
+                      {
+                        "north": "false"
+                      },
+                      {
+                        "south": "false"
+                      }
+                    ]
+                  },
+                  {
+                    "OR": [
+                      {
+                        "west": "false"
+                      },
+                      {
+                        "east": "false"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "OR": [
+                "AND": [
                   {
-                    "west": "false"
+                    "up": "false"
                   },
                   {
-                    "east": "false"
+                    "down": "false"
+                  },
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  },
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
                   }
                 ]
               }
@@ -1417,24 +1713,30 @@
             "radius": "7"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "north": "true"
+                  },
+                  {
+                    "south": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "north": "true"
-                      },
-                      {
-                        "south": "true"
-                      }
-                    ]
+                    "east": "false"
+                  },
+                  {
+                    "west": "false"
                   }
                 ]
               }
@@ -1455,24 +1757,30 @@
             "radius": "7"
           },
           {
+            "up": "false"
+          },
+          {
+            "down": "false"
+          },
+          {
             "AND": [
               {
-                "up": "false"
-              },
-              {
-                "down": "false"
+                "AND": [
+                  {
+                    "east": "true"
+                  },
+                  {
+                    "west": "true"
+                  }
+                ]
               },
               {
                 "OR": [
                   {
-                    "AND": [
-                      {
-                        "east": "true"
-                      },
-                      {
-                        "west": "true"
-                      }
-                    ]
+                    "north": "false"
+                  },
+                  {
+                    "south": "false"
                   }
                 ]
               }
