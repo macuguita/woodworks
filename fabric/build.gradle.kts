@@ -71,6 +71,9 @@ dependencies {
         modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
     }
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
+    modRuntimeOnly("vectorwing:FarmersDelight:1.21.1-3.1.2+refabricated") {
+        exclude("net.fabricmc")
+    }
 
     // Other Mavens
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")

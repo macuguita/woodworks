@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/block",
   "format_version": "1.9.0",
+  "parent": "minecraft:block/block",
   "textures": {
     "particle": "#side"
   },

@@ -22,12 +22,11 @@
 
 package com.macuguita.woodworks.utils;
 
-import com.macuguita.woodworks.block.CarvedLogSeatBlock;
-import com.macuguita.woodworks.block.ResizableBeamBlock;
-import com.macuguita.woodworks.block.StumpSeatBlock;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import java.util.Objects;
 
-import net.minecraft.block.Block;
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.injectables.targets.ArchitecturyTarget;
+
 import net.minecraft.item.ItemConvertible;
 
 public class GWUtils {
@@ -42,15 +41,15 @@ public class GWUtils {
 		throw new AssertionError();
 	}
 
-	public static Block getStrippedStump(Block stump) {
-		return StumpSeatBlock.STRIPPED_STUMPS.get(stump);
+	public static boolean isFabric() {
+		return Objects.equals(ArchitecturyTarget.getCurrentTarget(), "fabric");
 	}
 
-	public static Block getStrippedCarvedLog(Block carvedLog) {
-		return CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.get(carvedLog);
+	public static boolean isNeoForge() {
+		return Objects.equals(ArchitecturyTarget.getCurrentTarget(), "neoforge");
 	}
 
-	public static Block getStrippedBeamBlock(Block beam) {
-		return ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.get(beam);
+	public static boolean isForge() {
+		return Objects.equals(ArchitecturyTarget.getCurrentTarget(), "forge");
 	}
 }

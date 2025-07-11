@@ -23,13 +23,13 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -44,6 +44,15 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 
 	@Override
 	public void generate(RecipeExporter recipeExporter) {
+		ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, GWObjects.SECATEURS.get(), 1)
+				.pattern("#$")
+				.pattern(" #")
+				.input('#', Items.IRON_NUGGET)
+				.input('$', Items.SHEARS)
+				.criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
+				.criterion(hasItem(Items.SHEARS), conditionsFromItem(Items.SHEARS))
+				.offerTo(recipeExporter);
+
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});

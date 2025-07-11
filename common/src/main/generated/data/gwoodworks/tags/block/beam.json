@@ -1,6 +1,24 @@
 {
   "values": [
     "gwoodworks:oak_beam",
-    "gwoodworks:stripped_oak_beam"
+    "gwoodworks:spruce_beam",
+    "gwoodworks:birch_beam",
+    "gwoodworks:jungle_beam",
+    "gwoodworks:acacia_beam",
+    "gwoodworks:dark_oak_beam",
+    "gwoodworks:mangrove_beam",
+    "gwoodworks:cherry_beam",
+    "gwoodworks:crimson_beam",
+    "gwoodworks:warped_beam",
+    "gwoodworks:stripped_oak_beam",
+    "gwoodworks:stripped_spruce_beam",
+    "gwoodworks:stripped_birch_beam",
+    "gwoodworks:stripped_jungle_beam",
+    "gwoodworks:stripped_acacia_beam",
+    "gwoodworks:stripped_dark_oak_beam",
+    "gwoodworks:stripped_mangrove_beam",
+    "gwoodworks:stripped_cherry_beam",
+    "gwoodworks:stripped_crimson_beam",
+    "gwoodworks:stripped_warped_beam"
   ]
 }

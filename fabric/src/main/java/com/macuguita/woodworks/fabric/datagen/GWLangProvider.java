@@ -44,17 +44,24 @@ public class GWLangProvider extends FabricLanguageProvider {
 
 	@Override
 	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
-			generateBlockTranslations(translationBuilder, GWUtils.getStrippedStump(regEntry.get()));
+		});
+		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
-			generateBlockTranslations(translationBuilder, GWUtils.getStrippedCarvedLog(regEntry.get()));
+		});
+		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
-			generateBlockTranslations(translationBuilder, GWUtils.getStrippedBeamBlock(regEntry.get()));
+		});
+		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
@@ -69,7 +76,7 @@ public class GWLangProvider extends FabricLanguageProvider {
 	private String capitalizeString(String string) {
 		char[] chars = string.toLowerCase(Locale.getDefault()).toCharArray();
 		boolean found = false;
-		for (int i = 0; i < chars.length; i++) {
+		for (int i = 0; i < chars.length; ++i) {
 			if (!found && Character.isLetter(chars[i])) {
 				chars[i] = Character.toUpperCase(chars[i]);
 				found = true;

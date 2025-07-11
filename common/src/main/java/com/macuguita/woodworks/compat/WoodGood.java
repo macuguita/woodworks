@@ -22,10 +22,9 @@
 
 package com.macuguita.woodworks.compat;
 
-import static com.macuguita.woodworks.GuitaWoodworks.id;
-
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 import com.macuguita.woodworks.reg.GWBlockTags;
@@ -62,6 +61,8 @@ public class WoodGood extends SimpleModule {
 	public final SimpleEntrySet<WoodType, Block> strippedStump;
 	public final SimpleEntrySet<WoodType, Block> carvedLog;
 	public final SimpleEntrySet<WoodType, Block> strippedCarvedLog;
+	public final SimpleEntrySet<WoodType, Block> beam;
+	public final SimpleEntrySet<WoodType, Block> strippedBeam;
 
 	public WoodGood(String modId) {
 		super(modId, "gww");
@@ -128,7 +129,7 @@ public class WoodGood extends SimpleModule {
 				//TEXTURE: stripped_log
 				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
-				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
@@ -137,6 +138,40 @@ public class WoodGood extends SimpleModule {
 				.defaultRecipe()
 				.build();
 		this.addEntry(strippedCarvedLog);
+
+		beam = SimpleEntrySet.builder(WoodType.class, "beam",
+						GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(beam);
+
+		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
+						GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedBeam);
 	}
 
 	@Override
@@ -163,6 +198,17 @@ public class WoodGood extends SimpleModule {
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
 		});
+		beam.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedBeam.blocks.get(w);
+			GWUtils.registerFuel(200, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
+				GWUtils.registerFuel(200, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
 	}
 
 	@Override
@@ -183,11 +229,11 @@ public class WoodGood extends SimpleModule {
 					handler.addTextureIfNotPresent(manager, newId, () -> newTop);
 
 				} catch (Exception e) {
-					handler.getLogger().error("Failed to generate Branch block texture for for {} : {}", block, e);
+					handler.getLogger().error("Failed to generate texture for {} : {}", block, e);
 				}
 			});
 		} catch (Exception e) {
-			GuitaWoodworks.LOGGER.error("Failed to open branch_top texture: ", e);
+			GuitaWoodworks.LOGGER.error("Failed to open stump_top texture: ", e);
 		}
 		try {
 			strippedStump.blocks.forEach((w, block) -> {
@@ -204,22 +250,22 @@ public class WoodGood extends SimpleModule {
 					handler.addTextureIfNotPresent(manager, newId, () -> newTop);
 
 				} catch (Exception e) {
-					handler.getLogger().error("Failed to generate Branch block texture for for {} : {}", block, e);
+					handler.getLogger().error("Failed to generate texture for {} : {}", block, e);
 				}
 			});
 		} catch (Exception e) {
-			GuitaWoodworks.LOGGER.error("Failed to open branch_top texture: ", e);
+			GuitaWoodworks.LOGGER.error("Failed to open stump_top texture: ", e);
 		}
 
 		// gwoodworks/textures block/carved_log_inside_edge.png
-		try (TextureImage insideEdgeMask = TextureImage.open(manager, id("block/mask/carved_log_inside_edge"));
-			 TextureImage insideMask = TextureImage.open(manager, id("block/mask/carved_log_inside"))
+		try (TextureImage insideEdgeMask = TextureImage.open(manager, GuitaWoodworks.id("block/mask/carved_log_inside_edge"));
+			 TextureImage insideMask = TextureImage.open(manager, GuitaWoodworks.id("block/mask/carved_log_inside"))
 		) {
 			carvedLog.blocks.forEach((woodType, block) -> {
 				Identifier id = Utils.getID(block);
 				String texturePath = "block/carved_oak_log_inside";
 
-				try (TextureImage carvedOakLogInsideTexture = TextureImage.open(manager, id(texturePath));
+				try (TextureImage carvedOakLogInsideTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
 					 TextureImage logSideTexture = TextureImage.open(manager,
 							 RPUtils.findFirstBlockTextureLocation(manager, woodType.log, SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
 					 TextureImage planksTexture = TextureImage.open(manager,
@@ -242,7 +288,7 @@ public class WoodGood extends SimpleModule {
 				Identifier id = Utils.getID(block);
 				String texturePath = "block/stripped_carved_oak_log_inside";
 
-				try (TextureImage strippedCarvedLogTexture = TextureImage.open(manager, id(texturePath));
+				try (TextureImage strippedCarvedLogTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
 					 TextureImage logSideTexture = TextureImage.open(manager,
 							 RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
 					 TextureImage planksTexture = TextureImage.open(manager,
@@ -261,6 +307,116 @@ public class WoodGood extends SimpleModule {
 			});
 		} catch (Exception e) {
 			GuitaWoodworks.LOGGER.error("Failed to open the mask texture: ", e);
+		}
+
+		try {
+			beam.blocks.forEach((w, block) -> {
+				Identifier id = Utils.getID(block);
+				String baseTexturePath = "block/oak_beam_top";
+
+				try (TextureImage topTexture = TextureImage.open(manager,
+						RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+					String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
+					String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
+					String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
+					String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
+					String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
+					String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
+					String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
+					String[] newIds = {
+							newId2x2,
+							newId4x4,
+							newId6x6,
+							newId8x8,
+							newId10x10,
+							newId12x12,
+							newId14x14
+					};
+
+					var newTop2x2 = topTexture.makeCopy();
+					var newTop4x4 = topTexture.makeCopy();
+					var newTop6x6 = topTexture.makeCopy();
+					var newTop8x8 = topTexture.makeCopy();
+					var newTop10x10 = topTexture.makeCopy();
+					var newTop12x12 = topTexture.makeCopy();
+					var newTop14x14 = topTexture.makeCopy();
+					TextureImage[] newTopTextures = {
+							newTop2x2,
+							newTop4x4,
+							newTop6x6,
+							newTop8x8,
+							newTop10x10,
+							newTop12x12,
+							newTop14x14
+					};
+					for (int i = 0; i < 7; ++i) {
+						var newTopTexture = newTopTextures[i];
+						generateBeamTexture(topTexture, newTopTexture, i);
+						handler.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+					}
+
+				} catch (Exception e) {
+					handler.getLogger().error("Failed to generate texture for {} : {}", block, e);
+				}
+			});
+		} catch (Exception e) {
+			GuitaWoodworks.LOGGER.error("Failed to open the beam textures: ", e);
+		}
+
+		try {
+			strippedBeam.blocks.forEach((w, block) -> {
+				Identifier id = Utils.getID(block);
+				String baseTexturePath = "block/stripped_oak_beam_top";
+
+				try (TextureImage topTexture = TextureImage.open(manager,
+						RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+					String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
+					String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
+					String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
+					String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
+					String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
+					String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
+					String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
+					String[] newIds = {
+							newId2x2,
+							newId4x4,
+							newId6x6,
+							newId8x8,
+							newId10x10,
+							newId12x12,
+							newId14x14
+					};
+
+					var newTop2x2 = topTexture.makeCopy();
+					var newTop4x4 = topTexture.makeCopy();
+					var newTop6x6 = topTexture.makeCopy();
+					var newTop8x8 = topTexture.makeCopy();
+					var newTop10x10 = topTexture.makeCopy();
+					var newTop12x12 = topTexture.makeCopy();
+					var newTop14x14 = topTexture.makeCopy();
+					TextureImage[] newTopTextures = {
+							newTop2x2,
+							newTop4x4,
+							newTop6x6,
+							newTop8x8,
+							newTop10x10,
+							newTop12x12,
+							newTop14x14
+					};
+					for (int i = 0; i < 7; ++i) {
+						var newTopTexture = newTopTextures[i];
+						generateBeamTexture(topTexture, newTopTexture, i);
+						handler.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+					}
+
+				} catch (Exception e) {
+					handler.getLogger().error("Failed to generate texture for {} : {}", block, e);
+				}
+			});
+		} catch (Exception e) {
+			GuitaWoodworks.LOGGER.error("Failed to open the beam textures: ", e);
 		}
 	}
 
@@ -299,6 +455,33 @@ public class WoodGood extends SimpleModule {
 
 	}
 
+	private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
+		int boxSize = ++radius * 2;
+		int offset = (16 - boxSize) / 2;
+
+		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
+				.copyRect(0, 0, 16, 1, offset, offset, boxSize, 1) // Top border
+				.copyRect(15, 0, 1, 16, offset + boxSize - 1, offset, 1, boxSize) // Right border
+				.copyRect(0, 15, 16, 1, offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+				.copyRect(0, 0, 1, 16, offset, offset, 1, boxSize) // Left border
+				.build();
+
+		transformer.apply(original, target);
+
+		target.forEachFramePixel((i, x, y) -> {
+			int localX = x - target.getFrameStartX(i);
+			int localY = y - target.getFrameStartY(i);
+
+			boolean inBox = (localX >= offset && localX < offset + boxSize) &&
+					(localY >= offset && localY < offset + boxSize);
+
+			if (!inBox) {
+				target.getImage().setColor(x, y, 0);
+			}
+		});
+	}
+
+
 	@Override
 	public boolean isEntryAlreadyRegistered(String blockId, BlockType blockType, Registry<?> registry) {
 		// blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
@@ -323,7 +506,7 @@ public class WoodGood extends SimpleModule {
 			shortenedIdenfity = shortenedId;
 
 			/// ========== INCLUDE VANILLA TYPE ========== \\\
-			//if (isWoodFrom(MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?carved_\\w+_log")) return false;
+			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?\\w+_beam")) return false;
 
 			return null;
 		}

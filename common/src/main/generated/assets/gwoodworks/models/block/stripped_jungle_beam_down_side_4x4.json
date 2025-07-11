@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/beams/sides_down/template_beam_side_4x4",
+  "textures": {
+    "side": "minecraft:block/stripped_jungle_log",
+    "top": "gwoodworks:block/stripped_jungle_beam_top_4x4"
+  }
+}

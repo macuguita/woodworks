@@ -34,8 +34,6 @@ public final class GuitaWoodworksFabricClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		BlockRenderLayerMap.INSTANCE.putBlock(GWObjects.OAK_BEAM.get(), RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(GWObjects.STRIPPED_OAK_BEAM.get(), RenderLayer.getCutout());
 		GuitaWoodworksClient.init();
 	}
 }

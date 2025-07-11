@@ -1,13 +1,13 @@
 package com.macuguita.woodworks.fabric.datagen;
 
-import com.macuguita.woodworks.reg.GWObjects;
+import java.util.concurrent.CompletableFuture;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.registry.RegistryWrapper;
 
-import java.util.concurrent.CompletableFuture;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
 public class GWBlockLootTableProvider extends FabricBlockLootTableProvider {
 

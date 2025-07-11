@@ -43,7 +43,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -65,9 +64,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 public class ResizableBeamBlock extends Block implements Waterloggable {
-	//TODO: when finished remove all debug assets for this block
-	//TODO: add datagen
-	//TODO: make textures and models
+	//TODO: add the severing mechanism
+	//TODO: fix some textures not connecting on the side model
 
 	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
 
@@ -161,7 +159,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 		BlockState state = this.getDefaultState()
 				.with(FACING_PROPERTIES.get(side.getOpposite()), true)
-				.with(FACING_PROPERTIES.get(side), ctx.getPlayer() != null ? ctx.getPlayer().isSneaking() : false)
+				.with(FACING_PROPERTIES.get(side), ctx.getPlayer() != null && ctx.getPlayer().isSneaking())
 				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
 
 		return shouldConnectWithNeighbors(state, ctx.getBlockPos(), ctx.getWorld());
@@ -205,7 +203,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			}
 			return ActionResult.SUCCESS;
 		}
-		if (stack.isOf(Items.STICK)) {
+		if (stack.isIn(GWItemTags.SECATEURS)) {
 			Optional<Direction> oDir = getDirectionByVec(hit.getPos(), pos, state);
 			oDir.ifPresent(direction -> GuitaWoodworks.LOGGER.info(String.format("Direction hit: %s", direction)));
 		}
@@ -241,7 +239,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		VoxelShape centerShape = Block.createCuboidShape(f * 16.0f, f * 16.0f, f * 16.0f, g * 16.0f, g * 16.0f, g * 16.0f);
 		VoxelShape[] armShapes = new VoxelShape[FACINGS.length];
 
-		for (int i = 0; i < FACINGS.length; i++) {
+		for (int i = 0; i < FACINGS.length; ++i) {
 			Direction direction = FACINGS[i];
 			armShapes[i] = VoxelShapes.cuboid(
 					0.5 + Math.min(-radius, direction.getOffsetX() * 0.5),
@@ -286,7 +284,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		 * ^ ^ ^ ^ ^ ^
 		 * N E S W U D
 		 */
-		for (int i = 0; i < FACINGS.length; i++) {
+		for (int i = 0; i < FACINGS.length; ++i) {
 			if (state.get(FACING_PROPERTIES.get(FACINGS[i]))) {
 				mask |= 1 << i;
 			}

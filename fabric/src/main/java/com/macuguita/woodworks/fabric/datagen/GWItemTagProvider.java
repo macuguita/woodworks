@@ -40,6 +40,10 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+		getOrCreateTagBuilder(GWItemTags.SECATEURS)
+				.add(GWObjects.SECATEURS.get())
+				.addOptionalTag(GWItemTags.KNIVES);
+
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
 		});

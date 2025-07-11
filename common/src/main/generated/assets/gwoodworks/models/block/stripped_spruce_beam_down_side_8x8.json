@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/beams/sides_down/template_beam_side_8x8",
+  "textures": {
+    "side": "minecraft:block/stripped_spruce_log",
+    "top": "gwoodworks:block/stripped_spruce_beam_top_8x8"
+  }
+}

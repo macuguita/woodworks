@@ -6,7 +6,6 @@
   "client": [
   ],
   "mixins": [
-    "AxeItemAccessor",
     "FireBlockAccessor"
   ],
   "injectors": {

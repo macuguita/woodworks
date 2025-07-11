@@ -97,7 +97,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		int times = ((degrees % 360) + 360) % 360 / 90;
 
 		VoxelShape result = shape;
-		for (int i = 0; i < times; i++) {
+		for (int i = 0; i < times; ++i) {
 			VoxelShape rotated = VoxelShapes.empty();
 			for (Box box : result.getBoundingBoxes()) {
 				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(
