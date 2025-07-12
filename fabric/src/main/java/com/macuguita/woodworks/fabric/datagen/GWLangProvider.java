@@ -62,6 +62,12 @@ public class GWLangProvider extends FabricLanguageProvider {
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
+		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+		});
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
 		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");
@@ -69,6 +75,8 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("block_type.gwoodworks.stripped_carved_log", "Stripped Carved %s Log");
 		translationBuilder.add("block_type.gwoodworks.beam", "%s Beam");
 		translationBuilder.add("block_type.gwoodworks.stripped_beam", "Stripped %s Beam");
+		translationBuilder.add("block_type.gwoodworks.hollow_log", "Hollow %s Log");
+		translationBuilder.add("block_type.gwoodworks.stripped_hollow_log", "Stripped Hollow %s Log");
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
 		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
 		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");
@@ -76,6 +84,8 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("tag.block.gwoodworks.carved_log", "Carved Log");
 		translationBuilder.add("tag.item.gwoodworks.beam", "Beam");
 		translationBuilder.add("tag.block.gwoodworks.beam", "Beam");
+		translationBuilder.add("tag.item.gwoodworks.hollow_log", "Hollow Log");
+		translationBuilder.add("tag.block.gwoodworks.hollow_log", "Hollow Log");
 		translationBuilder.add("tag.item.gwoodworks.secateurs", "Secateurs");
 		translationBuilder.add("tooltip.gwoodworks.more_info", "Press [%s] to see more.");
 		translationBuilder.add("tooltip.gwoodworks.beam_block", "Strip with axe, resize with shears, link with secateurs.");

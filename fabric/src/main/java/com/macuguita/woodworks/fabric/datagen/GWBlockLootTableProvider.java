@@ -57,5 +57,11 @@ public class GWBlockLootTableProvider extends FabricBlockLootTableProvider {
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			addDrop(regEntry.get());
 		});
+		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			addDrop(regEntry.get());
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			addDrop(regEntry.get());
+		});
 	}
 }

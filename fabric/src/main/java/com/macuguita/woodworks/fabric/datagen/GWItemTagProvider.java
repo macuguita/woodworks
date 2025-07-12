@@ -62,5 +62,11 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
 		});
+		GWObjects.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+		});
 	}
 }

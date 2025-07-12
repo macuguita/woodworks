@@ -33,6 +33,7 @@ public class GWBlockTags {
 	public static TagKey<Block> STUMP = createTag("stump");
 	public static TagKey<Block> CARVED_LOG = createTag("carved_log");
 	public static TagKey<Block> BEAM = createTag("beam");
+	public static TagKey<Block> HOLLOW_LOG = createTag("hollow_log");
 
 	private static TagKey<Block> createTag(String name) {
 		return TagKey.of(RegistryKeys.BLOCK, GuitaWoodworks.id(name));

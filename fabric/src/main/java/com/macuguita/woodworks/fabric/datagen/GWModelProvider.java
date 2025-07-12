@@ -26,10 +26,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.macuguita.woodworks.GuitaWoodworks;
+import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.NoCornerModularSeatBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.property.NoCornerModularSeatProperty;
 import com.macuguita.woodworks.reg.GWObjects;
+
+import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.data.client.BlockStateModelGenerator;
@@ -77,6 +80,12 @@ public class GWModelProvider extends FabricModelProvider {
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			registerBeamBlock(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
+		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			registerHollowLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			registerHollowLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
 	}
 
@@ -220,6 +229,11 @@ public class GWModelProvider extends FabricModelProvider {
 			Optional.of("_side_14x14"),
 			TextureKey.SIDE, TextureKey.TOP);
 
+	private static final Model HOLLOW_LOG = new Model(
+			Optional.of(GuitaWoodworks.id("block/template_hollow_log")),
+			Optional.empty(),
+			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
+
 	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
 		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top"));
 		Identifier identifier = STUMP.upload(block, textureMap, blockStateModelGenerator.modelCollector);
@@ -338,6 +352,19 @@ public class GWModelProvider extends FabricModelProvider {
 
 		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, textureMapSide8x8, blockStateModelGenerator.modelCollector);
 		blockStateModelGenerator.registerParentedItemModel(block, inventoryModel);
+	}
+
+	private void registerHollowLog(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
+		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(log, "_top")).put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log)));
+		Identifier model = HOLLOW_LOG.upload(block, textureMap, blockStateModelGenerator.modelCollector);
+
+		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(
+				BlockStateVariantMap.create(HollowLogBlock.AXIS)
+						.register(Direction.Axis.X, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+						.register(Direction.Axis.Y, BlockStateVariant.create().put(VariantSettings.MODEL, model))
+						.register(Direction.Axis.Z, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90))
+		));
+		blockStateModelGenerator.registerParentedItemModel(block, model);
 	}
 
 	private void generateRotatedCoreModels(MultipartBlockStateSupplier blockStateSupplier, Map<Integer, Identifier> coreModelMap, int size) {

@@ -58,5 +58,11 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWBlockTags.BEAM).add(regEntry.get());
 		});
+		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			getOrCreateTagBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
+		});
 	}
 }

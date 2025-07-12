@@ -66,10 +66,16 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 			createCarvedLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			createBeamRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			createBeamBlockRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			createBeamRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
+		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			createHollowLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
+		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			createHollowLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
 	}
 
@@ -91,11 +97,21 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 				.offerTo(exporter);
 	}
 
-	private void createBeamBlockRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
+	private void createBeamRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
 		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 12)
 				.pattern("#")
 				.pattern("#")
 				.pattern("#")
+				.input('#', log)
+				.criterion(hasItem(log), conditionsFromItem(log))
+				.offerTo(exporter);
+	}
+
+	private void createHollowLogRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
+		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 12)
+				.pattern("# #")
+				.pattern("# #")
+				.pattern("# #")
 				.input('#', log)
 				.criterion(hasItem(log), conditionsFromItem(log))
 				.offerTo(exporter);
