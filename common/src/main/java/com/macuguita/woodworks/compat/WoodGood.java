@@ -24,6 +24,7 @@ package com.macuguita.woodworks.compat;
 
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
@@ -63,6 +64,8 @@ public class WoodGood extends SimpleModule {
 	public final SimpleEntrySet<WoodType, Block> strippedCarvedLog;
 	public final SimpleEntrySet<WoodType, Block> beam;
 	public final SimpleEntrySet<WoodType, Block> strippedBeam;
+	public final SimpleEntrySet<WoodType, Block> hollowLog;
+	public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
 
 	public WoodGood(String modId) {
 		super(modId, "gww");
@@ -143,12 +146,9 @@ public class WoodGood extends SimpleModule {
 						GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
-				//TEXTURE: stripped_log
-				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
 				.setTabKey(tab)
-				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
@@ -160,8 +160,6 @@ public class WoodGood extends SimpleModule {
 						GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
-				//TEXTURE: stripped_log
-				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
 				.setTabKey(tab)
@@ -172,6 +170,40 @@ public class WoodGood extends SimpleModule {
 				.defaultRecipe()
 				.build();
 		this.addEntry(strippedBeam);
+
+		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
+						GWObjects.HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(hollowLog);
+
+		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
+						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedHollowLog);
 	}
 
 	@Override
@@ -205,6 +237,17 @@ public class WoodGood extends SimpleModule {
 			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 			if (stripped != null) {
 				ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
+				GWUtils.registerFuel(200, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		hollowLog.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedHollowLog.blocks.get(w);
+			GWUtils.registerFuel(200, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				HollowLogBlock.STRIPPED_HOLLOW_LOGS.put(block, stripped);
 				GWUtils.registerFuel(200, stripped);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
