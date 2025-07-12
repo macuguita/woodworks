@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.macuguita.woodworks.reg.GWItemTags;
+import com.macuguita.woodworks.utils.GWUtils;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.block.Block;
@@ -45,6 +46,7 @@ import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -65,23 +67,6 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 
 	public CarvedLogSeatBlock(Settings settings) {
 		super(settings);
-	}
-
-	private static VoxelShape rotateVoxelShape(VoxelShape shape, int degrees) {
-		int times = ((degrees % 360) + 360) % 360 / 90;
-
-		VoxelShape result = shape;
-		for (int i = 0; i < times; ++i) {
-			VoxelShape rotated = VoxelShapes.empty();
-			for (Box box : result.getBoundingBoxes()) {
-				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(
-						1 - box.maxZ, box.minY, box.minX,
-						1 - box.minZ, box.maxY, box.maxX
-				));
-			}
-			result = rotated;
-		}
-		return result;
 	}
 
 	@Override
@@ -140,9 +125,9 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		return switch (state.get(FACING)) {
 			case DOWN, UP -> VoxelShapes.empty();
 			case NORTH -> shape;
-			case SOUTH -> rotateVoxelShape(shape, 180);
-			case WEST -> rotateVoxelShape(shape, 270);
-			case EAST -> rotateVoxelShape(shape, 90);
+			case SOUTH -> GWUtils.rotateVoxelShape(shape, Direction.Axis.Y, 180);
+			case WEST -> GWUtils.rotateVoxelShape(shape, Direction.Axis.Y, 270);
+			case EAST -> GWUtils.rotateVoxelShape(shape, Direction.Axis.Y, 90);
 		};
 	}
 

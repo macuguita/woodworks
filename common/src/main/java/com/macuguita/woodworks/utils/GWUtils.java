@@ -28,6 +28,10 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.injectables.targets.ArchitecturyTarget;
 
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 
 public class GWUtils {
 
@@ -52,4 +56,34 @@ public class GWUtils {
 	public static boolean isForge() {
 		return Objects.equals(ArchitecturyTarget.getCurrentTarget(), "forge");
 	}
+
+	public static VoxelShape rotateVoxelShape(VoxelShape shape, Direction.Axis axis, int degrees) {
+		int times = ((degrees % 360) + 360) % 360 / 90;
+		if (times == 0 || shape.isEmpty()) return shape;
+
+		VoxelShape result = shape;
+		for (int i = 0; i < times; ++i) {
+			VoxelShape rotated = VoxelShapes.empty();
+			for (Box box : result.getBoundingBoxes()) {
+				Box rotatedBox = switch (axis) {
+					case Y -> new Box(
+							1 - box.maxZ, box.minY, box.minX,
+							1 - box.minZ, box.maxY, box.maxX
+					);
+					case X -> new Box(
+							box.minX, 1 - box.maxZ, box.minY,
+							box.maxX, 1 - box.minZ, box.maxY
+					);
+					case Z -> new Box(
+							box.minY, box.minX, box.minZ,
+							box.maxY, box.maxX, box.maxZ
+					);
+				};
+				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(rotatedBox));
+			}
+			result = rotated;
+		}
+		return result;
+	}
+
 }

@@ -122,7 +122,6 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);
 		Direction right = dir.rotateClockwise(Direction.Axis.Y);
 
-		// Might have to make it so the tag is checked on the CarvedLogSeatBlock instead...
 		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.offset(left)).get(FACING) == dir;
 		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.offset(right)).get(FACING) == dir;
 
