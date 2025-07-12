@@ -41,6 +41,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
 
 public final class GuitaWoodworks {
+	//TODO: need to recalculate the fuel time of each block respective to their crafting recipe
 
 	public static final String MOD_ID = "gwoodworks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);

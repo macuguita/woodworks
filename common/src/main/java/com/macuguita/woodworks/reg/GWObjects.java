@@ -31,6 +31,7 @@ import com.macuguita.lib.platform.registry.GuitaRegistry;
 import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.utils.GWUtils;
@@ -65,6 +66,11 @@ public class GWObjects {
 	public static final GuitaRegistry<Block> STRIPPED_BEAM_BLOCKS = GuitaRegistries.create(BLOCKS);
 	public static final GuitaRegistry<Item> BEAM_ITEMS = GuitaRegistries.create(ITEMS);
 	public static final GuitaRegistry<Item> STRIPPED_BEAM_ITEMS = GuitaRegistries.create(ITEMS);
+
+	public static final GuitaRegistry<Block> HOLLOW_LOG_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Block> STRIPPED_HOLLOW_LOG_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Item> HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
+	public static final GuitaRegistry<Item> STRIPPED_HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 
 	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Settings().maxDamage(476).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent())));
 
@@ -158,6 +164,36 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> WARPED_BEAM = createBeam("warped_beam", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_WARPED_BEAM = createStrippedBeam("stripped_warped_beam", Blocks.STRIPPED_WARPED_STEM);
 
+	public static final GuitaRegistryEntry<Block> HOLLOW_OAK_LOG = createHollowLog("hollow_oak_log", Blocks.OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_OAK_LOG = createStrippedHollowLog("stripped_hollow_oak_log", Blocks.STRIPPED_OAK_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_SPRUCE_LOG = createHollowLog("hollow_spruce_log", Blocks.SPRUCE_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_SPRUCE_LOG = createStrippedHollowLog("stripped_hollow_spruce_log", Blocks.STRIPPED_SPRUCE_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_BIRCH_LOG = createHollowLog("hollow_birch_log", Blocks.BIRCH_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_BIRCH_LOG = createStrippedHollowLog("stripped_hollow_birch_log", Blocks.STRIPPED_BIRCH_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_JUNGLE_LOG = createHollowLog("hollow_jungle_log", Blocks.JUNGLE_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_JUNGLE_LOG = createStrippedHollowLog("stripped_hollow_jungle_log", Blocks.STRIPPED_JUNGLE_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_ACACIA_LOG = createHollowLog("hollow_acacia_log", Blocks.ACACIA_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_ACACIA_LOG = createStrippedHollowLog("stripped_hollow_acacia_log", Blocks.STRIPPED_ACACIA_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_DARK_OAK_LOG = createHollowLog("hollow_dark_oak_log", Blocks.DARK_OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_DARK_OAK_LOG = createStrippedHollowLog("stripped_hollow_dark_oak_log", Blocks.STRIPPED_DARK_OAK_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_MANGROVE_LOG = createHollowLog("hollow_mangrove_log", Blocks.MANGROVE_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_MANGROVE_LOG = createStrippedHollowLog("stripped_hollow_mangrove_log", Blocks.STRIPPED_MANGROVE_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_CHERRY_LOG = createHollowLog("hollow_cherry_log", Blocks.CHERRY_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CHERRY_LOG = createStrippedHollowLog("stripped_hollow_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_CRIMSON_STEM = createHollowLog("hollow_crimson_stem", Blocks.CRIMSON_STEM);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CRIMSON_STEM = createStrippedHollowLog("stripped_hollow_crimson_stem", Blocks.STRIPPED_CRIMSON_STEM);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_WARPED_STEM = createHollowLog("hollow_warped_stem", Blocks.WARPED_STEM);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_WARPED_STEM = createStrippedHollowLog("stripped_hollow_warped_stem", Blocks.STRIPPED_WARPED_STEM);
+
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
 		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
@@ -190,6 +226,18 @@ public class GWObjects {
 
 	public static GuitaRegistryEntry<Block> createStrippedBeam(String name, Block wood) {
 		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
+	public static GuitaRegistryEntry<Block> createHollowLog(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), HOLLOW_LOG_BLOCKS, HOLLOW_LOG_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
+	public static GuitaRegistryEntry<Block> createStrippedHollowLog(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
