@@ -36,7 +36,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -117,11 +116,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
-		if (Screen.hasShiftDown()) {
-			tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GREEN));
-		} else {
-			tooltip.add(Text.translatable("tooltip.gwoodworks.more_info", "SHIFT").formatted(Formatting.DARK_GRAY));
-		}
+		tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GRAY));
 	}
 
 	@Override

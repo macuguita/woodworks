@@ -98,6 +98,5 @@
   "tag.item.gwoodworks.hollow_log": "Hollow Log",
   "tag.item.gwoodworks.secateurs": "Secateurs",
   "tag.item.gwoodworks.stump": "Stump",
-  "tooltip.gwoodworks.beam_block": "Strip with axe, resize with shears, link with secateurs.",
-  "tooltip.gwoodworks.more_info": "Press [%s] to see more."
+  "tooltip.gwoodworks.beam_block": "Strip with axe, resize with shears, link with secateurs."
 }

@@ -87,7 +87,6 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("tag.item.gwoodworks.hollow_log", "Hollow Log");
 		translationBuilder.add("tag.block.gwoodworks.hollow_log", "Hollow Log");
 		translationBuilder.add("tag.item.gwoodworks.secateurs", "Secateurs");
-		translationBuilder.add("tooltip.gwoodworks.more_info", "Press [%s] to see more.");
 		translationBuilder.add("tooltip.gwoodworks.beam_block", "Strip with axe, resize with shears, link with secateurs.");
 	}
 
