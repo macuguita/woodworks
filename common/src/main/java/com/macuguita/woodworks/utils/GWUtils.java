@@ -30,7 +30,6 @@ import dev.architectury.injectables.targets.ArchitecturyTarget;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -61,8 +60,8 @@ public class GWUtils {
 	}
 
 	public static Block getStrippedBlockOrSelf(Block block) {
-		Block stripped = ((AxeItemAccessor) Items.DIAMOND_AXE).gwoodworks$getStrippedBlocksMap().get(block);
-		return stripped == null? block : stripped;
+		Block stripped = AxeItemAccessor.gwoodworks$getStrippedBlocksMap().get(block);
+		return stripped == null ? block : stripped;
 	}
 
 	public static VoxelShape rotateVoxelShape(VoxelShape shape, Direction.Axis axis, int degrees) {

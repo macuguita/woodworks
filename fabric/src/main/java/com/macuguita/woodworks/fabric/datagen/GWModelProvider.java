@@ -31,7 +31,6 @@ import com.macuguita.woodworks.block.NoCornerModularSeatBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.property.NoCornerModularSeatProperty;
 import com.macuguita.woodworks.reg.GWObjects;
-
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
