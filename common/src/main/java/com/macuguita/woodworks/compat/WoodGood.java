@@ -211,44 +211,44 @@ public class WoodGood extends SimpleModule {
 		stump.blocks.forEach((w, block) -> {
 
 			Block stripped = strippedStump.blocks.get(w);
-			GWUtils.registerFuel(200, block);
+			GWUtils.registerFuel(150, block);
 			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 			if (stripped != null) {
 				StumpSeatBlock.STRIPPED_STUMPS.put(block, stripped);
-				GWUtils.registerFuel(200, stripped);
+				GWUtils.registerFuel(150, stripped);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
 		});
 		carvedLog.blocks.forEach((w, block) -> {
 
 			Block stripped = strippedCarvedLog.blocks.get(w);
-			GWUtils.registerFuel(200, block);
+			GWUtils.registerFuel(250, block);
 			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 			if (stripped != null) {
 				CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(block, stripped);
-				GWUtils.registerFuel(200, stripped);
+				GWUtils.registerFuel(250, stripped);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
 		});
 		beam.blocks.forEach((w, block) -> {
 
 			Block stripped = strippedBeam.blocks.get(w);
-			GWUtils.registerFuel(200, block);
+			GWUtils.registerFuel(75, block);
 			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 			if (stripped != null) {
 				ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
-				GWUtils.registerFuel(200, stripped);
+				GWUtils.registerFuel(75, stripped);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
 		});
 		hollowLog.blocks.forEach((w, block) -> {
 
 			Block stripped = strippedHollowLog.blocks.get(w);
-			GWUtils.registerFuel(200, block);
+			GWUtils.registerFuel(150, block);
 			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 			if (stripped != null) {
 				HollowLogBlock.STRIPPED_HOLLOW_LOGS.put(block, stripped);
-				GWUtils.registerFuel(200, stripped);
+				GWUtils.registerFuel(150, stripped);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
 			}
 		});
