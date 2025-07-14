@@ -1,6 +1,8 @@
 package com.macuguita.woodworks.block;
 
-import com.macuguita.woodworks.reg.GWItemTags;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
@@ -33,9 +35,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class HollowLogBlock extends PillarBlock implements Waterloggable {
 
 	public static final Map<Block, Block> STRIPPED_HOLLOW_LOGS = new HashMap<>();
@@ -52,16 +51,19 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 	public HollowLogBlock(Settings settings) {
 		super(settings);
 	}
+
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(WATERLOGGED);
+		builder.add(PillarBlock.AXIS, WATERLOGGED);
 	}
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		return this.getDefaultState()
-				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER))
+				.with(AXIS, ctx.getSide().getAxis());
 	}
+
 	@Override
 	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
 		Hand hand = player.getActiveHand();
@@ -87,7 +89,8 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 	@Override
 	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return switch (state.get(PillarBlock.AXIS)) {
-			case X -> GWUtils.rotateVoxelShape(GWUtils.rotateVoxelShape(VOXEL_SHAPE, Direction.Axis.X, 90), Direction.Axis.Y, 90);
+			case X ->
+					GWUtils.rotateVoxelShape(GWUtils.rotateVoxelShape(VOXEL_SHAPE, Direction.Axis.X, 90), Direction.Axis.Y, 90);
 			case Y -> VOXEL_SHAPE;
 			case Z -> GWUtils.rotateVoxelShape(VOXEL_SHAPE, Direction.Axis.X, 90);
 		};
