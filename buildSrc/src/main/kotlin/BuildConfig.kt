@@ -9,11 +9,11 @@ object BuildConfig {
     val architectureApiVersion: String = "13.0.8"
     val enabledPlatforms: String = "fabric,neoforge"
 
-    val modVersion: String = "0.0.1-" + minecraftVersion
+    val modVersion: String = "1.0.0-" + minecraftVersion
     val mavenGroup: String = "com.macuguita.woodworks"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
-    val description: String = "Mod that adds all kinds of wood blocks! "
+    val description: String = "Decorations that have some sort of chopped charm!"
     val license: String = "MIT"
     val website: String = "https://macuguita.com/"
     val source: String = "https://github.com/macuguita/woodworks"
