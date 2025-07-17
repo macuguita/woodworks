@@ -31,20 +31,19 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -66,6 +65,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+@SuppressWarnings("deprecation")
 public class ResizableBeamBlock extends Block implements Waterloggable {
 
 	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
@@ -115,7 +115,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+	public void appendTooltip(ItemStack stack, @Nullable BlockView world, List<Text> tooltip, TooltipContext options) {
 		tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GRAY));
 	}
 
@@ -172,13 +172,12 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof AxeItem) {
 			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 				BlockState strippedState = strippedBlock.getDefaultState()
@@ -196,7 +195,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			}
 		}
 		if (stack.isIn(GWItemTags.SHEARS)) {
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 			// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
@@ -220,7 +219,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 					world.setBlockState(neighborPos, newNeighborState, NOTIFY_ALL);
 				}
 
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 				world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return ActionResult.SUCCESS;
 			}
@@ -231,11 +230,11 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 			world.setBlockState(pos, newState);
 
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 			world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			return ActionResult.SUCCESS;
 		}
-		return super.onUse(state, world, pos, player, hit);
+		return super.onUse(state, world, pos, player, hand, hit);
 	}
 
 	private BlockState shiftRadius(BlockState state, int amount) {
@@ -297,7 +296,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		int radius = state.get(RADIUS);
 		int mask = this.getConnectionMask(state);
 		return this.radiusToFacingsShape[radius][mask];

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:mangrove_log"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "#  ",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "gwoodworks:carved_mangrove_log"
+  },
+  "show_notification": true
+}

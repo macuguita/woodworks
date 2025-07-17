@@ -39,7 +39,6 @@ import com.macuguita.woodworks.utils.GWUtils;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ShearsItem;
@@ -72,7 +71,7 @@ public class GWObjects {
 	public static final GuitaRegistry<Item> HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 	public static final GuitaRegistry<Item> STRIPPED_HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 
-	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Settings().maxDamage(476).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent())));
+	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new ShearsItem(new Item.Settings().maxDamage(476)));
 
 	public static final GuitaRegistryEntry<Block> OAK_STUMP = createStump("oak_stump", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_STUMP = createStrippedStump("stripped_oak_stump", Blocks.STRIPPED_OAK_LOG);

@@ -22,19 +22,15 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
 import com.macuguita.woodworks.reg.GWObjects;
-
-import net.minecraft.registry.RegistryWrapper;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
 public class GWBlockLootTableProvider extends FabricBlockLootTableProvider {
 
-	protected GWBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-		super(dataOutput, registryLookup);
+	protected GWBlockLootTableProvider(FabricDataOutput dataOutput) {
+		super(dataOutput);
 	}
 
 	@Override

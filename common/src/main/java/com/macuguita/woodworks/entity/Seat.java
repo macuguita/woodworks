@@ -31,16 +31,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Dismounting;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.EntityTrackerEntry;
 import net.minecraft.util.annotation.MethodsReturnNonnullByDefault;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -92,8 +89,8 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	public Packet<ClientPlayPacketListener> createSpawnPacket(EntityTrackerEntry tracker) {
-		return new EntitySpawnS2CPacket(this, tracker, canRotate ? 1 : 0);
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return new EntitySpawnS2CPacket(this, canRotate ? 1 : 0);
 	}
 
 	@Override
@@ -178,9 +175,11 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	protected Vec3d getPassengerAttachmentPos(Entity entity, EntityDimensions dims, float partialTick) {
-		if (shape == null) return super.getPassengerAttachmentPos(entity, dims, partialTick);
-		return new Vec3d(0, (float) (shape.getLengthY() * 0.75) + 0.2f, 0);
+	public double getMountedHeightOffset() {
+		if (shape == null) {
+			return super.getMountedHeightOffset();
+		}
+		return shape.getYLength() * 0.75;
 	}
 
 	protected void clampRotation(Entity entity) {
@@ -205,7 +204,7 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	protected void initDataTracker(DataTracker.Builder builder) {}
+	protected void initDataTracker() {}
 
 	@Override
 	protected void readCustomDataFromNbt(NbtCompound tag) {}

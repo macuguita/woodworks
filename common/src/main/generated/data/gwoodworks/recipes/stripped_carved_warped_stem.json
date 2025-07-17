@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stripped_warped_stem"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "#  ",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "gwoodworks:stripped_carved_warped_stem"
+  },
+  "show_notification": true
+}

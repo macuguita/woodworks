@@ -1,6 +1,6 @@
-// 1.21.1	2025-07-14T09:00:26.362392	guita's Woodworks/Tags for minecraft:item
-f484e0939fcbe6abff1f27b63eccaaab516949f7 data/gwoodworks/tags/item/carved_log.json
-ea97f8560a156259c1a2395cffcab91f6b8895f5 data/gwoodworks/tags/item/stump.json
-907c25116ed23e4c60290749f0103e86ac6abed9 data/gwoodworks/tags/item/secateurs.json
-300bd4564e735c5f4b0362161bc3ef9d73237434 data/gwoodworks/tags/item/hollow_log.json
-db949fbaac77d15ca11e81e820f1cf4475c31b64 data/gwoodworks/tags/item/beam.json
+// 1.20.1	2025-07-17T16:34:31.766813	guita's Woodworks/Tags for minecraft:item
+7485bd6e71f2c81b951a4088718b62573ac0c7f1 data/gwoodworks/tags/items/carved_log.json
+2e4850ea530499573c70cb52a9b8ea011aa2446c data/gwoodworks/tags/items/stump.json
+fbcb7d87426794be47abf865b0d9e7b42508a290 data/gwoodworks/tags/items/beam.json
+104c637950bf655021c5c6898d80f80f41750b41 data/gwoodworks/tags/items/secateurs.json
+5d2b98fe7ee0d042b0dc16dca8466fca8a03401a data/gwoodworks/tags/items/hollow_log.json

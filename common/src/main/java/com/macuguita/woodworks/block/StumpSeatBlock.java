@@ -31,7 +31,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -55,6 +54,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+@SuppressWarnings("deprecation")
 public class StumpSeatBlock extends Block implements SittableBlock, Waterloggable {
 
 	public static final Map<Block, Block> STRIPPED_STUMPS = new HashMap<>();
@@ -80,13 +80,12 @@ public class StumpSeatBlock extends Block implements SittableBlock, Waterloggabl
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof AxeItem) {
 			Block strippedBlock = STRIPPED_STUMPS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 				if (world instanceof ServerWorld serverWorld) {
@@ -103,7 +102,7 @@ public class StumpSeatBlock extends Block implements SittableBlock, Waterloggabl
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return VOXEL_SHAPE;
 	}
 

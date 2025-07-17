@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stripped_acacia_log"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "#  ",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "gwoodworks:stripped_carved_acacia_log"
+  },
+  "show_notification": true
+}

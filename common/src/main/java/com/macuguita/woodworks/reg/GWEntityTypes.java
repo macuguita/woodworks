@@ -38,7 +38,7 @@ public class GWEntityTypes {
 
 	public static final GuitaRegistryEntry<EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () ->
 			EntityType.Builder.<Seat>create(Seat::new, SpawnGroup.MISC)
-					.dimensions(1, 1)
+					.setDimensions(1, 1)
 					.disableSaving()
 					.makeFireImmune()
 					.disableSummon()

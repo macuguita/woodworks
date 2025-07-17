@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "gwoodworks:carved_oak_log",
+    "gwoodworks:carved_spruce_log",
+    "gwoodworks:carved_birch_log",
+    "gwoodworks:carved_jungle_log",
+    "gwoodworks:carved_acacia_log",
+    "gwoodworks:carved_dark_oak_log",
+    "gwoodworks:carved_mangrove_log",
+    "gwoodworks:carved_cherry_log",
+    "gwoodworks:carved_crimson_stem",
+    "gwoodworks:carved_warped_stem",
+    "gwoodworks:stripped_carved_oak_log",
+    "gwoodworks:stripped_carved_spruce_log",
+    "gwoodworks:stripped_carved_birch_log",
+    "gwoodworks:stripped_carved_jungle_log",
+    "gwoodworks:stripped_carved_acacia_log",
+    "gwoodworks:stripped_carved_dark_oak_log",
+    "gwoodworks:stripped_carved_mangrove_log",
+    "gwoodworks:stripped_carved_cherry_log",
+    "gwoodworks:stripped_carved_crimson_stem",
+    "gwoodworks:stripped_carved_warped_stem"
+  ]
+}

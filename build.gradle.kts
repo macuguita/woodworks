@@ -50,6 +50,10 @@ allprojects {
                 includeGroup("curse.maven")
             }
         }
+        maven {
+            name = "Ladysnake Mods"
+            url = uri("https://maven.ladysnake.org/releases")
+        }
     }
 }
 
@@ -63,23 +67,18 @@ subprojects {
     dependencies {
         "minecraft"("net.minecraft:minecraft:${BuildConfig.minecraftVersion}")
 
-        "mappings"(
-            loom.layered {
-                mappings("net.fabricmc:yarn:${BuildConfig.yarnMappings}:v2")
-                mappings("dev.architectury:yarn-mappings-patch-neoforge:${BuildConfig.yarnMappingsNeoforgePatchVersion}")
-            }
-        )
+        "mappings"("net.fabricmc:yarn:${BuildConfig.yarnMappings}:v2")
     }
 
     configure<JavaPluginExtension> {
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     tasks.withType<JavaCompile>().configureEach {
-        options.release.set(21)
+        options.release.set(17)
     }
 
     configure<PublishingExtension> {

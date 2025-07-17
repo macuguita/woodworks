@@ -1,9 +1,0 @@
-{
-  "values": [
-    "gwoodworks:secateurs",
-    {
-      "id": "#c:tools/knife",
-      "required": false
-    }
-  ]
-}

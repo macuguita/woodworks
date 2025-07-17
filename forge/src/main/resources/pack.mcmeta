@@ -1,0 +1,7 @@
+{
+  "pack": {
+    "description": "${modName}",
+    "forge:server_data_pack_format": 15,
+    "pack_format": 15
+  }
+}

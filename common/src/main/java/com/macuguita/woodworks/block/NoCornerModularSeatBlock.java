@@ -31,7 +31,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -51,6 +50,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+@SuppressWarnings("deprecation")
 public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock implements Waterloggable, SittableBlock {
 
 	public static final EnumProperty<NoCornerModularSeatProperty> SHAPE = EnumProperty.of("shape", NoCornerModularSeatProperty.class);
@@ -70,7 +70,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 	}
 
 	@Override
-	protected BlockState mirror(BlockState state, BlockMirror mirror) {
+	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		Direction direction = state.get(FACING);
 		NoCornerModularSeatProperty couchShape = state.get(SHAPE);
 		switch (mirror) {
@@ -89,8 +89,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
 		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
@@ -139,10 +138,5 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-	}
-
-	@Override
-	protected boolean canPathfindThrough(BlockState state, NavigationType type) {
-		return false;
 	}
 }

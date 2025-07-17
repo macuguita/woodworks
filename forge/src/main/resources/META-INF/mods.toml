@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "${issues}"
+license = "${license}"
+
+[[mods]]
+modId = "${modId}"
+version = "${version}-forge"
+displayName = "${modName}"
+authors = "macuguita"
+description = '''
+${description}
+'''
+displayURL = "${website}"
+logoFile = "assets/${modId}/logo.png"
+
+[[dependencies.${ modId }]]
+modId = "forge"
+mandatory = true
+versionRange = "[${loaderVersion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraftVersion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "macu_lib"
+mandatory = true
+versionRange = "[${macuLibVersion}-${minecraftVersion},)"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "everycomp"
+mandatory = false
+versionRange = "*"
+ordering = "BEFORE"
+side = "BOTH"

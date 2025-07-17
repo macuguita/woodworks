@@ -23,26 +23,24 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 public class GWLangProvider extends FabricLanguageProvider {
 
-	public GWLangProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-		super(dataOutput, "en_us", registryLookup);
+	protected GWLangProvider(FabricDataOutput dataOutput) {
+		super(dataOutput, "en_us");
 	}
 
 	@Override
-	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+	public void generateTranslations(TranslationBuilder translationBuilder) {
 		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());

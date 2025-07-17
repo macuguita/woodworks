@@ -27,13 +27,10 @@ import java.util.Map;
 
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.utils.GWUtils;
-import com.mojang.serialization.MapCodec;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
@@ -52,11 +49,11 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+@SuppressWarnings("deprecation")
 public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements SittableBlock {
 
 	public static final Map<Block, Block> STRIPPED_CARVED_LOGS = new HashMap<>();
 	public static final Box SEAT = new Box(0.125, 0, 0.125, 0.875, 0.5, 0.875);
-	public static final MapCodec<CarvedLogSeatBlock> CODEC = createCodec(CarvedLogSeatBlock::new);
 	protected static final VoxelShape VOXEL_SHAPE = VoxelShapes.combineAndSimplify(
 			VoxelShapes.fullCube(),
 			VoxelShapes.union(
@@ -70,13 +67,12 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof AxeItem) {
 			Block strippedBlock = STRIPPED_CARVED_LOGS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 				if (world instanceof ServerWorld serverWorld) {
@@ -91,11 +87,11 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 			}
 		}
 		if (stack.isIn(GWItemTags.WATER_BUCKETS) || stack.isIn(GWItemTags.EMPTY_BUCKETS)) return ActionResult.FAIL;
-		return super.onUse(state, world, pos, player, hit);
+		return super.onUse(state, world, pos, player, hand, hit);
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		VoxelShape shape = switch (state.get(SHAPE)) {
 			case SINGLE -> VOXEL_SHAPE;
 			case LEFT -> VoxelShapes.combineAndSimplify(
@@ -134,10 +130,5 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 	@Override
 	public Box getSeatSize(BlockState state) {
 		return SEAT;
-	}
-
-	@Override
-	protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-		return CODEC;
 	}
 }
