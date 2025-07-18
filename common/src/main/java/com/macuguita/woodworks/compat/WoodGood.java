@@ -58,203 +58,203 @@ import net.minecraft.util.Identifier;
 
 public class WoodGood extends SimpleModule {
 
-    public final SimpleEntrySet<WoodType, Block> stump;
-    public final SimpleEntrySet<WoodType, Block> strippedStump;
-    public final SimpleEntrySet<WoodType, Block> carvedLog;
-    public final SimpleEntrySet<WoodType, Block> strippedCarvedLog;
-    public final SimpleEntrySet<WoodType, Block> beam;
-    public final SimpleEntrySet<WoodType, Block> strippedBeam;
-    public final SimpleEntrySet<WoodType, Block> hollowLog;
-    public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
+	public final SimpleEntrySet<WoodType, Block> stump;
+	public final SimpleEntrySet<WoodType, Block> strippedStump;
+	public final SimpleEntrySet<WoodType, Block> carvedLog;
+	public final SimpleEntrySet<WoodType, Block> strippedCarvedLog;
+	public final SimpleEntrySet<WoodType, Block> beam;
+	public final SimpleEntrySet<WoodType, Block> strippedBeam;
+	public final SimpleEntrySet<WoodType, Block> hollowLog;
+	public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
 
-    public WoodGood(String modId) {
-        super(modId, "gww");
-        Identifier tab = modRes("main");
+	public WoodGood(String modId) {
+		super(modId, "gww");
+		Identifier tab = modRes("main");
 
-        stump = SimpleEntrySet.builder(WoodType.class, "stump",
-                        GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
-                )
-                //TEXTURE: log
-                .createPaletteFromChild("log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
-                .addTexture(modRes("block/oak_stump_top"))
-                .addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(stump);
+		stump = SimpleEntrySet.builder(WoodType.class, "stump",
+						GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: log
+				.createPaletteFromChild("log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/oak_stump_top"))
+				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(stump);
 
-        strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
-                        GWObjects.STRIPPED_OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
-                )
-                .requiresChildren("stripped_log")
-                //TEXTURE: stripped_log
-                .createPaletteFromChild("stripped_log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
-                .addTexture(modRes("block/stripped_oak_stump_top"))
-                .addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(strippedStump);
+		strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
+						GWObjects.STRIPPED_OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
+				)
+				.requiresChildren("stripped_log")
+				//TEXTURE: stripped_log
+				.createPaletteFromChild("stripped_log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
+				.addTexture(modRes("block/stripped_oak_stump_top"))
+				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedStump);
 
-        carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
-                        GWObjects.CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
-                )
-                //TEXTURE: log
-                //TEXTURE: manually generated texture below (carved_oak_log_inside.png)
-                .addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(carvedLog);
+		carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
+						GWObjects.CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: log
+				//TEXTURE: manually generated texture below (carved_oak_log_inside.png)
+				.addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(carvedLog);
 
-        strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
-                        GWObjects.STRIPPED_CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
-                )
-                //TEXTURE: stripped_log
-                //TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
-                .addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(strippedCarvedLog);
+		strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
+						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
+				.addTag(GWItemTags.CARVED_LOG, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.CARVED_LOG, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedCarvedLog);
 
-        beam = SimpleEntrySet.builder(WoodType.class, "beam",
-                        GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
-                )
-                .addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(beam);
+		beam = SimpleEntrySet.builder(WoodType.class, "beam",
+						GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
+				)
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(beam);
 
-        strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
-                        GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
-                )
-                .addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(strippedBeam);
+		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
+						GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
+				)
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedBeam);
 
-        hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
-                        GWObjects.HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
-                )
-                //TEXTURE: stripped_log
-                .requiresChildren("stripped_log")
-                .addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(hollowLog);
+		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
+						GWObjects.HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(hollowLog);
 
-        strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
-                        GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
-                )
-                //TEXTURE: stripped_log
-                .requiresChildren("stripped_log")
-                .addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
-                .addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
-                .setTabKey(tab)
-                //REASON: take a look at their textures, you'll see why.
-                .excludeBlockTypes("natures_spirit", "joshua")
-                .excludeBlockTypes("terrestria", "sakura")
-                .excludeBlockTypes("terrestria", "yucca_palm")
-                .defaultRecipe()
-                .build();
-        this.addEntry(strippedHollowLog);
-    }
+		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
+						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
+				)
+				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
+				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
+				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
+				.setTabKey(tab)
+				//REASON: take a look at their textures, you'll see why.
+				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("terrestria", "sakura")
+				.excludeBlockTypes("terrestria", "yucca_palm")
+				.defaultRecipe()
+				.build();
+		this.addEntry(strippedHollowLog);
+	}
 
-    @Override
-    public void onModSetup() {
-        stump.blocks.forEach((w, block) -> {
+	@Override
+	public void onModSetup() {
+		stump.blocks.forEach((w, block) -> {
 
-            Block stripped = strippedStump.blocks.get(w);
-            GWUtils.registerFuel(150, block);
-            ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
-            if (stripped != null) {
-                StumpSeatBlock.STRIPPED_STUMPS.put(block, stripped);
-                GWUtils.registerFuel(150, stripped);
-                ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
-            }
-        });
-        carvedLog.blocks.forEach((w, block) -> {
+			Block stripped = strippedStump.blocks.get(w);
+			GWUtils.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				StumpSeatBlock.STRIPPED_STUMPS.put(block, stripped);
+				GWUtils.registerFuel(150, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		carvedLog.blocks.forEach((w, block) -> {
 
-            Block stripped = strippedCarvedLog.blocks.get(w);
-            GWUtils.registerFuel(250, block);
-            ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
-            if (stripped != null) {
-                CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(block, stripped);
-                GWUtils.registerFuel(250, stripped);
-                ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
-            }
-        });
-        beam.blocks.forEach((w, block) -> {
+			Block stripped = strippedCarvedLog.blocks.get(w);
+			GWUtils.registerFuel(250, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(block, stripped);
+				GWUtils.registerFuel(250, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		beam.blocks.forEach((w, block) -> {
 
-            Block stripped = strippedBeam.blocks.get(w);
-            GWUtils.registerFuel(75, block);
-            ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
-            if (stripped != null) {
-                ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
-                GWUtils.registerFuel(75, stripped);
-                ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
-            }
-        });
-        hollowLog.blocks.forEach((w, block) -> {
+			Block stripped = strippedBeam.blocks.get(w);
+			GWUtils.registerFuel(75, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
+				GWUtils.registerFuel(75, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		hollowLog.blocks.forEach((w, block) -> {
 
-            Block stripped = strippedHollowLog.blocks.get(w);
-            GWUtils.registerFuel(150, block);
-            ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
-            if (stripped != null) {
-                HollowLogBlock.STRIPPED_HOLLOW_LOGS.put(block, stripped);
-                GWUtils.registerFuel(150, stripped);
-                ((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
-            }
-        });
-    }
+			Block stripped = strippedHollowLog.blocks.get(w);
+			GWUtils.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				HollowLogBlock.STRIPPED_HOLLOW_LOGS.put(block, stripped);
+				GWUtils.registerFuel(150, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+	}
 
-    @Override
+	@Override
 	public void addDynamicClientResources(Consumer<ResourceGenTask> executor) {
 		super.addDynamicClientResources(executor);
 
@@ -464,96 +464,96 @@ public class WoodGood extends SimpleModule {
 				GuitaWoodworks.LOGGER.error("Failed to open the beam textures: ", e);
 			}
 		});
-    }
+	}
 
-    private void generateStumpTexture(TextureImage original, TextureImage target) {
-        ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-                .copyRect(0, 0, 16, 1, 0, 2, 16, 1) // Top border
-                .copyRect(0, 15, 16, 1, 0, 13, 16, 1) // Bottom border
-                .copyRect(0, 0, 1, 16, 2, 0, 1, 16) // Left border
-                .copyRect(15, 0, 1, 16, 13, 0, 1, 16) // Right border
-                .build();
+	private void generateStumpTexture(TextureImage original, TextureImage target) {
+		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
+				.copyRect(0, 0, 16, 1, 0, 2, 16, 1) // Top border
+				.copyRect(0, 15, 16, 1, 0, 13, 16, 1) // Bottom border
+				.copyRect(0, 0, 1, 16, 2, 0, 1, 16) // Left border
+				.copyRect(15, 0, 1, 16, 13, 0, 1, 16) // Right border
+				.build();
 
-        transformer.apply(original, target);
+		transformer.apply(original, target);
 
-        target.forEachFramePixel((i, x, y) -> {
-            int localX = x - target.getFrameStartX(i);
-            int localY = y - target.getFrameStartY(i);
+		target.forEachFramePixel((i, x, y) -> {
+			int localX = x - target.getFrameStartX(i);
+			int localY = y - target.getFrameStartY(i);
 
-            boolean insideOpaqueRegion = (localX >= 2 && localX <= 13) && (localY >= 2 && localY <= 13);
+			boolean insideOpaqueRegion = (localX >= 2 && localX <= 13) && (localY >= 2 && localY <= 13);
 
-            if (!insideOpaqueRegion) {
-                target.getImage().setColor(x, y, 0);
-            }
-        });
-    }
+			if (!insideOpaqueRegion) {
+				target.getImage().setColor(x, y, 0);
+			}
+		});
+	}
 
-    private TextureImage generateCarvedLogInsideTexture(TextureImage mainTexture, TextureImage logSideTexture, TextureImage planksTexture,
-                                                        TextureImage insideEdgeMask, TextureImage insideMask) {
-        Respriter targetEdge = Respriter.masked(mainTexture, insideMask);
+	private TextureImage generateCarvedLogInsideTexture(TextureImage mainTexture, TextureImage logSideTexture, TextureImage planksTexture,
+														TextureImage insideEdgeMask, TextureImage insideMask) {
+		Respriter targetEdge = Respriter.masked(mainTexture, insideMask);
 
-        TextureImage recoloredEdge = targetEdge.recolorWithAnimationOf(logSideTexture);
+		TextureImage recoloredEdge = targetEdge.recolorWithAnimationOf(logSideTexture);
 
-        Respriter targetInside = Respriter.masked(recoloredEdge, insideEdgeMask);
+		Respriter targetInside = Respriter.masked(recoloredEdge, insideEdgeMask);
 
-        // Finished Texture
-        return targetInside.recolorWithAnimationOf(planksTexture);
+		// Finished Texture
+		return targetInside.recolorWithAnimationOf(planksTexture);
 
-    }
+	}
 
-    private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
-        int boxSize = ++radius * 2;
-        int offset = (16 - boxSize) / 2;
+	private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
+		int boxSize = ++radius * 2;
+		int offset = (16 - boxSize) / 2;
 
-        ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-                .copyRect(0, 0, 16, 1, offset, offset, boxSize, 1) // Top border
-                .copyRect(15, 0, 1, 16, offset + boxSize - 1, offset, 1, boxSize) // Right border
-                .copyRect(0, 15, 16, 1, offset, offset + boxSize - 1, boxSize, 1) // Bottom border
-                .copyRect(0, 0, 1, 16, offset, offset, 1, boxSize) // Left border
-                .build();
+		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
+				.copyRect(0, 0, 16, 1, offset, offset, boxSize, 1) // Top border
+				.copyRect(15, 0, 1, 16, offset + boxSize - 1, offset, 1, boxSize) // Right border
+				.copyRect(0, 15, 16, 1, offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+				.copyRect(0, 0, 1, 16, offset, offset, 1, boxSize) // Left border
+				.build();
 
-        transformer.apply(original, target);
+		transformer.apply(original, target);
 
-        target.forEachFramePixel((i, x, y) -> {
-            int localX = x - target.getFrameStartX(i);
-            int localY = y - target.getFrameStartY(i);
+		target.forEachFramePixel((i, x, y) -> {
+			int localX = x - target.getFrameStartX(i);
+			int localY = y - target.getFrameStartY(i);
 
-            boolean inBox = (localX >= offset && localX < offset + boxSize) &&
-                    (localY >= offset && localY < offset + boxSize);
+			boolean inBox = (localX >= offset && localX < offset + boxSize) &&
+					(localY >= offset && localY < offset + boxSize);
 
-            if (!inBox) {
-                target.getImage().setColor(x, y, 0);
-            }
-        });
-    }
+			if (!inBox) {
+				target.getImage().setColor(x, y, 0);
+			}
+		});
+	}
 
 
-    @Override
-    public boolean isEntryAlreadyRegistered(String blockId, BlockType blockType, Registry<?> registry) {
-        // blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
-        String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
+	@Override
+	public boolean isEntryAlreadyRegistered(String blockId, BlockType blockType, Registry<?> registry) {
+		// blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
+		String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
 
-        if (blockType instanceof WoodType wt) {
-            Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId);
-            if (hardcoded != null) return hardcoded;
-        }
+		if (blockType instanceof WoodType wt) {
+			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId);
+			if (hardcoded != null) return hardcoded;
+		}
 
-        return super.isEntryAlreadyRegistered(blockId, blockType, registry);
-    }
+		return super.isEntryAlreadyRegistered(blockId, blockType, registry);
+	}
 
-    public static class CustomHardcodedBlockType extends HardcodedBlockType {
+	public static class CustomHardcodedBlockType extends HardcodedBlockType {
 
-        @Nullable
+		@Nullable
 		public static Boolean isWoodBlockAlreadyRegistered(String blockName, WoodType woodType, String ModId) {
-            woodTypeFromMod = woodType.getNamespace();
-            woodidentify = woodType.getId().toString();
-            supportedMod = ModId;
-            supportedBlockName = blockName;
+			woodTypeFromMod = woodType.getNamespace();
+			woodidentify = woodType.getId().toString();
+			supportedMod = ModId;
+			supportedBlockName = blockName;
 
-            /// ========== INCLUDE VANILLA TYPE ========== \\\
-            //if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?\\w+_beam")) return false;
+			/// ========== INCLUDE VANILLA TYPE ========== \\\
+			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?\\w+_beam")) return false;
 
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 }
