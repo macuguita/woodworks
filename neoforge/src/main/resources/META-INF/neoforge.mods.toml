@@ -31,7 +31,7 @@ side = "BOTH"
 [[dependencies.${ modId }]]
 modId = "macu_lib"
 type = "required"
-versionRange = "[${macuLibVersion}-${minecraftVersion},)"
+versionRange = "[${macuLibVersion}-1.21.5,)"
 side = "BOTH"
 
 [[dependencies.${ modId }]]

@@ -90,6 +90,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 				return ActionResult.SUCCESS;
 			}
 		}
+		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
 		if (stack.isIn(GWItemTags.WATER_BUCKETS) || stack.isIn(GWItemTags.EMPTY_BUCKETS)) return ActionResult.FAIL;
 		return super.onUse(state, world, pos, player, hit);
 	}

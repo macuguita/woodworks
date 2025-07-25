@@ -26,6 +26,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.macuguita.woodworks.block.SittableBlock;
 import com.macuguita.woodworks.reg.GWEntityTypes;
+import com.mojang.serialization.Codec;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -34,13 +36,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.EntityTrackerEntry;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.annotation.MethodsReturnNonnullByDefault;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -57,18 +65,14 @@ public class Seat extends Entity {
 
 	private Box shape;
 	private boolean remove;
-	private boolean canRotate;
+	private static final TrackedData<Boolean> CAN_ROTATE = DataTracker.registerData(Seat.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 	public Seat(EntityType<? extends Entity> type, World world) {
 		super(type, world);
 		this.setChangeListener(EntityChangeListener.NONE);
 	}
 
-	public Seat(World world, Box shape) {
-		super(GWEntityTypes.SEAT.get(), world);
-		this.shape = copyBox(shape);
-	}
-
+	@Nullable
 	public static Seat of(World world, BlockPos pos, Direction dir) {
 		BlockState state = world.getBlockState(pos);
 		Box shape = new Box(pos);
@@ -76,16 +80,27 @@ public class Seat extends Entity {
 			shape = seat.getSeatSize(state);
 		}
 
-		Seat entity = new Seat(world, shape);
+		Seat entity = GWEntityTypes.SEAT.get().create(world, SpawnReason.TRIGGERED);
+		if (entity == null) return null;
 		if (dir != null) {
-			entity.setYaw(dir.asRotation());
+			entity.setYaw(dir.getPositiveHorizontalDegrees());
 		} else {
-			entity.canRotate = true;
+			entity.setCanRotate(true);
 		}
 
 		entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		entity.shape = copyBox(shape);
 		return entity;
 	}
+
+	public boolean canRotate() {
+		return getDataTracker().get(CAN_ROTATE);
+	}
+
+	public void setCanRotate(boolean rotate) {
+		getDataTracker().set(CAN_ROTATE, rotate);
+	}
+
 
 	private static Box copyBox(Box box) {
 		return new Box(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
@@ -93,13 +108,13 @@ public class Seat extends Entity {
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket(EntityTrackerEntry tracker) {
-		return new EntitySpawnS2CPacket(this, tracker, canRotate ? 1 : 0);
+		return new EntitySpawnS2CPacket(this, tracker, canRotate() ? 1 : 0);
 	}
 
 	@Override
 	public void onSpawnPacket(EntitySpawnS2CPacket packet) {
 		super.onSpawnPacket(packet);
-		this.canRotate = packet.getEntityData() == 1;
+		setCanRotate(packet.getEntityData() == 1);
 	}
 
 	@Override
@@ -108,13 +123,18 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	public boolean hasPassengers() {
+	public boolean shouldRender(double x, double y, double z) {
 		return true;
 	}
 
 	@Override
-	public boolean shouldRender(double x, double y, double z) {
-		return false;
+	protected void readCustomData(ReadView view) {
+		setCanRotate(view.read("can_rotate", Codec.BOOL).orElse(false));
+	}
+
+	@Override
+	protected void writeCustomData(WriteView view) {
+		view.put("can_rotate", Codec.BOOL, canRotate());
 	}
 
 	@Override
@@ -153,16 +173,26 @@ public class Seat extends Entity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (!this.getWorld().isClient() &&
-				(!(this.getWorld().getBlockState(getBlockPos()).getBlock() instanceof SittableBlock) || remove)) {
+		if (this.getWorld() instanceof ServerWorld serverWorld &&
+				(!(serverWorld.getBlockState(getBlockPos()).getBlock() instanceof SittableBlock) || remove)) {
 			removeSeat();
 		}
 	}
 
 	@Override
+	public boolean clientDamage(DamageSource source) {
+		return !this.isAlwaysInvulnerableTo(source);
+	}
+
+	@Override
+	public boolean damage(ServerWorld world, DamageSource source, float amount) {
+		return false;
+	}
+
+	@Override
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
-		if (!this.getWorld().isClient() && getPassengerList().isEmpty()) {
+		if (this.getWorld() instanceof ServerWorld && getPassengerList().isEmpty()) {
 			remove = true;
 		}
 	}
@@ -170,11 +200,6 @@ public class Seat extends Entity {
 	public void removeSeat() {
 		SITTING_POSITIONS.get(this.getWorld().getRegistryKey()).remove(getBlockPos());
 		discard();
-	}
-
-	@Override
-	protected Box calculateBoundingBox() {
-		return shape == null ? super.calculateBoundingBox() : shape.offset(getBlockPos());
 	}
 
 	@Override
@@ -187,14 +212,14 @@ public class Seat extends Entity {
 		entity.setBodyYaw(getYaw());
 		float diff = MathHelper.wrapDegrees(entity.getYaw() - getYaw());
 		float clamped = MathHelper.clamp(diff, -105.0f, 105.0f);
-		entity.prevYaw += clamped - diff;
+		entity.lastYaw += clamped - diff;
 		entity.setYaw(entity.getYaw() + clamped - diff);
 		entity.setHeadYaw(entity.getYaw());
 	}
 
 	@Override
 	public void onPassengerLookAround(Entity entity) {
-		if (!canRotate) {
+		if (!canRotate()) {
 			clampRotation(entity);
 		}
 	}
@@ -205,13 +230,9 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	protected void initDataTracker(DataTracker.Builder builder) {}
-
-	@Override
-	protected void readCustomDataFromNbt(NbtCompound tag) {}
-
-	@Override
-	protected void writeCustomDataToNbt(NbtCompound tag) {}
+	protected void initDataTracker(DataTracker.Builder builder) {
+		builder.add(CAN_ROTATE, false);
+	}
 
 	private class WrappedCallback implements EntityChangeListener {
 

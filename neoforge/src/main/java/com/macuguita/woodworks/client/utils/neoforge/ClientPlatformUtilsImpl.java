@@ -31,7 +31,7 @@ import net.minecraft.entity.EntityType;
 
 public class ClientPlatformUtilsImpl {
 
-	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererFactory<T> factory) {
-		EntityRenderers.register(entity.get(), factory);
+	public static <T extends Entity> void registerRenderer(Supplier<? extends EntityType<? extends T>> type, EntityRendererFactory<T> provider) {
+		EntityRenderers.register(type.get(), provider);
 	}
 }

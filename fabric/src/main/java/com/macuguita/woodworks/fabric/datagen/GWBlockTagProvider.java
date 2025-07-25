@@ -41,28 +41,28 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.STUMP).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.BEAM).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.BEAM).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.BEAM).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.BEAM).add(regEntry.get());
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
+			valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
 		});
 	}
 }

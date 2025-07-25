@@ -40,33 +40,33 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-		getOrCreateTagBuilder(GWItemTags.SECATEURS)
+		valueLookupBuilder(GWItemTags.SECATEURS)
 				.add(GWObjects.SECATEURS.get())
 				.addOptionalTag(GWItemTags.KNIVES);
 
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.STUMP).add(regEntry.get());
 		});
 		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
 		});
 		GWObjects.BEAM_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.BEAM).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.BEAM).add(regEntry.get());
 		});
 		GWObjects.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
 		});
 	}
 }

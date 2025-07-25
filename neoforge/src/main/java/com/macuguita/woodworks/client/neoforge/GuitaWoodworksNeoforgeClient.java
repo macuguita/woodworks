@@ -22,14 +22,14 @@
 
 package com.macuguita.woodworks.client.neoforge;
 
+import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.client.GuitaWoodworksClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
-@SuppressWarnings("removal")
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = GuitaWoodworks.MOD_ID)
 public class GuitaWoodworksNeoforgeClient {
 
 	public static void init() {

@@ -31,6 +31,8 @@ import com.macuguita.woodworks.entity.Seat;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 
 public class GWEntityTypes {
 
@@ -38,11 +40,11 @@ public class GWEntityTypes {
 
 	public static final GuitaRegistryEntry<EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () ->
 			EntityType.Builder.<Seat>create(Seat::new, SpawnGroup.MISC)
-					.dimensions(1, 1)
-					.disableSaving()
-					.makeFireImmune()
-					.disableSummon()
-					.build("seat"));
+					.dropsNothing()
+					.dimensions(0.25f, 0.25f)
+					.maxTrackingRange(10)
+					.trackingTickInterval(Integer.MAX_VALUE)
+					.build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, GuitaWoodworks.id("seat"))));
 
 	public static void init() {
 		ENTITY_TYPES.init();

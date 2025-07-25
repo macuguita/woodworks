@@ -26,6 +26,7 @@ import com.macuguita.woodworks.entity.Seat;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -34,13 +35,15 @@ import net.minecraft.world.World;
 public interface SittableBlock {
 
 	default boolean sitOn(World world, BlockPos pos, PlayerEntity player, Direction dir) {
-		if (!world.isClient && !Seat.SITTING_POSITIONS.get(world.getRegistryKey()).contains(pos)) {
-			Seat entity = Seat.of(world, pos, dir);
-			if (world.spawnEntity(entity)) {
-				player.startRiding(entity);
-				return true;
-			} else {
-				entity.removeSeat();
+		if (world instanceof ServerWorld serverWorld && !Seat.SITTING_POSITIONS.get(world.getRegistryKey()).contains(pos)) {
+			Seat entity = Seat.of(serverWorld, pos, dir);
+			if (entity != null) {
+				if (serverWorld.spawnEntity(entity)) {
+					player.startRiding(entity);
+					return true;
+				} else {
+					entity.removeSeat();
+				}
 			}
 		}
 		return false;

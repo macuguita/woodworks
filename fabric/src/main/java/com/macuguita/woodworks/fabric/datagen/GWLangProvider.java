@@ -46,27 +46,35 @@ public class GWLangProvider extends FabricLanguageProvider {
 		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");

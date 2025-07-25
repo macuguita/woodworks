@@ -64,18 +64,18 @@ dependencies {
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
 
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-fabric")
-    modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
-    val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
-    if (isMyPc) {
-        modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
-    } else {
-        modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
-    }
-    modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
+    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.5-fabric")
+    //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
+    //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
+    //if (isMyPc) {
+    //    modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
+    //} else {
+    //    modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
+    //}
+    //modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
 
     // Other Mavens
-    modImplementation("com.github.glitchfiend:TerraBlender-fabric:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
+    //modImplementation("com.github.glitchfiend:TerraBlender-fabric:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
 
     modApi("com.terraformersmc:modmenu:${BuildConfig.modmenuVersion}")
     modApi("me.shedaniel:RoughlyEnoughItems-fabric:${BuildConfig.reiVersion}")

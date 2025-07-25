@@ -24,7 +24,7 @@ package com.macuguita.woodworks.reg;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import com.macuguita.lib.platform.registry.GuitaRegistries;
 import com.macuguita.lib.platform.registry.GuitaRegistry;
@@ -44,6 +44,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ShearsItem;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 
 public class GWObjects {
 
@@ -72,7 +74,7 @@ public class GWObjects {
 	public static final GuitaRegistry<Item> HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 	public static final GuitaRegistry<Item> STRIPPED_HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 
-	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Settings().maxDamage(476).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent())));
+	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Settings().maxDamage(476).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent()).registryKey(keyOfItem("secateurs"))));
 
 	public static final GuitaRegistryEntry<Block> OAK_STUMP = createStump("oak_stump", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_STUMP = createStrippedStump("stripped_oak_stump", Blocks.STRIPPED_OAK_LOG);
@@ -195,57 +197,67 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_WARPED_STEM = createStrippedHollowLog("stripped_hollow_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, StumpSeatBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), STUMP_BLOCKS, STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedStump(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_STUMP_BLOCKS, STRIPPED_STUMP_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, StumpSeatBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), STRIPPED_STUMP_BLOCKS, STRIPPED_STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createCarvedLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), CARVED_LOG_BLOCKS, CARVED_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, CarvedLogSeatBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), CARVED_LOG_BLOCKS, CARVED_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedCarvedLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_CARVED_LOG_BLOCKS, STRIPPED_CARVED_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, CarvedLogSeatBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), STRIPPED_CARVED_LOG_BLOCKS, STRIPPED_CARVED_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), BEAM_BLOCKS, BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, ResizableBeamBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), BEAM_BLOCKS, BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, ResizableBeamBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createHollowLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), HOLLOW_LOG_BLOCKS, HOLLOW_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, HollowLogBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), HOLLOW_LOG_BLOCKS, HOLLOW_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
+
 
 	public static GuitaRegistryEntry<Block> createStrippedHollowLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, HollowLogBlock::new, AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
-	public static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Supplier<T> block, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
-		GuitaRegistryEntry<T> toReturn = blockReg.register(name, block);
-		itemReg.register(name, () -> new BlockItem(toReturn.get(), new Item.Settings()));
+	private static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Function<AbstractBlock.Settings, T> blockFactory, AbstractBlock.Settings settings, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
+		GuitaRegistryEntry<T> toReturn = blockReg.register(name, () -> blockFactory.apply(settings.registryKey(keyOfBlock(name))));
+		itemReg.register(name, () -> new BlockItem(toReturn.get(),
+				new Item.Settings().registryKey(keyOfItem(name))));
 		return toReturn;
+	}
+
+	private static RegistryKey<Block> keyOfBlock(String name) {
+		return RegistryKey.of(RegistryKeys.BLOCK, GuitaWoodworks.id(name));
+	}
+
+	private static RegistryKey<Item> keyOfItem(String name) {
+		return RegistryKey.of(RegistryKeys.ITEM, GuitaWoodworks.id(name));
 	}
 
 	public static void init() {

@@ -24,7 +24,7 @@ package com.macuguita.woodworks.utils.fabric;
 
 import net.minecraft.item.ItemConvertible;
 
-import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class GWUtilsImpl {
@@ -34,6 +34,8 @@ public class GWUtilsImpl {
 	}
 
 	public static void registerFuel(int time, ItemConvertible item) {
-		FuelRegistry.INSTANCE.add(item, time);
+		FuelRegistryEvents.BUILD.register((builder, context) -> {
+			builder.add(item, time);
+		});
 	}
 }

@@ -22,8 +22,10 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.HollowLogBlock;
@@ -34,24 +36,27 @@ import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.BlockStateVariant;
-import net.minecraft.data.client.BlockStateVariantMap;
-import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Model;
-import net.minecraft.data.client.MultipartBlockStateSupplier;
-import net.minecraft.data.client.TextureKey;
-import net.minecraft.data.client.TextureMap;
-import net.minecraft.data.client.VariantSettings;
-import net.minecraft.data.client.VariantsBlockStateSupplier;
-import net.minecraft.data.client.When;
+import net.minecraft.client.data.BlockStateModelGenerator;
+import net.minecraft.client.data.BlockStateVariantMap;
+import net.minecraft.client.data.ItemModelGenerator;
+import net.minecraft.client.data.Model;
+import net.minecraft.client.data.Models;
+import net.minecraft.client.data.MultipartBlockModelDefinitionCreator;
+import net.minecraft.client.data.TextureKey;
+import net.minecraft.client.data.TextureMap;
+import net.minecraft.client.data.VariantsBlockModelDefinitionCreator;
+import net.minecraft.client.render.model.json.ModelVariantOperator;
+import net.minecraft.client.render.model.json.MultipartModelCombinedCondition;
+import net.minecraft.client.render.model.json.MultipartModelCondition;
+import net.minecraft.client.render.model.json.MultipartModelConditionBuilder;
+import net.minecraft.client.render.model.json.WeightedVariant;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 public class GWModelProvider extends FabricModelProvider {
 
@@ -61,7 +66,6 @@ public class GWModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		blockStateModelGenerator.registerItemModel(GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			registerStump(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
@@ -90,7 +94,7 @@ public class GWModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-
+		itemModelGenerator.register(GWObjects.SECATEURS.get(), Models.GENERATED);
 	}
 
 	private static final Model STUMP = new Model(
@@ -235,36 +239,43 @@ public class GWModelProvider extends FabricModelProvider {
 
 	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
 		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top"));
-		Identifier identifier = STUMP.upload(block, textureMap, blockStateModelGenerator.modelCollector);
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block, BlockStateVariant.create().put(VariantSettings.MODEL, identifier)));
-		blockStateModelGenerator.registerParentedItemModel(block, identifier);
+		Identifier id = STUMP.upload(block, textureMap, blockStateModelGenerator.modelCollector);
+		WeightedVariant weightedVariant = BlockStateModelGenerator.createWeightedVariant(id);
+		blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block, weightedVariant));
+		blockStateModelGenerator.registerParentedItemModel(block, id);
 	}
 
 	private void registerCarvedLog(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
 		TextureMap textureMapMiddle = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside"));
 		TextureMap textureMapCommon = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(log, "_top")).put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside"));
-		Identifier middleModel = CARVED_LOG_MIDDLE.upload(block, textureMapMiddle, blockStateModelGenerator.modelCollector);
-		Identifier leftModel = CARVED_LOG_LEFT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector);
-		Identifier rightModel = CARVED_LOG_RIGHT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector);
-		Identifier singleModel = CARVED_LOG_SINGLE.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector);
-		Map<NoCornerModularSeatProperty, Identifier> modelMap = Map.of(
-				NoCornerModularSeatProperty.SINGLE, singleModel,
-				NoCornerModularSeatProperty.LEFT, leftModel,
-				NoCornerModularSeatProperty.MIDDLE, middleModel,
-				NoCornerModularSeatProperty.RIGHT, rightModel
+		Identifier singleModelId = CARVED_LOG_SINGLE.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector);
+		WeightedVariant singleWeightedVariant = BlockStateModelGenerator.createWeightedVariant(singleModelId);
+		WeightedVariant middleWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_MIDDLE.upload(block, textureMapMiddle, blockStateModelGenerator.modelCollector));
+		WeightedVariant leftWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_LEFT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector));
+		WeightedVariant rightWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_RIGHT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector));
+		BlockStateVariantMap<ModelVariantOperator> rotationOperations = BlockStateVariantMap.operations(
+						NoCornerModularSeatBlock.FACING
+				)
+				.register(Direction.EAST, BlockStateModelGenerator.ROTATE_Y_90)
+				.register(Direction.SOUTH, BlockStateModelGenerator.ROTATE_Y_180)
+				.register(Direction.WEST, BlockStateModelGenerator.ROTATE_Y_270)
+				.register(Direction.NORTH, BlockStateModelGenerator.NO_OP);
+
+		Map<NoCornerModularSeatProperty, WeightedVariant> modelMap = Map.of(
+				NoCornerModularSeatProperty.SINGLE, singleWeightedVariant,
+				NoCornerModularSeatProperty.LEFT, leftWeightedVariant,
+				NoCornerModularSeatProperty.MIDDLE, middleWeightedVariant,
+				NoCornerModularSeatProperty.RIGHT, rightWeightedVariant
 		);
 
-		BlockStateVariantMap.DoubleProperty<NoCornerModularSeatProperty, Direction> map = BlockStateVariantMap.create(NoCornerModularSeatBlock.SHAPE, NoCornerModularSeatBlock.FACING);
+		var blockStateVariantMap = BlockStateVariantMap.models(NoCornerModularSeatBlock.SHAPE);
 		for (var entry : modelMap.entrySet()) {
 			var shape = entry.getKey();
-			var model = entry.getValue();
-			map.register(shape, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model))
-					.register(shape, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-					.register(shape, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-					.register(shape, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R270));
+			blockStateVariantMap.register(shape, modelMap.get(shape));
 		}
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
-		blockStateModelGenerator.registerParentedItemModel(block, singleModel);
+
+		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(block).with(blockStateVariantMap).coordinate(rotationOperations));
+		blockStateModelGenerator.registerParentedItemModel(block, singleModelId);
 	}
 
 	private void registerBeamBlock(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
@@ -285,69 +296,71 @@ public class GWModelProvider extends FabricModelProvider {
 				6, textureMapSide12x12,
 				7, textureMapSide14x14
 		);
-		Identifier coreModel2 = BEAM_CORE_2X2.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel4 = BEAM_CORE_4X4.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel6 = BEAM_CORE_6X6.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel8 = BEAM_CORE_8X8.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel10 = BEAM_CORE_10X10.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel12 = BEAM_CORE_12X12.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel14 = BEAM_CORE_14X14.upload(block, textureMapCore, blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> coreModelMap = Map.of(
-				1, coreModel2,
-				2, coreModel4,
-				3, coreModel6,
-				4, coreModel8,
-				5, coreModel10,
-				6, coreModel12,
-				7, coreModel14
+		WeightedVariant weightedVariantCore2 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_2X2.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore4 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_4X4.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore6 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_6X6.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore8 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_8X8.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore10 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_10X10.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore12 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_12X12.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore14 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_14X14.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		Map<Integer, WeightedVariant> coreWeightedVariantMap = Map.of(
+				1, weightedVariantCore2,
+				2, weightedVariantCore4,
+				3, weightedVariantCore6,
+				4, weightedVariantCore8,
+				5, weightedVariantCore10,
+				6, weightedVariantCore12,
+				7, weightedVariantCore14
 		);
-		Identifier sideUpModel2 = BEAM_SIDE_UP_2X2.upload(block, "_up", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel4 = BEAM_SIDE_UP_4X4.upload(block, "_up", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel6 = BEAM_SIDE_UP_6X6.upload(block, "_up", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel8 = BEAM_SIDE_UP_8X8.upload(block, "_up", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel10 = BEAM_SIDE_UP_10X10.upload(block, "_up", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel12 = BEAM_SIDE_UP_12X12.upload(block, "_up", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel14 = BEAM_SIDE_UP_14X14.upload(block, "_up", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> sideUpModelMap = Map.of(
-				1, sideUpModel2,
-				2, sideUpModel4,
-				3, sideUpModel6,
-				4, sideUpModel8,
-				5, sideUpModel10,
-				6, sideUpModel12,
-				7, sideUpModel14
-		);
-
-		Identifier sideDownModel2 = BEAM_SIDE_DOWN_2X2.upload(block, "_down", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel4 = BEAM_SIDE_DOWN_4X4.upload(block, "_down", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel6 = BEAM_SIDE_DOWN_6X6.upload(block, "_down", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel8 = BEAM_SIDE_DOWN_8X8.upload(block, "_down", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel10 = BEAM_SIDE_DOWN_10X10.upload(block, "_down", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel12 = BEAM_SIDE_DOWN_12X12.upload(block, "_down", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel14 = BEAM_SIDE_DOWN_14X14.upload(block, "_down", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> sideDownModelMap = Map.of(
-				1, sideDownModel2,
-				2, sideDownModel4,
-				3, sideDownModel6,
-				4, sideDownModel8,
-				5, sideDownModel10,
-				6, sideDownModel12,
-				7, sideDownModel14
+		WeightedVariant weightedVariantSideUp2 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_2X2.upload(block, "_up", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp4 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_4X4.upload(block, "_up", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp6 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_6X6.upload(block, "_up", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp8 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_8X8.upload(block, "_up", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp10 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_10X10.upload(block, "_up", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp12 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_12X12.upload(block, "_up", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideUp14 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_UP_14X14.upload(block, "_up", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector));
+		Map<Integer, WeightedVariant> sideUpWeightedVariantMap = Map.of(
+				1, weightedVariantSideUp2,
+				2, weightedVariantSideUp4,
+				3, weightedVariantSideUp6,
+				4, weightedVariantSideUp8,
+				5, weightedVariantSideUp10,
+				6, weightedVariantSideUp12,
+				7, weightedVariantSideUp14
 		);
 
-		MultipartBlockStateSupplier blockStateSupplier = MultipartBlockStateSupplier.create(block);
+		WeightedVariant weightedVariantSideDown2 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_2X2.upload(block, "_down", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown4 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_4X4.upload(block, "_down", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown6 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_6X6.upload(block, "_down", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown8 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_8X8.upload(block, "_down", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown10 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_10X10.upload(block, "_down", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown12 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_12X12.upload(block, "_down", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantSideDown14 = BlockStateModelGenerator.createWeightedVariant(BEAM_SIDE_DOWN_14X14.upload(block, "_down", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector));
+		Map<Integer, WeightedVariant> sideDownWeightedVariantMap = Map.of(
+				1, weightedVariantSideDown2,
+				2, weightedVariantSideDown4,
+				3, weightedVariantSideDown6,
+				4, weightedVariantSideDown8,
+				5, weightedVariantSideDown10,
+				6, weightedVariantSideDown12,
+				7, weightedVariantSideDown14
+		);
+
+		MultipartBlockModelDefinitionCreator multipartBlockModelDefinitionCreator = MultipartBlockModelDefinitionCreator.create(block);
 
 		IntProperty radiusProp = ResizableBeamBlock.RADIUS;
 		Map<Direction, BooleanProperty> facingProperties = ResizableBeamBlock.FACING_PROPERTIES;
 		for (int size : radiusProp.getValues()) {
-			generateRotatedCoreModels(blockStateSupplier, coreModelMap, size);
+			generateRotatedCoreModels(multipartBlockModelDefinitionCreator, coreWeightedVariantMap, size);
 			for (Direction dir : Direction.values()) {
 				BooleanProperty sideProp = facingProperties.get(dir);
-				blockStateSupplier.with(When.create().set(radiusProp, size).set(sideProp, true), rotateBeamModel(BlockStateVariant.create().put(VariantSettings.MODEL, getSidedModel(sideUpModelMap.get(size), sideDownModelMap.get(size), dir)), dir));
+				multipartBlockModelDefinitionCreator.with(BlockStateModelGenerator.createMultipartConditionBuilder()
+						.put(radiusProp, size)
+						.put(sideProp, true), getSidedModel(sideUpWeightedVariantMap.get(size), sideDownWeightedVariantMap.get(size), dir).apply(getBeamRotation(dir)));
 			}
 		}
 
-		blockStateModelGenerator.blockStateCollector.accept(blockStateSupplier);
+		blockStateModelGenerator.blockStateCollector.accept(multipartBlockModelDefinitionCreator);
 
 		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, textureMapSide8x8, blockStateModelGenerator.modelCollector);
 		blockStateModelGenerator.registerParentedItemModel(block, inventoryModel);
@@ -356,110 +369,135 @@ public class GWModelProvider extends FabricModelProvider {
 	private void registerHollowLog(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
 		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(log, "_top")).put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log)));
 		Identifier model = HOLLOW_LOG.upload(block, textureMap, blockStateModelGenerator.modelCollector);
+		WeightedVariant weightedVariant = BlockStateModelGenerator.createWeightedVariant(model);
 
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(
-				BlockStateVariantMap.create(HollowLogBlock.AXIS)
-						.register(Direction.Axis.X, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-						.register(Direction.Axis.Y, BlockStateVariant.create().put(VariantSettings.MODEL, model))
-						.register(Direction.Axis.Z, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90))
-		));
+		BlockStateVariantMap<ModelVariantOperator> rotationOperations = BlockStateVariantMap.operations(
+						HollowLogBlock.AXIS
+				)
+				.register(Direction.Axis.X, BlockStateModelGenerator.ROTATE_X_90.then(BlockStateModelGenerator.ROTATE_Y_90))
+				.register(Direction.Axis.Y, BlockStateModelGenerator.NO_OP)
+				.register(Direction.Axis.Z, BlockStateModelGenerator.ROTATE_X_90);
+
+		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(block, weightedVariant).coordinate(rotationOperations));
 		blockStateModelGenerator.registerParentedItemModel(block, model);
 	}
 
-	private void generateRotatedCoreModels(MultipartBlockStateSupplier blockStateSupplier, Map<Integer, Identifier> coreModelMap, int size) {
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.anyOf(
-						When.create().setNegated(ResizableBeamBlock.UP, true),
-						When.create().setNegated(ResizableBeamBlock.DOWN, true),
-						When.create().setNegated(ResizableBeamBlock.NORTH, true),
-						When.create().setNegated(ResizableBeamBlock.SOUTH, true),
-						When.create().setNegated(ResizableBeamBlock.EAST, true),
-						When.create().setNegated(ResizableBeamBlock.WEST, true)
+	private void generateRotatedCoreModels(MultipartBlockModelDefinitionCreator multipartBlockModelDefinitionCreator, Map<Integer, WeightedVariant> coreWeightedVariantMap, int size) {
+		multipartBlockModelDefinitionCreator.with(and(
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.RADIUS, size),
+				or(
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, false),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, false),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, false),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, false)
 				),
-				When.anyOf(
-						When.create().set(ResizableBeamBlock.UP, true),
-						When.create().set(ResizableBeamBlock.DOWN, true),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.create().set(ResizableBeamBlock.NORTH, false),
-								When.create().set(ResizableBeamBlock.SOUTH, false),
-								When.create().set(ResizableBeamBlock.EAST, false),
-								When.create().set(ResizableBeamBlock.WEST, false)
+				or(
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, true),
+						BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, true),
+						and(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, false)
 						),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.anyOf(
-										When.create().set(ResizableBeamBlock.NORTH, false),
-										When.create().set(ResizableBeamBlock.SOUTH, false)
+						and(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+								or(
+										BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, false),
+										BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, false)
 								),
-								When.anyOf(
-										When.create().set(ResizableBeamBlock.WEST, false),
-										When.create().set(ResizableBeamBlock.EAST, false)
+								or(
+										BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, false),
+										BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, false)
 								)
 						),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.create().set(ResizableBeamBlock.NORTH, true),
-								When.create().set(ResizableBeamBlock.SOUTH, true),
-								When.create().set(ResizableBeamBlock.EAST, true),
-								When.create().set(ResizableBeamBlock.WEST, true)
+						and(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, true),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, true),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, true),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, true)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
+		), coreWeightedVariantMap.get(size));
 
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.create().set(ResizableBeamBlock.UP, false),
-				When.create().set(ResizableBeamBlock.DOWN, false),
-				When.allOf(
-						When.allOf(
-								When.create().set(ResizableBeamBlock.NORTH, true),
-								When.create().set(ResizableBeamBlock.SOUTH, true)
+		multipartBlockModelDefinitionCreator.with(and(
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.RADIUS, size),
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+				and(
+						and(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, true),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, true)
 						),
-						When.anyOf(
-								When.create().set(ResizableBeamBlock.EAST, false),
-								When.create().set(ResizableBeamBlock.WEST, false)
+						or(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, false)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90));
+		), coreWeightedVariantMap.get(size).apply(BlockStateModelGenerator.ROTATE_X_90));
 
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.create().set(ResizableBeamBlock.UP, false),
-				When.create().set(ResizableBeamBlock.DOWN, false),
-				When.allOf(
-						When.allOf(
-								When.create().set(ResizableBeamBlock.EAST, true),
-								When.create().set(ResizableBeamBlock.WEST, true)
+		multipartBlockModelDefinitionCreator.with(and(
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.RADIUS, size),
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.UP, false),
+				BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.DOWN, false),
+				and(
+						and(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.EAST, true),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.WEST, true)
 						),
-						When.anyOf(
-								When.create().set(ResizableBeamBlock.NORTH, false),
-								When.create().set(ResizableBeamBlock.SOUTH, false)
+						or(
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.NORTH, false),
+								BlockStateModelGenerator.createMultipartConditionBuilder().put(ResizableBeamBlock.SOUTH, false)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90));
+		), coreWeightedVariantMap.get(size).apply(BlockStateModelGenerator.ROTATE_X_90.then(BlockStateModelGenerator.ROTATE_Y_90)));
 	}
 
-	private Identifier getSidedModel(Identifier sideUp, Identifier sideDown, Direction dir) {
+	public static MultipartModelCondition and(Object... conditions) {
+		return combine(MultipartModelCombinedCondition.LogicalOperator.AND, conditions);
+	}
+
+	public static MultipartModelCondition or(Object... conditions) {
+		return combine(MultipartModelCombinedCondition.LogicalOperator.OR, conditions);
+	}
+
+	private static MultipartModelCondition combine(MultipartModelCombinedCondition.LogicalOperator op, Object... conditions) {
+		List<MultipartModelCondition> built = Stream.of(conditions)
+				.map(condition -> {
+					if (condition instanceof MultipartModelConditionBuilder builder) {
+						return builder.build();
+					} else if (condition instanceof MultipartModelCondition mc) {
+						return mc;
+					} else {
+						throw new IllegalArgumentException("Unsupported condition type: " + condition.getClass());
+					}
+				})
+				.toList();
+		return new MultipartModelCombinedCondition(op, built);
+	}
+
+	private WeightedVariant getSidedModel(WeightedVariant sideUp, WeightedVariant sideDown, Direction dir) {
 		return switch (dir) {
 			case UP, NORTH, EAST -> sideUp;
 			case DOWN, SOUTH, WEST -> sideDown;
 		};
 	}
 
-	private BlockStateVariant rotateBeamModel(BlockStateVariant blockStateVariant, Direction dir) {
-		switch (dir) {
-			case EAST -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R90);
-			case SOUTH -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R180);
-			case WEST -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R270);
-			case UP -> blockStateVariant.put(VariantSettings.X, VariantSettings.Rotation.R270);
-			case DOWN -> blockStateVariant.put(VariantSettings.X, VariantSettings.Rotation.R90);
-		}
-
-		return blockStateVariant;
+	private ModelVariantOperator getBeamRotation(Direction dir) {
+		return switch (dir) {
+			case EAST -> BlockStateModelGenerator.ROTATE_Y_90;
+			case SOUTH -> BlockStateModelGenerator.ROTATE_Y_180;
+			case WEST -> BlockStateModelGenerator.ROTATE_Y_270;
+			case UP -> BlockStateModelGenerator.ROTATE_X_270;
+			case DOWN -> BlockStateModelGenerator.ROTATE_X_90;
+			default -> BlockStateModelGenerator.NO_OP;
+		};
 	}
 }

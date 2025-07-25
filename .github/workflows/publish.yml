@@ -26,222 +26,183 @@ permissions:
   contents: write
   packages: write
 
-
 jobs:
-  mod-build:
-    name: 📦 Build mod
-    runs-on: macos-14
+  prepare-release:
+    name: 📥 Prepare Release Data
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v4.1.1 # This is effectively git clone
-      - name: setup JDK 17
-        uses: actions/setup-java@v4.0.0
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4.1.3
         with:
-          java-version: 17
-          distribution: 'temurin' # Installs java
-      - name: make gradle wrapper executable
-        run: chmod +x ./gradlew # Execution workaround for unix-based systems
-      - name: Setup gradle
-        uses: gradle/actions/setup-gradle@v3 # Speeds up build time by about 5 mins :P
-      - name: Execute Gradle build
-        run: ./gradlew build --warning-mode all # Builds the mod into a jar file
-      - uses: actions/upload-artifact@v4.3.0
-        with:
-          name: build-common
-          path: common/build/libs/
-      - uses: actions/upload-artifact@v4.3.0
-        with:
-          name: build-fabric
-          path: fabric/build/libs/
-      - uses: actions/upload-artifact@v4.3.0
-        with:
-          name: build-forge
-          path: forge/build/libs/
+          name: Artifacts
+          path: compiledmods/
+
+      - name: Set outputs from Build workflow
+        id: set_build_outputs
+        run: |
+          # Access outputs from the completed workflow run
+          # Ensure these match the output names set in build.yml
+          MOD_NAME="${{ github.event.workflow_run.outputs.mod_name }}"
+          MOD_VERSION="${{ github.event.workflow_run.outputs.mod_version }}"
+          MC_VERSION="${{ github.event.workflow_run.outputs.mc_version }}"
+          
+          echo "mod_name=$MOD_NAME" >> $GITHUB_OUTPUT
+          echo "mod_version=$MOD_VERSION" >> $GITHUB_OUTPUT
+          echo "mc_version=$MC_VERSION" >> $GITHUB_OUTPUT
 
   publish-github:
     name: 🐙 Publish to GitHub
     runs-on: ubuntu-latest
     if: inputs.publish_github
-    needs: mod-build
+    needs: prepare-release
     steps:
-      - uses: actions/checkout@v4.1.1
-      - name: Download build files
-        uses: actions/download-artifact@v4.1.3
-        with:
-          path: compiledmods/
-      - uses: madhead/read-java-properties@latest
-        id: read_properties
-        with:
-          file: gradle.properties
-          all: true
-      - name: process builds
+      - name: Use artifacts and variables from prepare-release
         run: |
-          cd compiledmods/
-          ls -a -r
-          mv ./build-common/${{ env.mod_name }}-common-${{ env.mod_version }}.jar ${{ env.mod_name }}-common-${{ env.mod_version }}.jar
-          mv ./build-fabric/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar ./${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-          mv ./build-forge/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar ./${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-        env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
-      - name: publish
+          # The downloaded artifacts are already in 'compiledmods/' from the prepare-release job
+          # Access the outputs from the prepare-release job
+          MOD_NAME="${{ needs.prepare-release.outputs.mod_name }}"
+          MOD_VERSION="${{ needs.prepare-release.outputs.mod_version }}"
+          MC_VERSION="${{ needs.prepare-release.outputs.mc_version }}"
+          echo "Mod Name: $MOD_NAME"
+          echo "Mod Version: $MOD_VERSION"
+          echo "MC Version: $MC_VERSION"
+          ls -R compiledmods/ # Verify artifacts are present
+      - name: Publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            compiledmods/${{ env.mod_name }}-common-${{ env.mod_version }}.jar
-            compiledmods/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-            compiledmods/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-          github-tag: "v${{ env.mod_version }}"
-          name: "v${{ env.mod_version }}"
-          version: "v${{ env.mod_version }}"
-          version-type: ${{ inputs.release_as_beta && 'beta' || 'release' }}
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-common.jar
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-fabric.jar
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-neoforge.jar
+          github-tag: "v${{ needs.prepare-release.outputs.mod_version }}"
+          name: "v${{ needs.prepare-release.outputs.mod_version }}"
+          version: "v${{ needs.prepare-release.outputs.mod_version }}"
+          version-type: release
           changelog-file: CHANGELOG.md
         env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mc_version: ${{ steps.read_properties.outputs.minecraft_version }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
+          mod_name: ${{ needs.prepare-release.outputs.mod_name }}
+          mc_version: ${{ needs.prepare-release.outputs.mc_version }}
+          mod_version: ${{ needs.prepare-release.outputs.mod_version }}
 
   publish-modrinth:
     name: 🟢 Publish to Modrinth
     runs-on: ubuntu-latest
     if: inputs.publish_modrinth && contains('macuguita', github.triggering_actor)
-    needs: mod-build
+    needs: prepare-release
     steps:
-      - uses: actions/checkout@v4.1.1
-      - name: Download build files
-        uses: actions/download-artifact@v4.1.3
-        with:
-          path: compiledmods/
-      - uses: madhead/read-java-properties@latest
-        id: read_properties
-        with:
-          file: gradle.properties
-          all: true
-      - name: process builds
+      - name: Use artifacts and variables from prepare-release
         run: |
-          cd compiledmods/
-          ls -a -r
-          mv ./build-common/${{ env.mod_name }}-common-${{ env.mod_version }}.jar ${{ env.mod_name }}-common-${{ env.mod_version }}.jar
-          mv ./build-fabric/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar ./${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-          mv ./build-forge/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar ./${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-        env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
+          MOD_NAME="${{ needs.prepare-release.outputs.mod_name }}"
+          MOD_VERSION="${{ needs.prepare-release.outputs.mod_version }}"
+          MC_VERSION="${{ needs.prepare-release.outputs.mc_version }}"
+          echo "Mod Name: $MOD_NAME"
+          echo "Mod Version: $MOD_VERSION"
+          echo "MC Version: $MC_VERSION"
+          ls -R compiledmods/
+
       - name: Publish for Fabric
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: 3Rn43X40
+          modrinth-id: 7vxePowz
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files: |
-            compiledmods/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-          name: "guita's Branches ${{ env.mod_version }}-fabric"
-          version: "${{ env.mod_version }}-fabric"
-          version-type: ${{ inputs.release_as_beta && 'beta' || 'release' }}
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-fabric.jar
+          name: "guita's Woodworks ${{ needs.prepare-release.outputs.mod_version }}-fabric"
+          version: "${{ needs.prepare-release.outputs.mod_version }}-fabric"
+          version-type: release # Set to 'release' or handle conditional logic for 'beta'
           changelog-file: CHANGELOG.md
           loaders: |
             fabric
             quilt
-          game-versions: ${{ env.mc_version }}
+          game-versions: ${{ needs.prepare-release.outputs.mc_version }}
           dependencies: |
             fabric-api@(required){modrinth:P7dR8mSH}
             macu-lib@(required){modrinth:XnLNz8og}
-            every-compat@(recommended){modrinth:eiktJyw1}
         env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mc_version: ${{ steps.read_properties.outputs.minecraft_version }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
-      - name: Publish for Forge
+          mod_name: ${{ needs.prepare-release.outputs.mod_name }}
+          mc_version: ${{ needs.prepare-release.outputs.mc_version }}
+          mod_version: ${{ needs.prepare-release.outputs.mod_version }}
+
+      - name: Publish for NeoForge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: 3Rn43X40
+          modrinth-id: 7vxePowz
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files: |
-            compiledmods/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-          name: "guita's Branches ${{ env.mod_version }}-forge"
-          version: "${{ env.mod_version }}-forge"
-          version-type: ${{ inputs.release_as_beta && 'beta' || 'release' }}
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-neoforge.jar # Corrected from forge to neoforge
+          name: "guita's Woodworks ${{ needs.prepare-release.outputs.mod_version }}-neoforge"
+          version: "${{ needs.prepare-release.outputs.mod_version }}-neoforge"
+          version-type: release # Set to 'release' or handle conditional logic for 'beta'
           changelog-file: CHANGELOG.md
-          loaders: forge
-          game-versions: ${{ env.mc_version }}
+          loaders: neoforge # Corrected from forge to neoforge
+          game-versions: ${{ needs.prepare-release.outputs.mc_version }}
           dependencies: |
             macu-lib@(required){modrinth:XnLNz8og}
-            every-compat@(recommended){modrinth:eiktJyw1}
         env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mc_version: ${{ steps.read_properties.outputs.minecraft_version }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
+          mod_name: ${{ needs.prepare-release.outputs.mod_name }}
+          mc_version: ${{ needs.prepare-release.outputs.mc_version }}
+          mod_version: ${{ needs.prepare-release.outputs.mod_version }}
 
   publish-cf:
     name: 🔶 Publish to Curseforge
     runs-on: ubuntu-latest
-    if: inputs.publish_modrinth && contains('macuguita', github.triggering_actor)
-    needs: mod-build
+    if: inputs.publish_cf && contains('macuguita', github.triggering_actor)
+    needs: prepare-release
     steps:
-      - uses: actions/checkout@v4.1.1
-      - name: Download build files
-        uses: actions/download-artifact@v4.1.3
-        with:
-          path: compiledmods/
-      - uses: madhead/read-java-properties@latest
-        id: read_properties
-        with:
-          file: gradle.properties
-          all: true
-      - name: process builds
+      - name: Use artifacts and variables from prepare-release
         run: |
-          cd compiledmods/
-          ls -a -r
-          mv ./build-common/${{ env.mod_name }}-common-${{ env.mod_version }}.jar ${{ env.mod_name }}-common-${{ env.mod_version }}.jar
-          mv ./build-fabric/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar ./${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-          mv ./build-forge/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar ./${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-        env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
+          MOD_NAME="${{ needs.prepare-release.outputs.mod_name }}"
+          MOD_VERSION="${{ needs.prepare-release.outputs.mod_version }}"
+          MC_VERSION="${{ needs.prepare-release.outputs.mc_version }}"
+          echo "Mod Name: $MOD_NAME"
+          echo "Mod Version: $MOD_VERSION"
+          echo "MC Version: $MC_VERSION"
+          ls -R compiledmods/
+
       - name: Publish for Fabric
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          curseforge-id: 1195790
+          curseforge-id: 1308420
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            compiledmods/${{ env.mod_name }}-fabric-${{ env.mod_version }}.jar
-          name: "guita's Branches ${{ env.mod_version }}-fabric"
-          version: "${{ env.mod_version }}-fabric"
-          version-type: ${{ inputs.release_as_beta && 'beta' || 'release' }}
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-fabric.jar
+          name: "guita's Woodworks ${{ needs.prepare-release.outputs.mod_version }}-fabric"
+          version: "${{ needs.prepare-release.outputs.mod_version }}-fabric"
+          version-type: release # Set to 'release' or handle conditional logic for 'beta'
           changelog-file: CHANGELOG.md
           loaders: |
             fabric
             quilt
-          game-versions: ${{ env.mc_version }}
+          game-versions: ${{ needs.prepare-release.outputs.mc_version }}
           dependencies: |
             fabric-api@(required){curseforge:306612}
             macu-lib@(required){curseforge:1216837}
-            every-compat@(recommended){curseforge:628539}
           java: |
-            17
+            21
         env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mc_version: ${{ steps.read_properties.outputs.minecraft_version }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
-      - name: Publish for Forge
+          mod_name: ${{ needs.prepare-release.outputs.mod_name }}
+          mc_version: ${{ needs.prepare-release.outputs.mc_version }}
+          mod_version: ${{ needs.prepare-release.outputs.mod_version }}
+
+      - name: Publish for NeoForge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          curseforge-id: 1195790
+          curseforge-id: 1308420
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            compiledmods/${{ env.mod_name }}-forge-${{ env.mod_version }}.jar
-          name: "guita's Branches ${{ env.mod_version }}-forge"
-          version: "${{ env.mod_version }}-forge"
-          version-type: ${{ inputs.release_as_beta && 'beta' || 'release' }}
+            compiledmods/${{ needs.prepare-release.outputs.mod_name }}-${{ needs.prepare-release.outputs.mod_version }}-neoforge.jar # Corrected from forge to neoforge
+          name: "guita's Woodworks ${{ needs.prepare-release.outputs.mod_version }}-neoforge"
+          version: "${{ needs.prepare-release.outputs.mod_version }}-neoforge"
+          version-type: release # Set to 'release' or handle conditional logic for 'beta'
           changelog-file: CHANGELOG.md
-          loaders: forge
-          game-versions: ${{ env.mc_version }}
+          loaders: neoforge # Corrected from forge to neoforge
+          game-versions: ${{ needs.prepare-release.outputs.mc_version }}
           dependencies: |
             macu-lib@(required){curseforge:1216837}
-            every-compat@(recommended){curseforge:628539}
           java: |
-            17
+            21
         env:
-          mod_name: ${{ steps.read_properties.outputs.archives_name }}
-          mc_version: ${{ steps.read_properties.outputs.minecraft_version }}
-          mod_version: ${{ steps.read_properties.outputs.mod_version }}
+          mod_name: ${{ needs.prepare-release.outputs.mod_name }}
+          mc_version: ${{ needs.prepare-release.outputs.mc_version }}
+          mod_version: ${{ needs.prepare-release.outputs.mod_version }}

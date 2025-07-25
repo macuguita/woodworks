@@ -48,8 +48,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 
 public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock implements Waterloggable, SittableBlock {
 
@@ -93,17 +95,16 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		Hand hand = player.getActiveHand();
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
-		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
 		return this.sitOn(world, pos, player, state.get(FACING)) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+	protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
 		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+			tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
 
-		return direction.getAxis().isHorizontal() ? state.with(SHAPE, getShape(state, world, pos)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return direction.getAxis().isHorizontal() ? state.with(SHAPE, getShape(state, world, pos)) : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 		return state.with(SHAPE, getShape(state, ctx.getWorld(), pos));
 	}
 
-	private NoCornerModularSeatProperty getShape(BlockState state, WorldAccess world, BlockPos pos) {
+	private NoCornerModularSeatProperty getShape(BlockState state, WorldView world, BlockPos pos) {
 		Direction dir = state.get(FACING);
 
 		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);

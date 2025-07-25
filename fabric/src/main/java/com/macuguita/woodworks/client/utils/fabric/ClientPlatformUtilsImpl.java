@@ -32,7 +32,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 public class ClientPlatformUtilsImpl {
 
-	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererFactory<T> factory) {
-		EntityRendererRegistry.register(entity.get(), factory);
+	public static <T extends Entity> void registerRenderer(Supplier<? extends EntityType<? extends T>> type, EntityRendererFactory<T> provider) {
+		EntityRendererRegistry.register(type.get(), provider);
 	}
 }

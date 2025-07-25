@@ -1,6 +1,5 @@
-name: Publish
+name: Build
 on: [ pull_request, push ] # Changed trigger to run on push and pull_request events
-# TODO: Cleanup this mess because there's definitely a better way to do this...
 
 permissions:
   contents: write
@@ -115,7 +114,6 @@ jobs:
             echo "Warning: No $PLATFORM JAR found matching $FILENAME in $PLATFORM/build/libs/"
           fi
 
-# Upload the single combined ZIP file
       - name: Upload combined artifacts
         uses: actions/upload-artifact@v4.3.0
         with:

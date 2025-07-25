@@ -31,7 +31,6 @@ import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
-import com.macuguita.woodworks.compat.ModCompat;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
@@ -54,7 +53,6 @@ public final class GuitaWoodworks {
 		GWObjects.init();
 		GWEntityTypes.init();
 		GWItemGroups.init();
-		everyCompatModule();
 	}
 
 	public static void commonSetup() {
@@ -96,18 +94,6 @@ public final class GuitaWoodworks {
 				strippedMap.put(block, strippedBlock);
 			}
 			index++;
-		}
-	}
-
-	private static void everyCompatModule() {
-		try {
-			if (GWUtils.isModLoaded("everycomp")) {
-				ModCompat.init();
-			} else {
-				LOGGER.info("EveryCompat module is not loaded");
-			}
-		} catch (Exception e) {
-			LOGGER.error("Failed to start EveryComp module", e);
 		}
 	}
 

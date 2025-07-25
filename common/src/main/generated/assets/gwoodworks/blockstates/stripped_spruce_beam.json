@@ -12,22 +12,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -276,22 +276,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -540,22 +540,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -804,22 +804,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -1068,22 +1068,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -1332,22 +1332,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
@@ -1596,22 +1596,22 @@
           {
             "OR": [
               {
-                "up": "!true"
+                "up": "false"
               },
               {
-                "down": "!true"
+                "down": "false"
               },
               {
-                "north": "!true"
+                "north": "false"
               },
               {
-                "south": "!true"
+                "south": "false"
               },
               {
-                "east": "!true"
+                "east": "false"
               },
               {
-                "west": "!true"
+                "west": "false"
               }
             ]
           },
