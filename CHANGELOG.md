@@ -1,0 +1,1 @@
+- Fixed hollow log not keeping its axis rotation when being stripped
