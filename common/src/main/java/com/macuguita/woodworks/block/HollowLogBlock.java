@@ -75,6 +75,7 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 
 				if (world instanceof ServerWorld serverWorld) {
 					BlockState strippedState = strippedBlock.getDefaultState()
+							.with(PillarBlock.AXIS, state.get(PillarBlock.AXIS))
 							.with(WATERLOGGED, state.get(WATERLOGGED));
 
 					serverWorld.setBlockState(pos, strippedState);
