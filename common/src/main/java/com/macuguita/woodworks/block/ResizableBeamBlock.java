@@ -31,6 +31,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
+
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
@@ -117,6 +121,31 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable BlockView world, List<Text> tooltip, TooltipContext options) {
 		tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GRAY));
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, BlockRotation rotation) {
+		BlockState rotated = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = rotation.rotate(dir);
+			rotated = rotated.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return rotated;
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, BlockMirror mirror) {
+		BlockRotation rotation = mirror.getRotation(Direction.NORTH);
+		if (rotation != BlockRotation.NONE) {
+			return this.rotate(state, rotation);
+		}
+
+		BlockState mirrored = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = mirror.apply(dir);
+			mirrored = mirrored.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return mirrored;
 	}
 
 	@Override
