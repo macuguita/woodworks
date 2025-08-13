@@ -53,6 +53,8 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
@@ -117,6 +119,31 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
 		tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GRAY));
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, BlockRotation rotation) {
+		BlockState rotated = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = rotation.rotate(dir);
+			rotated = rotated.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return rotated;
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, BlockMirror mirror) {
+		BlockRotation rotation = mirror.getRotation(Direction.NORTH);
+		if (rotation != BlockRotation.NONE) {
+			return this.rotate(state, rotation);
+		}
+
+		BlockState mirrored = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = mirror.apply(dir);
+			mirrored = mirrored.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return mirrored;
 	}
 
 	@Override
