@@ -1,2 +1,1 @@
-- Updated to 1.21.8
-- Fixed hollow log not keeping its axis rotation when being stripped
+- Implemented rotate and mirror methods for ResizableBeamBlock

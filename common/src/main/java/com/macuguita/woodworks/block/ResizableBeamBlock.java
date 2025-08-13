@@ -33,6 +33,7 @@ import com.macuguita.woodworks.reg.GWItemTags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ConnectingBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.entity.LivingEntity;
@@ -49,6 +50,8 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
@@ -109,6 +112,31 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(RADIUS, NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, BlockRotation rotation) {
+		BlockState rotated = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = rotation.rotate(dir);
+			rotated = rotated.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return rotated;
+	}
+
+	@Override
+	protected BlockState mirror(BlockState state, BlockMirror mirror) {
+		BlockRotation rotation = mirror.getRotation(Direction.NORTH);
+		if (rotation != BlockRotation.NONE) {
+			return this.rotate(state, rotation);
+		}
+
+		BlockState mirrored = state;
+		for (Direction dir : Direction.values()) {
+			Direction newDir = mirror.apply(dir);
+			mirrored = mirrored.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+		}
+		return mirrored;
 	}
 
 	@Override
