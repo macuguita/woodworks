@@ -1,1 +1,1 @@
-- Implemented rotate and mirror methods for ResizableBeamBlock
+- Fixed project metadata.
