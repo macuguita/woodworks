@@ -43,6 +43,8 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 		getOrCreateTagBuilder(GWItemTags.SECATEURS)
 				.add(GWObjects.SECATEURS.get())
 				.addOptionalTag(GWItemTags.KNIVES);
+		getOrCreateTagBuilder(GWItemTags.SHEARS)
+				.addOptionalTag(GWItemTags.FORGE_SHEARS);
 
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());

@@ -38,6 +38,7 @@ public class GWItemTags {
 	public static TagKey<Item> SECATEURS = createTag("secateurs");
 	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
 	public static TagKey<Item> SHEARS = createCommonTag("shears");
+	public static TagKey<Item> FORGE_SHEARS = createCommonTag("shears");
 	public static TagKey<Item> KNIVES = createCommonTag("tools/knife");
 	public static TagKey<Item> EMPTY_BUCKETS = createCommonTag("buckets/empty");
 
@@ -47,5 +48,9 @@ public class GWItemTags {
 
 	private static TagKey<Item> createCommonTag(String name) {
 		return TagKey.of(RegistryKeys.ITEM, Identifier.of("c", name));
+	}
+
+	private static TagKey<Item> createForgeTag(String name) {
+		return TagKey.of(RegistryKeys.ITEM, Identifier.of("forge", name));
 	}
 }

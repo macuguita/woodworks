@@ -27,6 +27,10 @@ import net.mehvahdjukaar.every_compat.api.EveryCompatAPI;
 
 public class ModCompat {
 
+	/*
+	 * This is a dirty "hack" because when every compat is not installed
+	 * it tries to import the `EveryCompatAPI` class on the mod init making it crash.
+	 */
 	public static void init() {
 		EveryCompatAPI.registerModule(new WoodGood(GuitaWoodworks.MOD_ID));
 	}
