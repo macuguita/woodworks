@@ -80,7 +80,7 @@ subprojects {
     }
 
     var modLoader = name
-    val changelogText: String = File("CHANGELOG.md").readText()
+    val changelogText: String = rootProject.file("CHANGELOG.md").readText()
 
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
