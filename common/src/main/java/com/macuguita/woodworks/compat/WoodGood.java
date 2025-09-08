@@ -34,6 +34,7 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.api.PaletteStrategies;
 import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
 import net.mehvahdjukaar.every_compat.api.SimpleModule;
@@ -46,8 +47,8 @@ import net.mehvahdjukaar.moonlight.api.resources.textures.ImageTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.textures.Respriter;
 import net.mehvahdjukaar.moonlight.api.resources.textures.TextureImage;
 import net.mehvahdjukaar.moonlight.api.set.BlockType;
+import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
-import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,11 +70,11 @@ public class WoodGood extends SimpleModule {
 	public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
 
 	public WoodGood(String modId) {
-		super(modId, "gww");
+		super(modId, "gww", EveryCompat.MOD_ID);
 		Identifier tab = modRes("main");
 
 		stump = SimpleEntrySet.builder(WoodType.class, "stump",
-						GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
@@ -90,7 +91,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(stump);
 
 		strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
-						GWObjects.STRIPPED_OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				.requiresChildren("stripped_log")
@@ -108,7 +109,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedStump);
 
 		carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
-						GWObjects.CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
@@ -125,7 +126,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(carvedLog);
 
 		strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
-						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -142,7 +143,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedCarvedLog);
 
 		beam = SimpleEntrySet.builder(WoodType.class, "beam",
-						GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.OAK_BEAM, () -> VanillaWoodTypes.OAK,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
@@ -156,7 +157,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(beam);
 
 		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
-						GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_OAK_BEAM, () -> VanillaWoodTypes.OAK,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
@@ -171,7 +172,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedBeam);
 
 		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
-						GWObjects.HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -188,7 +189,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(hollowLog);
 
 		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
-						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -264,7 +265,7 @@ public class WoodGood extends SimpleModule {
 					try (TextureImage topTexture = TextureImage.open(manager,
 							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak"));
 
 						var newTop = topTexture.makeCopy();
 						generateStumpTexture(topTexture, newTop);
@@ -285,7 +286,7 @@ public class WoodGood extends SimpleModule {
 					try (TextureImage topTexture = TextureImage.open(manager,
 							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/stripped_oak_stump_top", w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/stripped_oak_stump_top", w, id, "oak"));
 
 						var newTop = topTexture.makeCopy();
 						generateStumpTexture(topTexture, newTop);
@@ -315,7 +316,7 @@ public class WoodGood extends SimpleModule {
 								 RPUtils.findFirstBlockTextureLocation(manager, woodType.planks))
 					) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, woodType, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, woodType, id, "oak"));
 
 						TextureImage finishedTexture = generateCarvedLogInsideTexture(carvedOakLogInsideTexture,
 								logSideTexture, planksTexture, insideEdgeMask, insideMask);
@@ -338,7 +339,7 @@ public class WoodGood extends SimpleModule {
 								 RPUtils.findFirstBlockTextureLocation(manager, w.planks))
 					) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, w, id, "oak"));
 
 						TextureImage finishedTexture = generateCarvedLogInsideTexture(strippedCarvedLogTexture, logSideTexture, planksTexture, insideEdgeMask, insideMask);
 
@@ -360,14 +361,14 @@ public class WoodGood extends SimpleModule {
 					try (TextureImage topTexture = TextureImage.open(manager,
 							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
-						String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
-						String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
-						String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
-						String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
-						String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
-						String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
-						String[] newIds = {
+						Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+						Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+						Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+						Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+						Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+						Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+						Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+						Identifier[] newIds = {
 								newId2x2,
 								newId4x4,
 								newId6x6,
@@ -415,14 +416,14 @@ public class WoodGood extends SimpleModule {
 					try (TextureImage topTexture = TextureImage.open(manager,
 							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
-						String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
-						String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
-						String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
-						String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
-						String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
-						String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
-						String[] newIds = {
+						Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+						Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+						Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+						Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+						Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+						Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+						Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+						Identifier[] newIds = {
 								newId2x2,
 								newId4x4,
 								newId6x6,
