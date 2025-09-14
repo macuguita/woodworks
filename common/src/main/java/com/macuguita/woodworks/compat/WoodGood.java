@@ -43,8 +43,8 @@ import net.mehvahdjukaar.every_compat.misc.HardcodedBlockType;
 import net.mehvahdjukaar.moonlight.api.resources.BlockTypeResTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.RPUtils;
 import net.mehvahdjukaar.moonlight.api.resources.pack.ResourceGenTask;
-import net.mehvahdjukaar.moonlight.api.resources.textures.ImageTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.textures.Respriter;
+import net.mehvahdjukaar.moonlight.api.resources.textures.TextureCollager;
 import net.mehvahdjukaar.moonlight.api.resources.textures.TextureImage;
 import net.mehvahdjukaar.moonlight.api.set.BlockType;
 import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
@@ -84,6 +84,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -102,6 +103,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -119,6 +121,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -136,6 +139,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -150,6 +154,7 @@ public class WoodGood extends SimpleModule {
 				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -165,6 +170,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -182,6 +188,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -199,6 +206,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -466,23 +474,19 @@ public class WoodGood extends SimpleModule {
 	}
 
 	private void generateStumpTexture(TextureImage original, TextureImage target) {
-		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-				.copyRect(0, 0, 16, 1, 0, 2, 16, 1) // Top border
-				.copyRect(0, 15, 16, 1, 0, 13, 16, 1) // Bottom border
-				.copyRect(0, 0, 1, 16, 2, 0, 1, 16) // Left border
-				.copyRect(15, 0, 1, 16, 13, 0, 1, 16) // Right border
+		TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+				.copyFrom(0, 0, 16, 1).to(0, 2, 16, 1) // Top border
+				.copyFrom(0, 15, 16, 1).to(0, 13, 16, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(2, 0, 1, 16) // Left border
+				.copyFrom(15, 0, 1, 16).to(13, 0, 1, 16) // Right border
 				.build();
 
-		transformer.apply(original, target);
+		collager.apply(original, target);
 
-		target.forEachFramePixel((i, x, y) -> {
-			int localX = x - target.getFrameStartX(i);
-			int localY = y - target.getFrameStartY(i);
 
-			boolean insideOpaqueRegion = (localX >= 2 && localX <= 13) && (localY >= 2 && localY <= 13);
-
-			if (!insideOpaqueRegion) {
-				target.getImage().setColor(x, y, 0);
+		target.forEachPixel((pixel) -> {
+			if (!((pixel.frameX() >= 2 && pixel.frameX() <= 13) && (pixel.frameY() >=2 && pixel.frameY() <= 13))) {
+				pixel.setValue(0);
 			}
 		});
 	}
@@ -495,33 +499,25 @@ public class WoodGood extends SimpleModule {
 
 		Respriter targetInside = Respriter.masked(recoloredEdge, insideEdgeMask);
 
-		// Finished Texture
 		return targetInside.recolorWithAnimationOf(planksTexture);
-
 	}
 
 	private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
 		int boxSize = ++radius * 2;
 		int offset = (16 - boxSize) / 2;
 
-		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-				.copyRect(0, 0, 16, 1, offset, offset, boxSize, 1) // Top border
-				.copyRect(15, 0, 1, 16, offset + boxSize - 1, offset, 1, boxSize) // Right border
-				.copyRect(0, 15, 16, 1, offset, offset + boxSize - 1, boxSize, 1) // Bottom border
-				.copyRect(0, 0, 1, 16, offset, offset, 1, boxSize) // Left border
-				.build();
+		TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+						.copyFrom(0, 0, 16, 1).to(offset, offset, boxSize, 1) // Top border
+						.copyFrom(15, 0, 1, 16).to(offset + boxSize - 1, offset, 1, boxSize) // Right border
+						.copyFrom(0, 15, 16, 1).to(offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+						.copyFrom(0, 0, 1, 16).to(offset, offset, 1, boxSize) // Left border
+						.build();
 
-		transformer.apply(original, target);
+		collager.apply(original, target);
 
-		target.forEachFramePixel((i, x, y) -> {
-			int localX = x - target.getFrameStartX(i);
-			int localY = y - target.getFrameStartY(i);
-
-			boolean inBox = (localX >= offset && localX < offset + boxSize) &&
-					(localY >= offset && localY < offset + boxSize);
-
-			if (!inBox) {
-				target.getImage().setColor(x, y, 0);
+		target.forEachPixel((pixel) -> {
+			if (!((pixel.frameX() >= offset && pixel.frameX() <= offset + boxSize) && (pixel.frameY() >= offset && pixel.frameY() <= offset + boxSize))) {
+				pixel.setValue(0);
 			}
 		});
 	}
