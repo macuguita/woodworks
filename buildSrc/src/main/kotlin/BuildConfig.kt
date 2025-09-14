@@ -20,7 +20,7 @@ object BuildConfig {
 
     val fabricVersion: String = "0.92.6+" + minecraftVersion
     val everyCompatVersion: String = "1.20-2.9.2"
-    val moonlightLibVersion: String = "1.20-2.16.8"
+    val moonlightLibVersion: String = "1.20-2.16.10"
     val macuLibVersion: String = "1.0.5"
     val modmenuVersion: String = "7.2.2"
     val reiVersion: String = "12.1.785"

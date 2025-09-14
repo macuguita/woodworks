@@ -34,19 +34,21 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import net.mehvahdjukaar.every_compat.EveryCompat;
+import net.mehvahdjukaar.every_compat.api.PaletteStrategies;
 import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
 import net.mehvahdjukaar.every_compat.api.SimpleModule;
+import net.mehvahdjukaar.every_compat.misc.CompatSpritesHelper;
 import net.mehvahdjukaar.every_compat.misc.HardcodedBlockType;
-import net.mehvahdjukaar.every_compat.misc.SpriteHelper;
 import net.mehvahdjukaar.moonlight.api.resources.BlockTypeResTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.RPUtils;
 import net.mehvahdjukaar.moonlight.api.resources.pack.ResourceGenTask;
-import net.mehvahdjukaar.moonlight.api.resources.textures.ImageTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.textures.Respriter;
+import net.mehvahdjukaar.moonlight.api.resources.textures.TextureCollager;
 import net.mehvahdjukaar.moonlight.api.resources.textures.TextureImage;
 import net.mehvahdjukaar.moonlight.api.set.BlockType;
+import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
-import net.mehvahdjukaar.moonlight.api.set.wood.WoodTypeRegistry;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,21 +70,21 @@ public class WoodGood extends SimpleModule {
 	public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
 
 	public WoodGood(String modId) {
-		super(modId, "gww");
+		super(modId, "gww", EveryCompat.MOD_ID);
 		Identifier tab = modRes("main");
 
 		stump = SimpleEntrySet.builder(WoodType.class, "stump",
-						GWObjects.OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
-				.createPaletteFromChild("log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
-				.addTexture(modRes("block/oak_stump_top"))
+				.addTexture(modRes("block/oak_stump_top"), PaletteStrategies.WOOD_LOG_SIDE)
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -90,18 +92,18 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(stump);
 
 		strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
-						GWObjects.STRIPPED_OAK_STUMP, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				.requiresChildren("stripped_log")
 				//TEXTURE: stripped_log
-				.createPaletteFromChild("stripped_log", SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE)
-				.addTexture(modRes("block/stripped_oak_stump_top"))
+				.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.WOOD_STRIPPED_LOG_SIDE)
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -109,7 +111,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedStump);
 
 		carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
-						GWObjects.CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
@@ -119,6 +121,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -126,7 +129,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(carvedLog);
 
 		strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
-						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -136,6 +139,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -143,13 +147,14 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedCarvedLog);
 
 		beam = SimpleEntrySet.builder(WoodType.class, "beam",
-						GWObjects.OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.OAK_BEAM, () -> VanillaWoodTypes.OAK,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.BEAM, RegistryKeys.BLOCK)
 				.setTabKey(tab)
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -157,7 +162,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(beam);
 
 		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
-						GWObjects.STRIPPED_OAK_BEAM, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_OAK_BEAM, () -> VanillaWoodTypes.OAK,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
 				.addTag(GWItemTags.BEAM, RegistryKeys.ITEM)
@@ -165,6 +170,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -172,7 +178,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(strippedBeam);
 
 		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
-						GWObjects.HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -182,6 +188,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -189,7 +196,7 @@ public class WoodGood extends SimpleModule {
 		this.addEntry(hollowLog);
 
 		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
-						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> WoodTypeRegistry.OAK_TYPE,
+						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
 						w -> new HollowLogBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
@@ -199,6 +206,7 @@ public class WoodGood extends SimpleModule {
 				.setTabKey(tab)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
+				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
@@ -257,21 +265,20 @@ public class WoodGood extends SimpleModule {
 	@Override
 	public void addDynamicClientResources(Consumer<ResourceGenTask> executor) {
 		super.addDynamicClientResources(executor);
-
-		executor.accept((manager, sink) -> {
+		executor.accept(( manager, sink ) -> {
 			try {
 				stump.blocks.forEach((w, block) -> {
 					Identifier id = Utils.getID(block);
 
 					try (TextureImage topTexture = TextureImage.open(manager,
-							RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak"));
 
 						var newTop = topTexture.makeCopy();
 						generateStumpTexture(topTexture, newTop);
 
-						sink.addTextureIfNotPresent(manager, newId, () -> newTop);
+						sink.addTextureIfNotPresent(manager, newId.toString(), () -> newTop);
 
 					} catch (Exception e) {
 						GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
@@ -285,14 +292,14 @@ public class WoodGood extends SimpleModule {
 					Identifier id = Utils.getID(block);
 
 					try (TextureImage topTexture = TextureImage.open(manager,
-							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace("block/stripped_oak_stump_top", w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/stripped_oak_stump_top", w, id, "oak"));
 
 						var newTop = topTexture.makeCopy();
 						generateStumpTexture(topTexture, newTop);
 
-						sink.addTextureIfNotPresent(manager, newId, () -> newTop);
+						sink.addTextureIfNotPresent(manager, newId.toString(), () -> newTop);
 
 					} catch (Exception e) {
 						GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
@@ -312,17 +319,17 @@ public class WoodGood extends SimpleModule {
 
 					try (TextureImage carvedOakLogInsideTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
 						 TextureImage logSideTexture = TextureImage.open(manager,
-								 RPUtils.findFirstBlockTextureLocation(manager, woodType.log, SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
+								 RPUtils.findFirstBlockTextureLocation(manager, woodType.log, CompatSpritesHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
 						 TextureImage planksTexture = TextureImage.open(manager,
 								 RPUtils.findFirstBlockTextureLocation(manager, woodType.planks))
 					) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, woodType, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, woodType, id, "oak"));
 
 						TextureImage finishedTexture = generateCarvedLogInsideTexture(carvedOakLogInsideTexture,
 								logSideTexture, planksTexture, insideEdgeMask, insideMask);
 
-						sink.addTextureIfNotPresent(manager, newId, () -> finishedTexture);
+						sink.addTextureIfNotPresent(manager, newId.toString(), () -> finishedTexture);
 
 					} catch (Exception e) {
 						GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
@@ -335,16 +342,16 @@ public class WoodGood extends SimpleModule {
 
 					try (TextureImage strippedCarvedLogTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
 						 TextureImage logSideTexture = TextureImage.open(manager,
-								 RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), SpriteHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
+								 RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
 						 TextureImage planksTexture = TextureImage.open(manager,
 								 RPUtils.findFirstBlockTextureLocation(manager, w.planks))
 					) {
 
-						String newId = BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, w, id, "oak");
+						Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, w, id, "oak"));
 
 						TextureImage finishedTexture = generateCarvedLogInsideTexture(strippedCarvedLogTexture, logSideTexture, planksTexture, insideEdgeMask, insideMask);
 
-						sink.addTextureIfNotPresent(manager, newId, () -> finishedTexture);
+						sink.addTextureIfNotPresent(manager, newId.toString(), () -> finishedTexture);
 
 					} catch (Exception e) {
 						GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
@@ -360,16 +367,16 @@ public class WoodGood extends SimpleModule {
 					String baseTexturePath = "block/oak_beam_top";
 
 					try (TextureImage topTexture = TextureImage.open(manager,
-							RPUtils.findFirstBlockTextureLocation(manager, w.log, SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
-						String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
-						String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
-						String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
-						String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
-						String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
-						String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
-						String[] newIds = {
+						Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+						Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+						Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+						Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+						Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+						Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+						Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+						Identifier[] newIds = {
 								newId2x2,
 								newId4x4,
 								newId6x6,
@@ -398,7 +405,7 @@ public class WoodGood extends SimpleModule {
 						for (int i = 0; i < 7; ++i) {
 							var newTopTexture = newTopTextures[i];
 							generateBeamTexture(topTexture, newTopTexture, i);
-							sink.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+							sink.addTextureIfNotPresent(manager, newIds[i].toString(), () -> newTopTexture);
 						}
 
 					} catch (Exception e) {
@@ -415,16 +422,16 @@ public class WoodGood extends SimpleModule {
 					String baseTexturePath = "block/stripped_oak_beam_top";
 
 					try (TextureImage topTexture = TextureImage.open(manager,
-							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), SpriteHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
 
-						String newId2x2 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak");
-						String newId4x4 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak");
-						String newId6x6 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak");
-						String newId8x8 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak");
-						String newId10x10 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak");
-						String newId12x12 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak");
-						String newId14x14 = BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak");
-						String[] newIds = {
+						Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+						Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+						Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+						Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+						Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+						Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+						Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+						Identifier[] newIds = {
 								newId2x2,
 								newId4x4,
 								newId6x6,
@@ -453,7 +460,7 @@ public class WoodGood extends SimpleModule {
 						for (int i = 0; i < 7; ++i) {
 							var newTopTexture = newTopTextures[i];
 							generateBeamTexture(topTexture, newTopTexture, i);
-							sink.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+							sink.addTextureIfNotPresent(manager, newIds[i].toString(), () -> newTopTexture);
 						}
 
 					} catch (Exception e) {
@@ -467,23 +474,19 @@ public class WoodGood extends SimpleModule {
 	}
 
 	private void generateStumpTexture(TextureImage original, TextureImage target) {
-		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-				.copyRect(0, 0, 16, 1, 0, 2, 16, 1) // Top border
-				.copyRect(0, 15, 16, 1, 0, 13, 16, 1) // Bottom border
-				.copyRect(0, 0, 1, 16, 2, 0, 1, 16) // Left border
-				.copyRect(15, 0, 1, 16, 13, 0, 1, 16) // Right border
+		TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+				.copyFrom(0, 0, 16, 1).to(0, 2, 16, 1) // Top border
+				.copyFrom(0, 15, 16, 1).to(0, 13, 16, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(2, 0, 1, 16) // Left border
+				.copyFrom(15, 0, 1, 16).to(13, 0, 1, 16) // Right border
 				.build();
 
-		transformer.apply(original, target);
+		collager.apply(original, target);
 
-		target.forEachFramePixel((i, x, y) -> {
-			int localX = x - target.getFrameStartX(i);
-			int localY = y - target.getFrameStartY(i);
 
-			boolean insideOpaqueRegion = (localX >= 2 && localX <= 13) && (localY >= 2 && localY <= 13);
-
-			if (!insideOpaqueRegion) {
-				target.getImage().setColor(x, y, 0);
+		target.forEachPixel((pixel) -> {
+			if (!((pixel.frameX() >= 2 && pixel.frameX() <= 13) && (pixel.frameY() >=2 && pixel.frameY() <= 13))) {
+				pixel.setValue(0);
 			}
 		});
 	}
@@ -496,58 +499,49 @@ public class WoodGood extends SimpleModule {
 
 		Respriter targetInside = Respriter.masked(recoloredEdge, insideEdgeMask);
 
-		// Finished Texture
 		return targetInside.recolorWithAnimationOf(planksTexture);
-
 	}
 
 	private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
 		int boxSize = ++radius * 2;
 		int offset = (16 - boxSize) / 2;
 
-		ImageTransformer transformer = ImageTransformer.builder(16, 16, 16, 16)
-				.copyRect(0, 0, 16, 1, offset, offset, boxSize, 1) // Top border
-				.copyRect(15, 0, 1, 16, offset + boxSize - 1, offset, 1, boxSize) // Right border
-				.copyRect(0, 15, 16, 1, offset, offset + boxSize - 1, boxSize, 1) // Bottom border
-				.copyRect(0, 0, 1, 16, offset, offset, 1, boxSize) // Left border
+		TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+				.copyFrom(0, 0, 16, 1).to(offset, offset, boxSize, 1) // Top border
+				.copyFrom(15, 0, 1, 16).to(offset + boxSize - 1, offset, 1, boxSize) // Right border
+				.copyFrom(0, 15, 16, 1).to(offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(offset, offset, 1, boxSize) // Left border
 				.build();
 
-		transformer.apply(original, target);
+		collager.apply(original, target);
 
-		target.forEachFramePixel((i, x, y) -> {
-			int localX = x - target.getFrameStartX(i);
-			int localY = y - target.getFrameStartY(i);
-
-			boolean inBox = (localX >= offset && localX < offset + boxSize) &&
-					(localY >= offset && localY < offset + boxSize);
-
-			if (!inBox) {
-				target.getImage().setColor(x, y, 0);
+		target.forEachPixel((pixel) -> {
+			if (!((pixel.frameX() >= offset && pixel.frameX() <= offset + boxSize) && (pixel.frameY() >= offset && pixel.frameY() <= offset + boxSize))) {
+				pixel.setValue(0);
 			}
 		});
 	}
 
 
 	@Override
-	public boolean isEntryAlreadyRegistered(String blockId, BlockType blockType, Registry<?> registry) {
+	public boolean isEntryAlreadyRegistered(String entrySetId, String blockId, BlockType blockType, Registry<?> registry) {
 		// blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
 		String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
 
 		if (blockType instanceof WoodType wt) {
-			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId);
+			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId, shortenedId());
 			if (hardcoded != null) return hardcoded;
 		}
 
-		return super.isEntryAlreadyRegistered(blockId, blockType, registry);
+		return super.isEntryAlreadyRegistered(entrySetId, blockId, blockType, registry);
 	}
 
 	public static class CustomHardcodedBlockType extends HardcodedBlockType {
 
 		@Nullable
-		public static Boolean isWoodBlockAlreadyRegistered(String blockName, WoodType woodType, String ModId) {
+		public static Boolean isWoodBlockAlreadyRegistered(String blockName, WoodType woodType, String ModId, String shortenedId) {
 			woodTypeFromMod = woodType.getNamespace();
 			woodidentify = woodType.getId().toString();
-			supportedMod = ModId;
 			supportedBlockName = blockName;
 
 			/// ========== INCLUDE VANILLA TYPE ========== \\\
