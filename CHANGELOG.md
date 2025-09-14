@@ -1,1 +1,1 @@
-- Fixed project metadata.
+- Fixed every compat module to work for newer versions of the mods
