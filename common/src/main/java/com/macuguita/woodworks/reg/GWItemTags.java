@@ -38,7 +38,7 @@ public class GWItemTags {
 	public static TagKey<Item> SECATEURS = createTag("secateurs");
 	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
 	public static TagKey<Item> SHEARS = createCommonTag("shears");
-	public static TagKey<Item> FORGE_SHEARS = createCommonTag("shears");
+	public static TagKey<Item> FORGE_SHEARS = createForgeTag("shears");
 	public static TagKey<Item> KNIVES = createCommonTag("tools/knife");
 	public static TagKey<Item> EMPTY_BUCKETS = createCommonTag("buckets/empty");
 

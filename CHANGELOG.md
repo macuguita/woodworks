@@ -1,1 +1,1 @@
-- Implemented rotate and mirror methods for ResizableBeamBlock
+- Fixed every compat module to work for newer versions of the mods
