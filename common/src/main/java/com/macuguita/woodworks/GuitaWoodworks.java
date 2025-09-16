@@ -50,6 +50,9 @@ public final class GuitaWoodworks {
 	public static final String MOD_ID = "gwoodworks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	// TODO: the carved stem and and hollow stem in the mushroom block on it's edge sides
+	//  it should behave like the default minecraft mushroom stem block
+	//  (eg. place a mushroom block on the side and it shows inside texture).
 	public static void init() {
 		GWObjects.init();
 		GWEntityTypes.init();

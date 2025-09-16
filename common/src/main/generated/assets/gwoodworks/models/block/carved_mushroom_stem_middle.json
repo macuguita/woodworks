@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_middle",
+  "textures": {
+    "inside": "minecraft:block/mushroom_block_inside",
+    "side": "minecraft:block/mushroom_stem"
+  }
+}
