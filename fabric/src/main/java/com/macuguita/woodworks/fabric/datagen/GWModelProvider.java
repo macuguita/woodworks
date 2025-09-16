@@ -59,6 +59,7 @@ public class GWModelProvider extends FabricModelProvider {
 		super(output);
 	}
 
+	// TODO: New mushroom blocks
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 		blockStateModelGenerator.registerItemModel(GWObjects.SECATEURS.get());

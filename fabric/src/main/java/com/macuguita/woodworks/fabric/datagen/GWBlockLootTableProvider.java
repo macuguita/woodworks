@@ -63,5 +63,9 @@ public class GWBlockLootTableProvider extends FabricBlockLootTableProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			addDrop(regEntry.get());
 		});
+		addDrop(GWObjects.MUSHROOM_STUMP.get());
+		addDrop(GWObjects.CARVED_MUSHROOM_STEM.get());
+		addDrop(GWObjects.MUSHROOM_BEAM.get());
+		addDrop(GWObjects.HOLLOW_MUSHROOM_STEM.get());
 	}
 }

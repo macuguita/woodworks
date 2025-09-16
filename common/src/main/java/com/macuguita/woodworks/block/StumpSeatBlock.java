@@ -61,11 +61,17 @@ public class StumpSeatBlock extends Block implements SittableBlock, Waterloggabl
 	public static final Box SEAT = new Box(0.125, 0, 0.125, 0.875, 0.5, 0.875);
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 	public static final VoxelShape VOXEL_SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 8.0, 14.0);
+	private final boolean strippable;
 
 	public StumpSeatBlock(Settings settings) {
+		this(settings, true);
+	}
+
+	public StumpSeatBlock(Settings settings, boolean strippable) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
 				.with(WATERLOGGED, false));
+		this.strippable = strippable;
 	}
 
 	@Override
@@ -83,7 +89,7 @@ public class StumpSeatBlock extends Block implements SittableBlock, Waterloggabl
 	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
 		Hand hand = player.getActiveHand();
 		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem) {
+		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_STUMPS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));

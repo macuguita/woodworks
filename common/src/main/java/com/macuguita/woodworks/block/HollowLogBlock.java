@@ -47,9 +47,15 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 			),
 			BooleanBiFunction.ONLY_FIRST
 	);
+	private final boolean strippable;
 
 	public HollowLogBlock(Settings settings) {
+		this(settings, true);
+	}
+
+	public HollowLogBlock(Settings settings, boolean strippable) {
 		super(settings);
+		this.strippable = strippable;
 	}
 
 	@Override
@@ -68,7 +74,7 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
 		Hand hand = player.getActiveHand();
 		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem) {
+		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_HOLLOW_LOGS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));

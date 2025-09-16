@@ -24,6 +24,7 @@ package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
@@ -68,5 +69,9 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
 			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
 		});
+		getOrCreateTagBuilder(GWItemTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get().asItem());
+		getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get().asItem());
+		getOrCreateTagBuilder(GWItemTags.BEAM).add(GWObjects.MUSHROOM_BEAM.get().asItem());
+		getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem());
 	}
 }
