@@ -55,8 +55,6 @@ import net.minecraft.util.math.Direction;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
-import org.w3c.dom.Text;
-
 public class GWModelProvider extends FabricModelProvider {
 
 	public GWModelProvider(FabricDataOutput output) {

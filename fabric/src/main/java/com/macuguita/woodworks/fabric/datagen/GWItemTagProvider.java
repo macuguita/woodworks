@@ -24,7 +24,6 @@ package com.macuguita.woodworks.fabric.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
