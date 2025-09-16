@@ -55,6 +55,7 @@ import net.minecraft.util.math.Direction;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
+@SuppressWarnings("deprecation")
 public class GWModelProvider extends FabricModelProvider {
 
 	public GWModelProvider(FabricDataOutput output) {
@@ -149,10 +150,10 @@ public class GWModelProvider extends FabricModelProvider {
 
 		registerCarvedLog(blockStateModelGenerator, GWObjects.CARVED_MUSHROOM_STEM.get(),
 				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
-						.put(TextureKey.INSIDE, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")),
 				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
 						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside"))
-						.put(TextureKey.INSIDE, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")));
 
 		registerBeamBlock(blockStateModelGenerator, GWObjects.MUSHROOM_BEAM.get(),
 				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)),

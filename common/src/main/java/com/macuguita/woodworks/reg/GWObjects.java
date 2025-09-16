@@ -31,7 +31,9 @@ import com.macuguita.lib.platform.registry.GuitaRegistry;
 import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.block.CarvedMushroomStemSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;
+import com.macuguita.woodworks.block.HollowMushroomStemBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.utils.GWUtils;
@@ -136,7 +138,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CARVED_WARPED_STEM = createCarvedLog("carved_warped_stem", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_WARPED_STEM = createStrippedCarvedLog("stripped_carved_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedMushroomStemSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor())), BLOCKS, ITEMS);
 
 	public static final GuitaRegistryEntry<Block> OAK_BEAM = createBeam("oak_beam", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_BEAM = createStrippedBeam("stripped_oak_beam", Blocks.STRIPPED_OAK_LOG);
@@ -200,7 +202,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> HOLLOW_WARPED_STEM = createHollowLog("hollow_warped_stem", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_WARPED_STEM = createStrippedHollowLog("stripped_hollow_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> HOLLOW_MUSHROOM_STEM = registerWithItem("hollow_mushroom_stem", () -> new HollowLogBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> HOLLOW_MUSHROOM_STEM = registerWithItem("hollow_mushroom_stem", () -> new HollowMushroomStemBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor())), BLOCKS, ITEMS);
 
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
 		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);

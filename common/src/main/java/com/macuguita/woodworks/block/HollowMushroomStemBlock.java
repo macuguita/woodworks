@@ -1,15 +1,8 @@
 package com.macuguita.woodworks.block;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.macuguita.woodworks.utils.GWUtils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -35,7 +28,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class HollowLogBlock extends PillarBlock implements Waterloggable {
+import java.util.HashMap;
+import java.util.Map;
+
+public class HollowMushroomStemBlock extends PillarBlock implements Waterloggable {
 
 	public static final Map<Block, Block> STRIPPED_HOLLOW_LOGS = new HashMap<>();
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
@@ -47,15 +43,9 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 			),
 			BooleanBiFunction.ONLY_FIRST
 	);
-	private final boolean strippable;
 
-	public HollowLogBlock(Settings settings) {
-		this(settings, true);
-	}
-
-	public HollowLogBlock(Settings settings, boolean strippable) {
+	public HollowMushroomStemBlock(Settings settings) {
 		super(settings);
-		this.strippable = strippable;
 	}
 
 	@Override
@@ -75,7 +65,7 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
 		Hand hand = player.getActiveHand();
 		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem && strippable) {
+		if (stack.getItem() instanceof AxeItem) {
 			Block strippedBlock = STRIPPED_HOLLOW_LOGS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));

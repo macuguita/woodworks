@@ -25,6 +25,7 @@ package com.macuguita.woodworks.reg;
 import com.macuguita.woodworks.GuitaWoodworks;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
@@ -34,6 +35,7 @@ public class GWBlockTags {
 	public static TagKey<Block> CARVED_LOG = createTag("carved_log");
 	public static TagKey<Block> BEAM = createTag("beam");
 	public static TagKey<Block> HOLLOW_LOG = createTag("hollow_log");
+	public static TagKey<Block> CONNECTING_MUSHROOM = createTag("connecting_mushroom");
 
 	private static TagKey<Block> createTag(String name) {
 		return TagKey.of(RegistryKeys.BLOCK, GuitaWoodworks.id(name));
