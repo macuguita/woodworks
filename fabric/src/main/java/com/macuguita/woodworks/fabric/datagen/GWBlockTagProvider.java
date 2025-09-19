@@ -90,5 +90,10 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 		getOrCreateTagBuilder(GWBlockTags.CONNECTING_MUSHROOM)
 				.add(GWObjects.CARVED_MUSHROOM_STEM.get())
 				.add(GWObjects.HOLLOW_MUSHROOM_STEM.get());
+		getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+				.add(GWObjects.MUSHROOM_STUMP.get())
+				.add(GWObjects.CARVED_MUSHROOM_STEM.get())
+				.add(GWObjects.MUSHROOM_BEAM.get())
+				.add(GWObjects.HOLLOW_MUSHROOM_STEM.get());
 	}
 }
