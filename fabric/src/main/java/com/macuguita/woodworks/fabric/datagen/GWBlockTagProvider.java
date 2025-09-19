@@ -64,5 +64,12 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(regEntry.get());
 		});
+		valueLookupBuilder(GWBlockTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get());
+		valueLookupBuilder(GWBlockTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get());
+		valueLookupBuilder(GWBlockTags.BEAM).add(GWObjects.MUSHROOM_BEAM.get());
+		valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(GWObjects.HOLLOW_MUSHROOM_STEM.get());
+		valueLookupBuilder(GWBlockTags.CONNECTING_MUSHROOM)
+				.add(GWObjects.CARVED_MUSHROOM_STEM.get())
+				.add(GWObjects.HOLLOW_MUSHROOM_STEM.get());
 	}
 }

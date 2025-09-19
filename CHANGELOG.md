@@ -1,1 +1,1 @@
-- Implemented rotate and mirror methods for ResizableBeamBlock
+- Added mushroom variants

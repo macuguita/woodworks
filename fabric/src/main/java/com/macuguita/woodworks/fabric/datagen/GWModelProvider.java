@@ -36,10 +36,12 @@ import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.data.BlockStateModelGenerator;
 import net.minecraft.client.data.BlockStateVariantMap;
 import net.minecraft.client.data.ItemModelGenerator;
 import net.minecraft.client.data.Model;
+import net.minecraft.client.data.ModelIds;
 import net.minecraft.client.data.Models;
 import net.minecraft.client.data.MultipartBlockModelDefinitionCreator;
 import net.minecraft.client.data.TextureKey;
@@ -58,6 +60,8 @@ import net.minecraft.util.math.Direction;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
+import org.w3c.dom.html.HTMLCollection;
+
 public class GWModelProvider extends FabricModelProvider {
 
 	public GWModelProvider(FabricDataOutput output) {
@@ -67,29 +71,110 @@ public class GWModelProvider extends FabricModelProvider {
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			registerStump(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerStump(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(block, "_top")));
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			registerStump(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerStump(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(block, "_top")));
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			registerCarvedLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerCarvedLog(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
+							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")));
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			registerCarvedLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerCarvedLog(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
+							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")));
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			registerBeamBlock(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerBeamBlock(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_2x2")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_4x4")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_6x6")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_8x8")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_10x10")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_12x12")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_14x14")));
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			registerBeamBlock(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerBeamBlock(blockStateModelGenerator, block,
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_2x2")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_4x4")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_6x6")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_8x8")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_10x10")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_12x12")),
+					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_14x14")));
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			registerHollowLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerHollowLog(blockStateModelGenerator, block,
+					new TextureMap()
+							.put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
+							.put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log))));
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			registerHollowLog(blockStateModelGenerator, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+			var block = regEntry.get();
+			registerHollowLog(blockStateModelGenerator, block,
+					new TextureMap()
+							.put(TextureKey.SIDE, TextureMap.getId(log))
+							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
+							.put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log))));
 		});
+
+		registerStump(blockStateModelGenerator, GWObjects.MUSHROOM_STUMP.get(),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
+						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+
+		registerCarvedLog(blockStateModelGenerator, GWObjects.CARVED_MUSHROOM_STEM.get(),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
+						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
+						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside"))
+						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")));
+
+		registerBeamBlock(blockStateModelGenerator, GWObjects.MUSHROOM_BEAM.get(),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
+				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+
+		registerHollowLog(blockStateModelGenerator, GWObjects.HOLLOW_MUSHROOM_STEM.get(),
+				new TextureMap()
+						.put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
+						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside"))
+						.put(TextureKey.INSIDE, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
 	}
 
 	@Override
@@ -237,22 +322,19 @@ public class GWModelProvider extends FabricModelProvider {
 			Optional.empty(),
 			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
 
-	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
-		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top"));
-		Identifier id = STUMP.upload(block, textureMap, blockStateModelGenerator.modelCollector);
+	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tm) {
+		Identifier id = STUMP.upload(block, tm, blockStateModelGenerator.modelCollector);
 		WeightedVariant weightedVariant = BlockStateModelGenerator.createWeightedVariant(id);
 		blockStateModelGenerator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block, weightedVariant));
 		blockStateModelGenerator.registerParentedItemModel(block, id);
 	}
 
-	private void registerCarvedLog(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
-		TextureMap textureMapMiddle = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside"));
-		TextureMap textureMapCommon = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(log, "_top")).put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside"));
-		Identifier singleModelId = CARVED_LOG_SINGLE.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector);
+	private void registerCarvedLog(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tmMiddle, TextureMap tmCommon) {
+		Identifier singleModelId = CARVED_LOG_SINGLE.upload(block, tmCommon, blockStateModelGenerator.modelCollector);
 		WeightedVariant singleWeightedVariant = BlockStateModelGenerator.createWeightedVariant(singleModelId);
-		WeightedVariant middleWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_MIDDLE.upload(block, textureMapMiddle, blockStateModelGenerator.modelCollector));
-		WeightedVariant leftWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_LEFT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector));
-		WeightedVariant rightWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_RIGHT.upload(block, textureMapCommon, blockStateModelGenerator.modelCollector));
+		WeightedVariant middleWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_MIDDLE.upload(block, tmMiddle, blockStateModelGenerator.modelCollector));
+		WeightedVariant leftWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_LEFT.upload(block, tmCommon, blockStateModelGenerator.modelCollector));
+		WeightedVariant rightWeightedVariant = BlockStateModelGenerator.createWeightedVariant(CARVED_LOG_RIGHT.upload(block, tmCommon, blockStateModelGenerator.modelCollector));
 		BlockStateVariantMap<ModelVariantOperator> rotationOperations = BlockStateVariantMap.operations(
 						NoCornerModularSeatBlock.FACING
 				)
@@ -278,31 +360,25 @@ public class GWModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.registerParentedItemModel(block, singleModelId);
 	}
 
-	private void registerBeamBlock(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
-		TextureMap textureMapCore = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log));
-		TextureMap textureMapSide2x2 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_2x2"));
-		TextureMap textureMapSide4x4 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_4x4"));
-		TextureMap textureMapSide6x6 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_6x6"));
-		TextureMap textureMapSide8x8 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_8x8"));
-		TextureMap textureMapSide10x10 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_10x10"));
-		TextureMap textureMapSide12x12 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_12x12"));
-		TextureMap textureMapSide14x14 = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_14x14"));
+	private void registerBeamBlock(BlockStateModelGenerator blockStateModelGenerator, Block block,
+								   TextureMap tmCore, TextureMap tmSide2x2, TextureMap tmSide4x4, TextureMap tmSide6x6,
+								   TextureMap tmSide8x8, TextureMap tmSide10x10, TextureMap tmSide12x12, TextureMap tmSide14x14) {
 		Map<Integer, TextureMap> textureMapSideMap = Map.of(
-				1, textureMapSide2x2,
-				2, textureMapSide4x4,
-				3, textureMapSide6x6,
-				4, textureMapSide8x8,
-				5, textureMapSide10x10,
-				6, textureMapSide12x12,
-				7, textureMapSide14x14
+				1, tmSide2x2,
+				2, tmSide4x4,
+				3, tmSide6x6,
+				4, tmSide8x8,
+				5, tmSide10x10,
+				6, tmSide12x12,
+				7, tmSide14x14
 		);
-		WeightedVariant weightedVariantCore2 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_2X2.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore4 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_4X4.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore6 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_6X6.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore8 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_8X8.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore10 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_10X10.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore12 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_12X12.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
-		WeightedVariant weightedVariantCore14 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_14X14.upload(block, textureMapCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore2 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_2X2.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore4 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_4X4.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore6 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_6X6.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore8 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_8X8.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore10 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_10X10.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore12 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_12X12.upload(block, tmCore, blockStateModelGenerator.modelCollector));
+		WeightedVariant weightedVariantCore14 = BlockStateModelGenerator.createWeightedVariant(BEAM_CORE_14X14.upload(block, tmCore, blockStateModelGenerator.modelCollector));
 		Map<Integer, WeightedVariant> coreWeightedVariantMap = Map.of(
 				1, weightedVariantCore2,
 				2, weightedVariantCore4,
@@ -362,13 +438,12 @@ public class GWModelProvider extends FabricModelProvider {
 
 		blockStateModelGenerator.blockStateCollector.accept(multipartBlockModelDefinitionCreator);
 
-		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, textureMapSide8x8, blockStateModelGenerator.modelCollector);
+		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, tmSide8x8, blockStateModelGenerator.modelCollector);
 		blockStateModelGenerator.registerParentedItemModel(block, inventoryModel);
 	}
 
-	private void registerHollowLog(BlockStateModelGenerator blockStateModelGenerator, Block block, Block log) {
-		TextureMap textureMap = new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(log, "_top")).put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log)));
-		Identifier model = HOLLOW_LOG.upload(block, textureMap, blockStateModelGenerator.modelCollector);
+	private void registerHollowLog(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tm) {
+		Identifier model = HOLLOW_LOG.upload(block, tm, blockStateModelGenerator.modelCollector);
 		WeightedVariant weightedVariant = BlockStateModelGenerator.createWeightedVariant(model);
 
 		BlockStateVariantMap<ModelVariantOperator> rotationOperations = BlockStateVariantMap.operations(
