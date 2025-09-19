@@ -1,7 +1,7 @@
-// 1.21.1	2025-09-19T22:23:16.831915574	guita's Woodworks/Tags for minecraft:block
+// 1.21.1	2025-09-19T22:32:12.108251279	guita's Woodworks/Tags for minecraft:block
 151096883832b9db433395162ee34c0b8a74cc0c data/gwoodworks/tags/block/connecting_mushroom.json
 22380957c4d8d40683a230b58dbcdc6ee98f1e63 data/gwoodworks/tags/block/carved_log.json
 a1851e9ceacb517bb088d62ed1a4868242333b51 data/gwoodworks/tags/block/hollow_log.json
-4d55ea77245364cf594e7e918101ddbc8c176de7 data/minecraft/tags/block/mineable/axe.json
+9655ee97a662652fd160520900d747b3bb1442b1 data/minecraft/tags/block/mineable/axe.json
 d03b4f87f503aa61433eda09e15c81457d285491 data/gwoodworks/tags/block/stump.json
 a20028ca4d627c48890d78fe9fdc10d81dbcc368 data/gwoodworks/tags/block/beam.json
