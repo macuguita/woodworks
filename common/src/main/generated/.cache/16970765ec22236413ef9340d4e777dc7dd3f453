@@ -1,4 +1,4 @@
-// 1.20.1	2025-09-19T20:37:09.021533608	guita's Woodworks/Block Loot Tables
+// 1.20.1	2025-09-19T22:26:26.154969023	guita's Woodworks/Block Loot Tables
 7895db424268fd573efb28e2de4ded394b44ac4b data/gwoodworks/loot_tables/blocks/stripped_hollow_warped_stem.json
 fae61a806632a5d6a3f859f602caab62fd71e43c data/gwoodworks/loot_tables/blocks/hollow_acacia_log.json
 2a10ec66ea83985c861e24c697c50989593dfdf8 data/gwoodworks/loot_tables/blocks/stripped_birch_beam.json
@@ -28,8 +28,8 @@ f828d1e4b9e983ea0ea0d476f144028c5c7456fd data/gwoodworks/loot_tables/blocks/birc
 48fba1623197b0fbb5be1a377e13c533f788a48c data/gwoodworks/loot_tables/blocks/stripped_jungle_beam.json
 7b6f3fb32bf3765f7aea787941bcf63cbfc971e0 data/gwoodworks/loot_tables/blocks/hollow_crimson_stem.json
 34c23374df7c75382766c04ee42569fd526ac30d data/gwoodworks/loot_tables/blocks/carved_oak_log.json
-e648d6e0ba8cb8652ab21a8adb1520d0a8941c5e data/gwoodworks/loot_tables/blocks/mangrove_stump.json
 250610e7b026e634f2817ee616ee980bd0522eef data/gwoodworks/loot_tables/blocks/mushroom_stump.json
+e648d6e0ba8cb8652ab21a8adb1520d0a8941c5e data/gwoodworks/loot_tables/blocks/mangrove_stump.json
 90433d92e30a4c8137b4793e1a7e77b76712faf8 data/gwoodworks/loot_tables/blocks/stripped_hollow_jungle_log.json
 719ba364466f4523e55d7f656eb46f03623cad5a data/gwoodworks/loot_tables/blocks/spruce_stump.json
 bcf97970437fcfc56e624d14cdcadf36b9fc5474 data/gwoodworks/loot_tables/blocks/stripped_carved_jungle_log.json
