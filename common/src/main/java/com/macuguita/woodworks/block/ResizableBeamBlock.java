@@ -33,7 +33,6 @@ import com.macuguita.woodworks.reg.GWItemTags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ConnectingBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.entity.LivingEntity;
