@@ -61,15 +61,21 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 			),
 			BooleanBiFunction.ONLY_FIRST
 	);
+	private final boolean strippable;
 
 	public CarvedLogSeatBlock(Settings settings) {
+		this(settings, true);
+	}
+
+	public CarvedLogSeatBlock(Settings settings, boolean strippable) {
 		super(settings);
+		this.strippable = strippable;
 	}
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem) {
+		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_CARVED_LOGS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));

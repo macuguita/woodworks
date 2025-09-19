@@ -522,14 +522,12 @@ public class WoodGood extends SimpleModule {
 		});
 	}
 
-
 	@Override
 	public boolean isEntryAlreadyRegistered(String entrySetId, String blockId, BlockType blockType, Registry<?> registry) {
-		// blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
 		String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
 
 		if (blockType instanceof WoodType wt) {
-			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId, shortenedId());
+			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(entrySetId, blockName, wt, modId);
 			if (hardcoded != null) return hardcoded;
 		}
 
@@ -538,14 +536,15 @@ public class WoodGood extends SimpleModule {
 
 	public static class CustomHardcodedBlockType extends HardcodedBlockType {
 
-		@Nullable
-		public static Boolean isWoodBlockAlreadyRegistered(String blockName, WoodType woodType, String ModId, String shortenedId) {
+		public static @Nullable Boolean isWoodBlockAlreadyRegistered(String entrySetId, String blockName, WoodType woodType, String ModId) {
 			woodTypeFromMod = woodType.getNamespace();
 			woodidentify = woodType.getId().toString();
+			supportedMod = ModId;
 			supportedBlockName = blockName;
 
-			/// ========== INCLUDE VANILLA TYPE ========== \\\
-			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?\\w+_beam")) return false;
+			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", ".*")) {
+			//	return false;
+			//}
 
 			return null;
 		}

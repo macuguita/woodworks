@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Items;
@@ -76,6 +77,10 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			createHollowLogRecipe(consumer, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
+		createStumpRecipe(consumer, GWObjects.MUSHROOM_STUMP.get(), Blocks.MUSHROOM_STEM);
+		createCarvedLogRecipe(consumer, GWObjects.CARVED_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
+		createBeamRecipe(consumer, GWObjects.MUSHROOM_BEAM.get(), Blocks.MUSHROOM_STEM);
+		createHollowLogRecipe(consumer, GWObjects.HOLLOW_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
 	}
 
 	private void createStumpRecipe(Consumer<RecipeJsonProvider> consumer, Block stump, Block log) {

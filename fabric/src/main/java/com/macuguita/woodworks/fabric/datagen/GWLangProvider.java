@@ -66,6 +66,10 @@ public class GWLangProvider extends FabricLanguageProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
+		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get());
+		generateBlockTranslations(translationBuilder, GWObjects.CARVED_MUSHROOM_STEM.get());
+		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_BEAM.get());
+		generateBlockTranslations(translationBuilder, GWObjects.HOLLOW_MUSHROOM_STEM.get());
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
 		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");

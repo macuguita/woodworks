@@ -99,7 +99,13 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 	private final VoxelShape[][] radiusToFacingsShape;
 
+	private final boolean strippable;
+
 	public ResizableBeamBlock(Settings settings) {
+		this(settings, true);
+	}
+
+	public ResizableBeamBlock(Settings settings, boolean strippable) {
 		super(settings);
 		this.radiusToFacingsShape = this.generateRadiusToFacingsShapeMap();
 		this.setDefaultState(this.getStateManager().getDefaultState()
@@ -111,6 +117,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 				.with(UP, false)
 				.with(DOWN, false)
 				.with(WATERLOGGED, false));
+		this.strippable = strippable;
 	}
 
 	@Override
@@ -203,7 +210,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem) {
+		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().creativeMode) stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
