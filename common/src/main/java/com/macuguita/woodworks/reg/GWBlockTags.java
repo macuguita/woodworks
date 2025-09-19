@@ -25,7 +25,6 @@ package com.macuguita.woodworks.reg;
 import com.macuguita.woodworks.GuitaWoodworks;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 

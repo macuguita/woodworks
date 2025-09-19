@@ -205,13 +205,16 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	protected void initDataTracker(DataTracker.Builder builder) {}
+	protected void initDataTracker(DataTracker.Builder builder) {
+	}
 
 	@Override
-	protected void readCustomDataFromNbt(NbtCompound tag) {}
+	protected void readCustomDataFromNbt(NbtCompound tag) {
+	}
 
 	@Override
-	protected void writeCustomDataToNbt(NbtCompound tag) {}
+	protected void writeCustomDataToNbt(NbtCompound tag) {
+	}
 
 	private class WrappedCallback implements EntityChangeListener {
 

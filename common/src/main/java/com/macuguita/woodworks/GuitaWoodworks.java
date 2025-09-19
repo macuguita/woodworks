@@ -33,16 +33,10 @@ import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
 import com.macuguita.woodworks.compat.ModCompat;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
-import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
-
-import net.minecraft.block.BlockState;
-
-import net.minecraft.block.MushroomBlock;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
