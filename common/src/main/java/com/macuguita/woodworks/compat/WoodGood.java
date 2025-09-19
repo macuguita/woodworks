@@ -78,7 +78,7 @@ public class WoodGood extends SimpleModule {
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: log
-				.addTexture(modRes("block/oak_stump_top"), PaletteStrategies.WOOD_LOG_SIDE)
+				.addTexture(modRes("block/oak_stump_top"), PaletteStrategies.LOG_SIDE_STANDARD)
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)
@@ -97,7 +97,7 @@ public class WoodGood extends SimpleModule {
 				)
 				.requiresChildren("stripped_log")
 				//TEXTURE: stripped_log
-				.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.WOOD_STRIPPED_LOG_SIDE)
+				.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.STRIPPED_LOG_SIDE_STANDARD)
 				.addTag(GWItemTags.STUMP, RegistryKeys.ITEM)
 				.addTag(GWBlockTags.STUMP, RegistryKeys.BLOCK)
 				.setTabKey(tab)

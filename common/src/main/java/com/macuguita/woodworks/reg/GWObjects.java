@@ -135,10 +135,10 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CARVED_WARPED_STEM = createCarvedLog("carved_warped_stem", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_WARPED_STEM = createStrippedCarvedLog("stripped_carved_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
+	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+
 	public static final GuitaRegistryEntry<Block> OAK_BEAM = createBeam("oak_beam", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_BEAM = createStrippedBeam("stripped_oak_beam", Blocks.STRIPPED_OAK_LOG);
-
-	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
 
 	public static final GuitaRegistryEntry<Block> SPRUCE_BEAM = createBeam("spruce_beam", Blocks.SPRUCE_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_SPRUCE_BEAM = createStrippedBeam("stripped_spruce_beam", Blocks.STRIPPED_SPRUCE_LOG);
