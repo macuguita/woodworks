@@ -265,7 +265,7 @@ public class WoodGood extends SimpleModule {
 	@Override
 	public void addDynamicClientResources(Consumer<ResourceGenTask> executor) {
 		super.addDynamicClientResources(executor);
-		executor.accept(( manager, sink ) -> {
+		executor.accept((manager, sink) -> {
 			try {
 				stump.blocks.forEach((w, block) -> {
 					Identifier id = Utils.getID(block);
@@ -485,7 +485,7 @@ public class WoodGood extends SimpleModule {
 
 
 		target.forEachPixel((pixel) -> {
-			if (!((pixel.frameX() >= 2 && pixel.frameX() <= 13) && (pixel.frameY() >=2 && pixel.frameY() <= 13))) {
+			if (!((pixel.frameX() >= 2 && pixel.frameX() <= 13) && (pixel.frameY() >= 2 && pixel.frameY() <= 13))) {
 				pixel.setValue(0);
 			}
 		});
@@ -507,11 +507,11 @@ public class WoodGood extends SimpleModule {
 		int offset = (16 - boxSize) / 2;
 
 		TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
-						.copyFrom(0, 0, 16, 1).to(offset, offset, boxSize, 1) // Top border
-						.copyFrom(15, 0, 1, 16).to(offset + boxSize - 1, offset, 1, boxSize) // Right border
-						.copyFrom(0, 15, 16, 1).to(offset, offset + boxSize - 1, boxSize, 1) // Bottom border
-						.copyFrom(0, 0, 1, 16).to(offset, offset, 1, boxSize) // Left border
-						.build();
+				.copyFrom(0, 0, 16, 1).to(offset, offset, boxSize, 1) // Top border
+				.copyFrom(15, 0, 1, 16).to(offset + boxSize - 1, offset, 1, boxSize) // Right border
+				.copyFrom(0, 15, 16, 1).to(offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(offset, offset, 1, boxSize) // Left border
+				.build();
 
 		collager.apply(original, target);
 
@@ -522,14 +522,12 @@ public class WoodGood extends SimpleModule {
 		});
 	}
 
-
 	@Override
 	public boolean isEntryAlreadyRegistered(String entrySetId, String blockId, BlockType blockType, Registry<?> registry) {
-		// blockId: everycomp:twigs/biomesoplenty/willow_table | blockName: willow_table
 		String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
 
 		if (blockType instanceof WoodType wt) {
-			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(blockName, wt, modId, shortenedId());
+			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(entrySetId, blockName, wt, modId);
 			if (hardcoded != null) return hardcoded;
 		}
 
@@ -538,14 +536,15 @@ public class WoodGood extends SimpleModule {
 
 	public static class CustomHardcodedBlockType extends HardcodedBlockType {
 
-		@Nullable
-		public static Boolean isWoodBlockAlreadyRegistered(String blockName, WoodType woodType, String ModId, String shortenedId) {
+		public static @Nullable Boolean isWoodBlockAlreadyRegistered(String entrySetId, String blockName, WoodType woodType, String ModId) {
 			woodTypeFromMod = woodType.getNamespace();
 			woodidentify = woodType.getId().toString();
+			supportedMod = ModId;
 			supportedBlockName = blockName;
 
-			/// ========== INCLUDE VANILLA TYPE ========== \\\
-			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "", "minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", "(stripped_)?\\w+_beam")) return false;
+			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", ".*")) {
+			//	return false;
+			//}
 
 			return null;
 		}
