@@ -100,6 +100,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_STUMP = createStump("cherry_stump", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_STUMP = createStrippedStump("stripped_cherry_stump", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> PALE_OAK_STUMP = createStump("pale_oak_stump", Blocks.PALE_OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_PALE_OAK_STUMP = createStrippedStump("stripped_pale_oak_stump", Blocks.STRIPPED_PALE_OAK_LOG);
+
 	public static final GuitaRegistryEntry<Block> CRIMSON_STUMP = createStump("crimson_stump", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CRIMSON_STUMP = createStrippedStump("stripped_crimson_stump", Blocks.STRIPPED_CRIMSON_STEM);
 
@@ -131,6 +134,9 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> CARVED_CHERRY_LOG = createCarvedLog("carved_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CHERRY_LOG = createStrippedCarvedLog("stripped_carved_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+
+	public static final GuitaRegistryEntry<Block> CARVED_PALE_OAK_LOG = createCarvedLog("carved_pale_oak_log", Blocks.PALE_OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_PALE_OAK_LOG = createStrippedCarvedLog("stripped_carved_pale_oak_log", Blocks.STRIPPED_PALE_OAK_LOG);
 
 	public static final GuitaRegistryEntry<Block> CARVED_CRIMSON_STEM = createCarvedLog("carved_crimson_stem", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CRIMSON_STEM = createStrippedCarvedLog("stripped_carved_crimson_stem", Blocks.STRIPPED_CRIMSON_STEM);
@@ -164,6 +170,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_BEAM = createBeam("cherry_beam", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_BEAM = createStrippedBeam("stripped_cherry_beam", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> PALE_OAK_BEAM = createBeam("pale_oak_beam", Blocks.PALE_OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_PALE_OAK_BEAM = createStrippedBeam("stripped_pale_oak_beam", Blocks.STRIPPED_PALE_OAK_LOG);
+
 	public static final GuitaRegistryEntry<Block> CRIMSON_BEAM = createBeam("crimson_beam", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CRIMSON_BEAM = createStrippedBeam("stripped_crimson_beam", Blocks.STRIPPED_CRIMSON_STEM);
 
@@ -195,6 +204,9 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> HOLLOW_CHERRY_LOG = createHollowLog("hollow_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CHERRY_LOG = createStrippedHollowLog("stripped_hollow_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+
+	public static final GuitaRegistryEntry<Block> HOLLOW_PALE_OAK_LOG = createHollowLog("hollow_pale_oak_log", Blocks.PALE_OAK_LOG);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_PALE_OAK_LOG = createStrippedHollowLog("stripped_hollow_pale_oak_log", Blocks.STRIPPED_PALE_OAK_LOG);
 
 	public static final GuitaRegistryEntry<Block> HOLLOW_CRIMSON_STEM = createHollowLog("hollow_crimson_stem", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CRIMSON_STEM = createStrippedHollowLog("stripped_hollow_crimson_stem", Blocks.STRIPPED_CRIMSON_STEM);
