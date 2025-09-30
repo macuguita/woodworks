@@ -1,1 +1,1 @@
-- Fixed EveryCompat module to work with the new update
+- Added mushroom variants
