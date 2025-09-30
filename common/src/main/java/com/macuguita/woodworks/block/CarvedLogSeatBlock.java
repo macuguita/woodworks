@@ -82,7 +82,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_CARVED_LOGS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 				if (world instanceof ServerWorld serverWorld) {

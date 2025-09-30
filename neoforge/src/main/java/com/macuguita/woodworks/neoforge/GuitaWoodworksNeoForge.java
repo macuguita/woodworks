@@ -34,7 +34,7 @@ public final class GuitaWoodworksNeoForge {
 
 	public GuitaWoodworksNeoForge(IEventBus modEventBus) {
 		GuitaWoodworks.init();
-		if (FMLEnvironment.dist.isClient()) {
+		if (FMLEnvironment.getDist().isClient()) {
 			GuitaWoodworksNeoforgeClient.init();
 		}
 		assert modEventBus != null;

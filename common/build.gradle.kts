@@ -19,12 +19,12 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${BuildConfig.fabricLoaderVersion}")
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
-    modCompileOnly("dev.architectury:architectury:${BuildConfig.architectureApiVersion}")
+    //modCompileOnly("dev.architectury:architectury:${BuildConfig.architectureApiVersion}")
 
-    //modImplementation "com.macuguita.lib:macu_lib-common:${project.macu_lib_version}-${project.minecraft_version}"
 
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.5-fabric")
+    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.9-fabric")
+    //modImplementation("com.macuguita.lib:macu_lib-common:${BuildConfig.macuLibVersion}-1.21.9")
     //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
     //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
     //if (isMyPc) {

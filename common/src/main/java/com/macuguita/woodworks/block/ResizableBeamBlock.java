@@ -204,7 +204,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
 				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 				BlockState strippedState = strippedBlock.getDefaultState()
@@ -222,7 +222,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			}
 		}
 		if (stack.isIn(GWItemTags.SHEARS)) {
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
 			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0f, 1.0f);
 
 			// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
@@ -246,7 +246,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 					world.setBlockState(neighborPos, newNeighborState, NOTIFY_ALL);
 				}
 
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+				if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
 				world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return ActionResult.SUCCESS;
 			}
@@ -257,7 +257,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 			world.setBlockState(pos, newState);
 
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
+			if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
 			world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			return ActionResult.SUCCESS;
 		}

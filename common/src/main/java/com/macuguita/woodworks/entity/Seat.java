@@ -141,13 +141,13 @@ public class Seat extends Entity {
 	public Vec3d updatePassengerForDismount(LivingEntity passenger) {
 		Direction facing = this.getHorizontalFacing();
 		BlockPos seatPos = this.getBlockPos();
-		Vec3d seatCenter = this.getPos();
+		Vec3d seatCenter = this.getEntityPos();
 
 		for (Direction offset : new Direction[]{facing, facing.rotateYClockwise(), facing.rotateYCounterclockwise(), facing.getOpposite()}) {
 			BlockPos targetPos = seatPos.offset(offset);
 			Vec3d dismountPos = Dismounting.findRespawnPos(
 					passenger.getType(),
-					this.getWorld(),
+					this.getEntityWorld(),
 					targetPos,
 					false
 			);
@@ -166,14 +166,14 @@ public class Seat extends Entity {
 			}
 		}
 
-		return this.getPos().add(0.0, 1.0, 0.0);
+		return this.getEntityPos().add(0.0, 1.0, 0.0);
 	}
 
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.getWorld() instanceof ServerWorld serverWorld &&
+		if (this.getEntityWorld() instanceof ServerWorld serverWorld &&
 				(!(serverWorld.getBlockState(getBlockPos()).getBlock() instanceof SittableBlock) || remove)) {
 			removeSeat();
 		}
@@ -192,13 +192,13 @@ public class Seat extends Entity {
 	@Override
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
-		if (this.getWorld() instanceof ServerWorld && getPassengerList().isEmpty()) {
+		if (this.getEntityWorld() instanceof ServerWorld && getPassengerList().isEmpty()) {
 			remove = true;
 		}
 	}
 
 	public void removeSeat() {
-		SITTING_POSITIONS.get(this.getWorld().getRegistryKey()).remove(getBlockPos());
+		SITTING_POSITIONS.get(this.getEntityWorld().getRegistryKey()).remove(getBlockPos());
 		discard();
 	}
 
@@ -246,9 +246,9 @@ public class Seat extends Entity {
 		public void updateEntityPosition() {
 			if (delegate != null) {
 				delegate.updateEntityPosition();
-				Block block = Seat.this.getWorld().getBlockState(getBlockPos()).getBlock();
+				Block block = Seat.this.getEntityWorld().getBlockState(getBlockPos()).getBlock();
 				if (block instanceof SittableBlock seat) {
-					shape = seat.getSeatSize(Seat.this.getWorld().getBlockState(getBlockPos()));
+					shape = seat.getSeatSize(Seat.this.getEntityWorld().getBlockState(getBlockPos()));
 				}
 			} else {
 				shape = null;
