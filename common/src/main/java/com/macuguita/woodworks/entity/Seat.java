@@ -29,92 +29,90 @@ import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Dismounting;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.network.EntityTrackerEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.annotation.MethodsReturnNonnullByDefault;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.EntityChangeListener;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityInLevelCallback;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
-@MethodsReturnNonnullByDefault
 public class Seat extends Entity {
 
-	public static final Multimap<RegistryKey<World>, BlockPos> SITTING_POSITIONS = ArrayListMultimap.create();
+	public static final Multimap<ResourceKey<Level>, BlockPos> SITTING_POSITIONS = ArrayListMultimap.create();
 
-	private Box shape;
+	private AABB shape;
 	private boolean remove;
-	private static final TrackedData<Boolean> CAN_ROTATE = DataTracker.registerData(Seat.class, TrackedDataHandlerRegistry.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CAN_ROTATE = SynchedEntityData.defineId(Seat.class, EntityDataSerializers.BOOLEAN);
 
-	public Seat(EntityType<? extends Entity> type, World world) {
+	public Seat(EntityType<? extends Entity> type, Level world) {
 		super(type, world);
-		this.setChangeListener(EntityChangeListener.NONE);
+		this.setLevelCallback(EntityInLevelCallback.NULL);
 	}
 
 	@Nullable
-	public static Seat of(World world, BlockPos pos, Direction dir) {
+	public static Seat of(Level world, BlockPos pos, Direction dir) {
 		BlockState state = world.getBlockState(pos);
-		Box shape = new Box(pos);
+		AABB shape = new AABB(pos);
 		if (state.getBlock() instanceof SittableBlock seat) {
 			shape = seat.getSeatSize(state);
 		}
 
-		Seat entity = GWEntityTypes.SEAT.get().create(world, SpawnReason.TRIGGERED);
+		Seat entity = GWEntityTypes.SEAT.get().create(world, EntitySpawnReason.TRIGGERED);
 		if (entity == null) return null;
 		if (dir != null) {
-			entity.setYaw(dir.getPositiveHorizontalDegrees());
+			entity.setYRot(dir.toYRot());
 		} else {
 			entity.setCanRotate(true);
 		}
 
-		entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		entity.setPosRaw(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		entity.shape = copyBox(shape);
 		return entity;
 	}
 
 	public boolean canRotate() {
-		return getDataTracker().get(CAN_ROTATE);
+		return getEntityData().get(CAN_ROTATE);
 	}
 
 	public void setCanRotate(boolean rotate) {
-		getDataTracker().set(CAN_ROTATE, rotate);
+		getEntityData().set(CAN_ROTATE, rotate);
 	}
 
 
-	private static Box copyBox(Box box) {
-		return new Box(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
-	}
-
-	@Override
-	public Packet<ClientPlayPacketListener> createSpawnPacket(EntityTrackerEntry tracker) {
-		return new EntitySpawnS2CPacket(this, tracker, canRotate() ? 1 : 0);
+	private static AABB copyBox(AABB box) {
+		return new AABB(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
 	}
 
 	@Override
-	public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-		super.onSpawnPacket(packet);
-		setCanRotate(packet.getEntityData() == 1);
+	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity tracker) {
+		return new ClientboundAddEntityPacket(this, tracker, canRotate() ? 1 : 0);
+	}
+
+	@Override
+	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+		super.recreateFromPacket(packet);
+		setCanRotate(packet.getData() == 1);
 	}
 
 	@Override
@@ -128,127 +126,127 @@ public class Seat extends Entity {
 	}
 
 	@Override
-	protected void readCustomData(ReadView view) {
+	protected void readAdditionalSaveData(ValueInput view) {
 		setCanRotate(view.read("can_rotate", Codec.BOOL).orElse(false));
 	}
 
 	@Override
-	protected void writeCustomData(WriteView view) {
-		view.put("can_rotate", Codec.BOOL, canRotate());
+	protected void addAdditionalSaveData(ValueOutput view) {
+		view.store("can_rotate", Codec.BOOL, canRotate());
 	}
 
 	@Override
-	public Vec3d updatePassengerForDismount(LivingEntity passenger) {
-		Direction facing = this.getHorizontalFacing();
-		BlockPos seatPos = this.getBlockPos();
-		Vec3d seatCenter = this.getEntityPos();
+	public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+		Direction facing = this.getDirection();
+		BlockPos seatPos = this.blockPosition();
+		Vec3 seatCenter = this.position();
 
-		for (Direction offset : new Direction[]{facing, facing.rotateYClockwise(), facing.rotateYCounterclockwise(), facing.getOpposite()}) {
-			BlockPos targetPos = seatPos.offset(offset);
-			Vec3d dismountPos = Dismounting.findRespawnPos(
+		for (Direction offset : new Direction[]{facing, facing.getClockWise(), facing.getCounterClockWise(), facing.getOpposite()}) {
+			BlockPos targetPos = seatPos.relative(offset);
+			Vec3 dismountPos = DismountHelper.findSafeDismountLocation(
 					passenger.getType(),
-					this.getEntityWorld(),
+					this.level(),
 					targetPos,
 					false
 			);
 
 			if (dismountPos != null) {
-				double distance = dismountPos.squaredDistanceTo(seatCenter);
+				double distance = dismountPos.distanceToSqr(seatCenter);
 				if (distance > 9.0) {
 					return seatCenter.add(0.0, 1.0, 0.0);
 				}
 
-				return new Vec3d(
+				return new Vec3(
 						dismountPos.x,
-						dismountPos.y + passenger.getHeight() * 0.5 + 0.1,
+						dismountPos.y + passenger.getBbHeight() * 0.5 + 0.1,
 						dismountPos.z
 				);
 			}
 		}
 
-		return this.getEntityPos().add(0.0, 1.0, 0.0);
+		return this.position().add(0.0, 1.0, 0.0);
 	}
 
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.getEntityWorld() instanceof ServerWorld serverWorld &&
-				(!(serverWorld.getBlockState(getBlockPos()).getBlock() instanceof SittableBlock) || remove)) {
+		if (this.level() instanceof ServerLevel serverWorld &&
+				(!(serverWorld.getBlockState(blockPosition()).getBlock() instanceof SittableBlock) || remove)) {
 			removeSeat();
 		}
 	}
 
 	@Override
-	public boolean clientDamage(DamageSource source) {
-		return !this.isAlwaysInvulnerableTo(source);
+	public boolean hurtClient(DamageSource source) {
+		return !this.isInvulnerableToBase(source);
 	}
 
 	@Override
-	public boolean damage(ServerWorld world, DamageSource source, float amount) {
+	public boolean hurtServer(ServerLevel world, DamageSource source, float amount) {
 		return false;
 	}
 
 	@Override
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
-		if (this.getEntityWorld() instanceof ServerWorld && getPassengerList().isEmpty()) {
+		if (this.level() instanceof ServerLevel && getPassengers().isEmpty()) {
 			remove = true;
 		}
 	}
 
 	public void removeSeat() {
-		SITTING_POSITIONS.get(this.getEntityWorld().getRegistryKey()).remove(getBlockPos());
+		SITTING_POSITIONS.get(this.level().dimension()).remove(blockPosition());
 		discard();
 	}
 
 	@Override
-	protected Vec3d getPassengerAttachmentPos(Entity entity, EntityDimensions dims, float partialTick) {
-		if (shape == null) return super.getPassengerAttachmentPos(entity, dims, partialTick);
-		return new Vec3d(0, (float) (shape.getLengthY() * 0.75) + 0.2f, 0);
+	protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dims, float partialTick) {
+		if (shape == null) return super.getPassengerAttachmentPoint(entity, dims, partialTick);
+		return new Vec3(0, (float) (shape.getYsize() * 0.75) + 0.2f, 0);
 	}
 
 	protected void clampRotation(Entity entity) {
-		entity.setBodyYaw(getYaw());
-		float diff = MathHelper.wrapDegrees(entity.getYaw() - getYaw());
-		float clamped = MathHelper.clamp(diff, -105.0f, 105.0f);
-		entity.lastYaw += clamped - diff;
-		entity.setYaw(entity.getYaw() + clamped - diff);
-		entity.setHeadYaw(entity.getYaw());
+		entity.setYBodyRot(getYRot());
+		float diff = Mth.wrapDegrees(entity.getYRot() - getYRot());
+		float clamped = Mth.clamp(diff, -105.0f, 105.0f);
+		entity.yRotO += clamped - diff;
+		entity.setYRot(entity.getYRot() + clamped - diff);
+		entity.setYHeadRot(entity.getYRot());
 	}
 
 	@Override
-	public void onPassengerLookAround(Entity entity) {
+	public void onPassengerTurned(Entity entity) {
 		if (!canRotate()) {
 			clampRotation(entity);
 		}
 	}
 
 	@Override
-	public void setChangeListener(EntityChangeListener callback) {
-		super.setChangeListener(new WrappedCallback(callback));
+	public void setLevelCallback(EntityInLevelCallback callback) {
+		super.setLevelCallback(new WrappedCallback(callback));
 	}
 
 	@Override
-	protected void initDataTracker(DataTracker.Builder builder) {
-		builder.add(CAN_ROTATE, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(CAN_ROTATE, false);
 	}
 
-	private class WrappedCallback implements EntityChangeListener {
+	private class WrappedCallback implements EntityInLevelCallback {
 
-		private final EntityChangeListener delegate;
+		private final EntityInLevelCallback delegate;
 
-		public WrappedCallback(EntityChangeListener delegate) {
+		public WrappedCallback(EntityInLevelCallback delegate) {
 			this.delegate = delegate;
 		}
 
 		@Override
-		public void updateEntityPosition() {
+		public void onMove() {
 			if (delegate != null) {
-				delegate.updateEntityPosition();
-				Block block = Seat.this.getEntityWorld().getBlockState(getBlockPos()).getBlock();
+				delegate.onMove();
+				Block block = Seat.this.level().getBlockState(blockPosition()).getBlock();
 				if (block instanceof SittableBlock seat) {
-					shape = seat.getSeatSize(Seat.this.getEntityWorld().getBlockState(getBlockPos()));
+					shape = seat.getSeatSize(Seat.this.level().getBlockState(blockPosition()));
 				}
 			} else {
 				shape = null;
@@ -256,9 +254,9 @@ public class Seat extends Entity {
 		}
 
 		@Override
-		public void remove(RemovalReason reason) {
+		public void onRemove(RemovalReason reason) {
 			if (delegate != null) {
-				delegate.remove(reason);
+				delegate.onRemove(reason);
 			}
 		}
 	}

@@ -28,12 +28,12 @@ import com.macuguita.woodworks.mixin.AxeItemAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.injectables.targets.ArchitecturyTarget;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GWUtils {
 
@@ -43,7 +43,7 @@ public class GWUtils {
 	}
 
 	@ExpectPlatform
-	public static void registerFuel(int time, ItemConvertible item) {
+	public static void registerFuel(int time, ItemLike item) {
 		throw new AssertionError();
 	}
 
@@ -70,23 +70,23 @@ public class GWUtils {
 
 		VoxelShape result = shape;
 		for (int i = 0; i < times; ++i) {
-			VoxelShape rotated = VoxelShapes.empty();
-			for (Box box : result.getBoundingBoxes()) {
-				Box rotatedBox = switch (axis) {
-					case Y -> new Box(
+			VoxelShape rotated = Shapes.empty();
+			for (AABB box : result.toAabbs()) {
+				AABB rotatedBox = switch (axis) {
+					case Y -> new AABB(
 							1 - box.maxZ, box.minY, box.minX,
 							1 - box.minZ, box.maxY, box.maxX
 					);
-					case X -> new Box(
+					case X -> new AABB(
 							box.minX, 1 - box.maxZ, box.minY,
 							box.maxX, 1 - box.minZ, box.maxY
 					);
-					case Z -> new Box(
+					case Z -> new AABB(
 							box.minY, box.minX, box.minZ,
 							box.maxY, box.maxX, box.maxZ
 					);
 				};
-				rotated = VoxelShapes.union(rotated, VoxelShapes.cuboid(rotatedBox));
+				rotated = Shapes.or(rotated, Shapes.create(rotatedBox));
 			}
 			result = rotated;
 		}

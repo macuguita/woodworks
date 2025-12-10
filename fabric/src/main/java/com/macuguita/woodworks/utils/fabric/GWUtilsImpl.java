@@ -22,7 +22,7 @@
 
 package com.macuguita.woodworks.utils.fabric;
 
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 
 import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -33,7 +33,7 @@ public class GWUtilsImpl {
 		return FabricLoader.getInstance().isModLoaded(id);
 	}
 
-	public static void registerFuel(int time, ItemConvertible item) {
+	public static void registerFuel(int time, ItemLike item) {
 		FuelRegistryEvents.BUILD.register((builder, context) -> {
 			builder.add(item, time);
 		});

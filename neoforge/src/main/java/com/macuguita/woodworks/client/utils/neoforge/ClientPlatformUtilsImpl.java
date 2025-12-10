@@ -24,14 +24,14 @@ package com.macuguita.woodworks.client.utils.neoforge;
 
 import java.util.function.Supplier;
 
-import net.minecraft.client.render.entity.EntityRendererFactories;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 public class ClientPlatformUtilsImpl {
 
-	public static <T extends Entity> void registerRenderer(Supplier<? extends EntityType<? extends T>> type, EntityRendererFactory<T> provider) {
-		EntityRendererFactories.register(type.get(), provider);
+	public static <T extends Entity> void registerRenderer(Supplier<? extends EntityType<? extends T>> type, EntityRendererProvider<T> provider) {
+		EntityRenderers.register(type.get(), provider);
 	}
 }

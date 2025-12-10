@@ -37,7 +37,6 @@ public final class GuitaWoodworksNeoForge {
 		if (FMLEnvironment.getDist().isClient()) {
 			GuitaWoodworksNeoforgeClient.init();
 		}
-		assert modEventBus != null;
 		modEventBus.addListener(this::commonSetup);
 	}
 

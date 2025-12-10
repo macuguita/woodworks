@@ -29,108 +29,107 @@ import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.utils.GWUtils;
 import com.mojang.serialization.MapCodec;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements SittableBlock {
 
 	public static final Map<Block, Block> STRIPPED_CARVED_LOGS = new HashMap<>();
-	public static final Box SEAT = new Box(0.125, 0, 0.125, 0.875, 0.5, 0.875);
-	public static final MapCodec<CarvedLogSeatBlock> CODEC = createCodec(CarvedLogSeatBlock::new);
-	protected static final VoxelShape VOXEL_SHAPE = VoxelShapes.combineAndSimplify(
-			VoxelShapes.fullCube(),
-			VoxelShapes.union(
-					createCuboidShape(2.0, 8.0, 0.0, 14.0, 16.0, 11.0)
+	public static final AABB SEAT = new AABB(0.125, 0, 0.125, 0.875, 0.5, 0.875);
+	public static final MapCodec<CarvedLogSeatBlock> CODEC = simpleCodec(CarvedLogSeatBlock::new);
+	protected static final VoxelShape VOXEL_SHAPE = Shapes.join(
+			Shapes.block(),
+			Shapes.or(
+					box(2.0, 8.0, 0.0, 14.0, 16.0, 11.0)
 			),
-			BooleanBiFunction.ONLY_FIRST
+			BooleanOp.ONLY_FIRST
 	);
 	private final boolean strippable;
 
-	public CarvedLogSeatBlock(Settings settings) {
+	public CarvedLogSeatBlock(Properties settings) {
 		this(settings, true);
 	}
 
-	public CarvedLogSeatBlock(Settings settings, boolean strippable) {
+	public CarvedLogSeatBlock(Properties settings, boolean strippable) {
 		super(settings);
 		this.strippable = strippable;
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
-		ItemStack stack = player.getStackInHand(hand);
+	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+		InteractionHand hand = player.getUsedItemHand();
+		ItemStack stack = player.getItemInHand(hand);
 		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_CARVED_LOGS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, hand);
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
+				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (world instanceof ServerWorld serverWorld) {
-					BlockState strippedState = strippedBlock.getDefaultState()
-							.with(SHAPE, state.get(SHAPE))
-							.with(FACING, state.get(FACING))
-							.with(WATERLOGGED, state.get(WATERLOGGED));
+				if (world instanceof ServerLevel serverWorld) {
+					BlockState strippedState = strippedBlock.defaultBlockState()
+							.setValue(SHAPE, state.getValue(SHAPE))
+							.setValue(FACING, state.getValue(FACING))
+							.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
 
-					serverWorld.setBlockState(pos, strippedState);
+					serverWorld.setBlockAndUpdate(pos, strippedState);
 				}
-				return ActionResult.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
-		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
-		if (stack.isIn(GWItemTags.WATER_BUCKETS) || stack.isIn(GWItemTags.EMPTY_BUCKETS)) return ActionResult.FAIL;
-		return super.onUse(state, world, pos, player, hit);
+		if (stack.is(GWItemTags.CARVED_LOG)) return InteractionResult.FAIL;
+		if (stack.is(GWItemTags.WATER_BUCKETS) || stack.is(GWItemTags.EMPTY_BUCKETS)) return InteractionResult.FAIL;
+		return super.useWithoutItem(state, world, pos, player, hit);
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		VoxelShape shape = switch (state.get(SHAPE)) {
+	protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		VoxelShape shape = switch (state.getValue(SHAPE)) {
 			case SINGLE -> VOXEL_SHAPE;
-			case LEFT -> VoxelShapes.combineAndSimplify(
+			case LEFT -> Shapes.join(
 					VOXEL_SHAPE,
-					VoxelShapes.union(
-							createCuboidShape(14.0, 8.0, 0.0, 16.0, 16.0, 11.0)
+					Shapes.or(
+							box(14.0, 8.0, 0.0, 16.0, 16.0, 11.0)
 
 					),
-					BooleanBiFunction.ONLY_FIRST
+					BooleanOp.ONLY_FIRST
 			);
-			case MIDDLE -> VoxelShapes.combineAndSimplify(
+			case MIDDLE -> Shapes.join(
 					VOXEL_SHAPE,
-					VoxelShapes.union(
-							createCuboidShape(14.0, 8.0, 0.0, 16.0, 16.0, 11.0),
-							createCuboidShape(0.0, 8.0, 0.0, 2.0, 16.0, 11.0)
+					Shapes.or(
+							box(14.0, 8.0, 0.0, 16.0, 16.0, 11.0),
+							box(0.0, 8.0, 0.0, 2.0, 16.0, 11.0)
 					),
-					BooleanBiFunction.ONLY_FIRST
+					BooleanOp.ONLY_FIRST
 			);
-			case RIGHT -> VoxelShapes.combineAndSimplify(
+			case RIGHT -> Shapes.join(
 					VOXEL_SHAPE,
-					VoxelShapes.union(
-							createCuboidShape(0.0, 8.0, 0.0, 2.0, 16.0, 11.0)
+					Shapes.or(
+							box(0.0, 8.0, 0.0, 2.0, 16.0, 11.0)
 					),
-					BooleanBiFunction.ONLY_FIRST
+					BooleanOp.ONLY_FIRST
 			);
 		};
-		return switch (state.get(FACING)) {
-			case DOWN, UP -> VoxelShapes.empty();
+		return switch (state.getValue(FACING)) {
+			case DOWN, UP -> Shapes.empty();
 			case NORTH -> shape;
 			case SOUTH -> GWUtils.rotateVoxelShape(shape, Direction.Axis.Y, 180);
 			case WEST -> GWUtils.rotateVoxelShape(shape, Direction.Axis.Y, 270);
@@ -139,12 +138,12 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 	}
 
 	@Override
-	public Box getSeatSize(BlockState state) {
+	public AABB getSeatSize(BlockState state) {
 		return SEAT;
 	}
 
 	@Override
-	protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
+	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
 		return CODEC;
 	}
 }

@@ -24,10 +24,10 @@ package com.macuguita.woodworks.reg;
 
 import com.macuguita.woodworks.GuitaWoodworks;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 public class GWItemTags {
 
@@ -42,10 +42,10 @@ public class GWItemTags {
 	public static TagKey<Item> EMPTY_BUCKETS = createCommonTag("buckets/empty");
 
 	private static TagKey<Item> createTag(String name) {
-		return TagKey.of(RegistryKeys.ITEM, GuitaWoodworks.id(name));
+		return TagKey.create(Registries.ITEM, GuitaWoodworks.id(name));
 	}
 
 	private static TagKey<Item> createCommonTag(String name) {
-		return TagKey.of(RegistryKeys.ITEM, Identifier.of("c", name));
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", name));
 	}
 }

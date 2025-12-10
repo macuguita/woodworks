@@ -28,23 +28,23 @@ import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.entity.Seat;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 
 public class GWEntityTypes {
 
-	public static final GuitaRegistry<EntityType<?>> ENTITY_TYPES = GuitaRegistries.create(Registries.ENTITY_TYPE, GuitaWoodworks.MOD_ID);
+	public static final GuitaRegistry<EntityType<?>> ENTITY_TYPES = GuitaRegistries.create(BuiltInRegistries.ENTITY_TYPE, GuitaWoodworks.MOD_ID);
 
 	public static final GuitaRegistryEntry<EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () ->
-			EntityType.Builder.<Seat>create(Seat::new, SpawnGroup.MISC)
-					.dropsNothing()
-					.dimensions(0.25f, 0.25f)
-					.maxTrackingRange(10)
-					.trackingTickInterval(Integer.MAX_VALUE)
-					.build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, GuitaWoodworks.id("seat"))));
+			EntityType.Builder.of(Seat::new, MobCategory.MISC)
+					.noLootTable()
+					.sized(0.25f, 0.25f)
+					.clientTrackingRange(10)
+					.updateInterval(Integer.MAX_VALUE)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, GuitaWoodworks.id("seat"))));
 
 	public static void init() {
 		ENTITY_TYPES.init();

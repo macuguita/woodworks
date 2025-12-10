@@ -27,19 +27,19 @@ import java.util.concurrent.CompletableFuture;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-	public GWItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+	public GWItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 		super(output, completableFuture);
 	}
 
 	@Override
-	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+	protected void addTags(HolderLookup.Provider wrapperLookup) {
 		valueLookupBuilder(GWItemTags.SECATEURS)
 				.add(GWObjects.SECATEURS.get())
 				.addOptionalTag(GWItemTags.KNIVES);

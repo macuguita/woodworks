@@ -24,21 +24,21 @@ package com.macuguita.woodworks.block;
 
 import com.macuguita.woodworks.entity.Seat;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public interface SittableBlock {
 
-	default boolean sitOn(World world, BlockPos pos, PlayerEntity player, Direction dir) {
-		if (world instanceof ServerWorld serverWorld && !Seat.SITTING_POSITIONS.get(world.getRegistryKey()).contains(pos)) {
+	default boolean sitOn(Level world, BlockPos pos, Player player, Direction dir) {
+		if (world instanceof ServerLevel serverWorld && !Seat.SITTING_POSITIONS.get(world.dimension()).contains(pos)) {
 			Seat entity = Seat.of(serverWorld, pos, dir);
 			if (entity != null) {
-				if (serverWorld.spawnEntity(entity)) {
+				if (serverWorld.addFreshEntity(entity)) {
 					player.startRiding(entity);
 					return true;
 				} else {
@@ -49,5 +49,5 @@ public interface SittableBlock {
 		return false;
 	}
 
-	Box getSeatSize(BlockState state);
+	AABB getSeatSize(BlockState state);
 }

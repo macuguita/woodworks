@@ -25,7 +25,7 @@ package com.macuguita.woodworks.client;
 import com.macuguita.woodworks.client.utils.ClientPlatformUtils;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 
-import net.minecraft.client.render.entity.EmptyEntityRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 
 public class GuitaWoodworksClient {
 
@@ -34,6 +34,6 @@ public class GuitaWoodworksClient {
 	}
 
 	private static void registerEntityRenderers() {
-		ClientPlatformUtils.registerRenderer(GWEntityTypes.SEAT, EmptyEntityRenderer::new);
+		ClientPlatformUtils.registerRenderer(GWEntityTypes.SEAT, NoopRenderer::new);
 	}
 }

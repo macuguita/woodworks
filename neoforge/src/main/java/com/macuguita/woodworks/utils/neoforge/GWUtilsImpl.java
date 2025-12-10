@@ -33,19 +33,19 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 
 public class GWUtilsImpl {
 
-	private static final Object2IntMap<ItemConvertible> FUEL_ITEMS = new Object2IntLinkedOpenHashMap();
+	private static final Object2IntMap<ItemLike> FUEL_ITEMS = new Object2IntLinkedOpenHashMap<>();
 	private static final Map<Block, Pair<Integer, Integer>> FLAMMABLE_BLOCKS = new HashMap<>();
 
 	public static boolean isModLoaded(String id) {
 		return ModList.get().isLoaded(id);
 	}
 
-	public static void registerFuel(int time, ItemConvertible item) {
+	public static void registerFuel(int time, ItemLike item) {
 		FUEL_ITEMS.put(item, time);
 	}
 

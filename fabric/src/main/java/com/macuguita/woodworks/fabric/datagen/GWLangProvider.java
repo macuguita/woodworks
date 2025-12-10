@@ -27,22 +27,22 @@ import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 public class GWLangProvider extends FabricLanguageProvider {
 
-	public GWLangProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+	public GWLangProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(dataOutput, "en_us", registryLookup);
 	}
 
 	@Override
-	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+	public void generateTranslations(HolderLookup.Provider wrapperLookup, TranslationBuilder translationBuilder) {
 		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
@@ -121,12 +121,12 @@ public class GWLangProvider extends FabricLanguageProvider {
 	}
 
 	private void generateBlockTranslations(TranslationBuilder translationBuilder, Block block) {
-		String temp = capitalizeString(Registries.BLOCK.getId(block).getPath().replace("_", " "));
+		String temp = capitalizeString(BuiltInRegistries.BLOCK.getKey(block).getPath().replace("_", " "));
 		translationBuilder.add(block, temp);
 	}
 
 	private void generateItemTranslations(TranslationBuilder translationBuilder, Item item) {
-		String temp = capitalizeString(Registries.ITEM.getId(item).getPath().replace("_", " "));
+		String temp = capitalizeString(BuiltInRegistries.ITEM.getKey(item).getPath().replace("_", " "));
 		translationBuilder.add(item, temp);
 	}
 }

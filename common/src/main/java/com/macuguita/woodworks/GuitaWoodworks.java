@@ -39,10 +39,10 @@ import com.macuguita.woodworks.utils.GWUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public final class GuitaWoodworks {
 
@@ -98,6 +98,6 @@ public final class GuitaWoodworks {
 	}
 
 	public static Identifier id(String name) {
-		return Identifier.of(MOD_ID, name);
+		return Identifier.fromNamespaceAndPath(MOD_ID, name);
 	}
 }

@@ -1,7 +1,5 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 version = BuildConfig.modVersion + "-neoforge"
@@ -93,7 +91,7 @@ tasks.processResources {
     }
 }
 
-tasks.withType<ShadowJar>().configureEach {
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
 }
