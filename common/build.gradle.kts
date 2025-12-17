@@ -23,7 +23,7 @@ dependencies {
 
 
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.9-fabric")
+    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.11-fabric")
     //modImplementation("com.macuguita.lib:macu_lib-common:${BuildConfig.macuLibVersion}-1.21.9")
     //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
     //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true

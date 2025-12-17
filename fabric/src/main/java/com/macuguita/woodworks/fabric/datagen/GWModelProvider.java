@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,9 +32,13 @@ import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.NoCornerModularSeatBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
+import com.macuguita.woodworks.block.ShutterBlock;
+import com.macuguita.woodworks.block.SupportBlock;
 import com.macuguita.woodworks.block.property.NoCornerModularSeatProperty;
+import com.macuguita.woodworks.block.property.SupportFaceShapeProperty;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -42,6 +47,7 @@ import net.minecraft.client.data.models.blockstates.ConditionBuilder;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
@@ -50,12 +56,14 @@ import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.block.model.VariantMutator;
 import net.minecraft.client.renderer.block.model.multipart.CombinedCondition;
 import net.minecraft.client.renderer.block.model.multipart.Condition;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -146,6 +154,24 @@ public class GWModelProvider extends FabricModelProvider {
 							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
 							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
 		});
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			registerSupportBlock(blockStateModelGenerator, block,
+					new TextureMapping()
+							.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
+							.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side")));
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			Identifier id = regEntry.getId();
+			String basePath = id.getPath().replace("_shutter", "_support");
+			Identifier endId = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + basePath + "_end");
+			Identifier sideId = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + basePath + "_side");
+			registerShutterBlock(blockStateModelGenerator, block,
+					new TextureMapping()
+							.put(TextureSlot.END, endId)
+							.put(TextureSlot.SIDE, sideId));
+		});
 
 		registerStump(blockStateModelGenerator, GWObjects.MUSHROOM_STUMP.get(),
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
@@ -178,6 +204,27 @@ public class GWModelProvider extends FabricModelProvider {
 	@Override
 	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 		itemModelGenerator.generateFlatItem(GWObjects.SECATEURS.get(), ModelTemplates.FLAT_ITEM);
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			var tm = new TextureMapping()
+					.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
+					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side"));
+
+			Identifier inventory = SUPPORT_INVENTORY.createWithSuffix(block, "_inventory", tm, itemModelGenerator.modelOutput);
+			Identifier uInventory = SUPPORT_INVENTORY_UPSIDE_DOWN.createWithSuffix(block, "_inventory_upside_down", tm, itemModelGenerator.modelOutput);
+			ItemModel.Unbaked inventoryModel = ItemModelUtils.plainModel(inventory);
+			ItemModel.Unbaked uInventoryModel = ItemModelUtils.plainModel(uInventory);
+
+			itemModelGenerator.itemModelOutput
+					.accept(
+							block.asItem(),
+							ItemModelUtils
+									.conditional(ItemModelUtils.hasComponent(DataComponents.BLOCK_STATE),
+									uInventoryModel,
+									inventoryModel
+							)
+					);
+		});
 	}
 
 	private static final ModelTemplate STUMP = new ModelTemplate(
@@ -320,6 +367,81 @@ public class GWModelProvider extends FabricModelProvider {
 			Optional.empty(),
 			TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.INSIDE);
 
+	private static final ModelTemplate SUPPORT_HORIZONTAL_BIG = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_big")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_SMALL = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_small")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_INVENTORY = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_inventory")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_POST = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_post")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_BIG = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_big")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_SMALL = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_small")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_BIG_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_big_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_SMALL_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_small_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_INVENTORY_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_inventory_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_POST_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_post_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_BIG_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_big_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_SMALL_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_small_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_LEFT = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_left")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_RIGHT = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_right")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_INVENTORY = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_inventory")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
 	private void registerStump(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
 		Identifier id = STUMP.create(block, tm, blockStateModelGenerator.modelOutput);
 		MultiVariant weightedVariant = BlockModelGenerators.plainVariant(id);
@@ -422,15 +544,13 @@ public class GWModelProvider extends FabricModelProvider {
 
 		MultiPartGenerator multipartBlockModelDefinitionCreator = MultiPartGenerator.multiPart(block);
 
-		IntegerProperty radiusProp = ResizableBeamBlock.RADIUS;
-		Map<Direction, BooleanProperty> facingProperties = ResizableBeamBlock.FACING_PROPERTIES;
-		for (int size : radiusProp.getPossibleValues()) {
+		for (int size : ResizableBeamBlock.RADIUS.getPossibleValues()) {
 			generateRotatedCoreModels(multipartBlockModelDefinitionCreator, coreWeightedVariantMap, size);
 			for (Direction dir : Direction.values()) {
-				BooleanProperty sideProp = facingProperties.get(dir);
+				BooleanProperty sideProp = ResizableBeamBlock.PROPERTY_BY_DIRECTION.get(dir);
 				multipartBlockModelDefinitionCreator.with(BlockModelGenerators.condition()
-						.term(radiusProp, size)
-						.term(sideProp, true), getSidedModel(sideUpWeightedVariantMap.get(size), sideDownWeightedVariantMap.get(size), dir).with(getBeamRotation(dir)));
+						.term(ResizableBeamBlock.RADIUS, size)
+						.term(sideProp, true), getSidedModel(sideUpWeightedVariantMap.get(size), sideDownWeightedVariantMap.get(size), dir).with(getModelRotation(dir)));
 			}
 		}
 
@@ -453,6 +573,139 @@ public class GWModelProvider extends FabricModelProvider {
 
 		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, weightedVariant).with(rotationOperations));
 		blockStateModelGenerator.registerSimpleItemModel(block, model);
+	}
+
+	private void registerSupportBlock(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		Map<SupportType, Pair<MultiVariant, MultiVariant>> supportModels = new EnumMap<>(SupportType.class);
+
+		supportModels.put(SupportType.HORIZONTAL_BIG, Pair.of(
+				BlockModelGenerators.plainVariant(
+						SUPPORT_HORIZONTAL_BIG.createWithSuffix(block, "_horizontal_big", tm, blockStateModelGenerator.modelOutput)),
+				BlockModelGenerators.plainVariant(
+						SUPPORT_HORIZONTAL_BIG_UPSIDE_DOWN.createWithSuffix(block, "_horizontal_big_upside_down", tm, blockStateModelGenerator.modelOutput))
+		));
+		supportModels.put(SupportType.HORIZONTAL_SMALL, Pair.of(
+				BlockModelGenerators.plainVariant(
+						SUPPORT_HORIZONTAL_SMALL.createWithSuffix(block, "_horizontal_small", tm, blockStateModelGenerator.modelOutput)),
+				BlockModelGenerators.plainVariant(
+						SUPPORT_HORIZONTAL_SMALL_UPSIDE_DOWN.createWithSuffix(block, "_horizontal_small_upside_down", tm, blockStateModelGenerator.modelOutput))
+		));
+		supportModels.put(SupportType.VERTICAL_BIG, Pair.of(
+				BlockModelGenerators.plainVariant(
+						SUPPORT_VERTICAL_BIG.createWithSuffix(block, "_vertical_big", tm, blockStateModelGenerator.modelOutput)),
+				BlockModelGenerators.plainVariant(
+						SUPPORT_VERTICAL_BIG_UPSIDE_DOWN.createWithSuffix(block, "_vertical_big_upside_down", tm, blockStateModelGenerator.modelOutput))
+		));
+		supportModels.put(SupportType.VERTICAL_SMALL, Pair.of(
+				BlockModelGenerators.plainVariant(
+						SUPPORT_VERTICAL_SMALL.createWithSuffix(block, "_vertical_small", tm, blockStateModelGenerator.modelOutput)),
+				BlockModelGenerators.plainVariant(
+						SUPPORT_VERTICAL_SMALL_UPSIDE_DOWN.createWithSuffix(block, "_vertical_small_upside_down", tm, blockStateModelGenerator.modelOutput))
+		));
+		supportModels.put(SupportType.POST, Pair.of(
+				BlockModelGenerators.plainVariant(
+						SUPPORT_POST.createWithSuffix(block, "_post", tm, blockStateModelGenerator.modelOutput)),
+				BlockModelGenerators.plainVariant(
+						SUPPORT_POST_UPSIDE_DOWN.createWithSuffix(block, "_post_upside_down", tm, blockStateModelGenerator.modelOutput))
+		));
+
+		MultiPartGenerator multipart = MultiPartGenerator.multiPart(block);
+
+		for (Direction dir : Direction.Plane.HORIZONTAL) {
+			for (boolean b : new boolean[]{true, false}) {
+				for (SupportFaceShapeProperty hFace : SupportFaceShapeProperty.values()) {
+					if (hFace.isHidden()) continue;
+					SupportType hType = hFace == SupportFaceShapeProperty.BIG ? SupportType.HORIZONTAL_BIG : SupportType.HORIZONTAL_SMALL;
+					multipart.with(and(
+							BlockModelGenerators.condition().term(SupportBlock.HORIZONTAL_SHAPE, hFace),
+							BlockModelGenerators.condition().term(SupportBlock.UP, b),
+							BlockModelGenerators.condition().term(SupportBlock.FACING, dir)
+					), b ? supportModels.get(hType).getFirst().with(getModelRotation(dir)) : supportModels.get(hType).getSecond().with(getModelRotation(dir)));
+				}
+				for (SupportFaceShapeProperty vFace : SupportFaceShapeProperty.values()) {
+					if (vFace.isHidden()) continue;
+					SupportType vType = vFace == SupportFaceShapeProperty.BIG ? SupportType.VERTICAL_BIG : SupportType.VERTICAL_SMALL;
+					multipart.with(and(
+							BlockModelGenerators.condition().term(SupportBlock.VERTICAL_SHAPE, vFace),
+							BlockModelGenerators.condition().term(SupportBlock.UP, b),
+							BlockModelGenerators.condition().term(SupportBlock.FACING, dir)
+					), b ? supportModels.get(vType).getFirst().with(getModelRotation(dir)) : supportModels.get(vType).getSecond().with(getModelRotation(dir)));
+				}
+				multipart.with(and(
+						BlockModelGenerators.condition().negatedTerm(SupportBlock.HORIZONTAL_SHAPE, SupportFaceShapeProperty.HIDDEN),
+						BlockModelGenerators.condition().negatedTerm(SupportBlock.VERTICAL_SHAPE, SupportFaceShapeProperty.HIDDEN),
+						BlockModelGenerators.condition().term(SupportBlock.UP, b),
+						BlockModelGenerators.condition().term(SupportBlock.FACING, dir)
+				), b ? supportModels.get(SupportType.POST).getFirst().with(getModelRotation(dir)) : supportModels.get(SupportType.POST).getSecond().with(getModelRotation(dir)));
+			}
+		}
+
+		blockStateModelGenerator.blockStateOutput.accept(multipart);
+	}
+
+	private void registerShutterBlock(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		MultiVariant leftVariant = BlockModelGenerators.plainVariant(
+				SHUTTER_LEFT.createWithSuffix(block, "_left", tm, blockStateModelGenerator.modelOutput));
+		MultiVariant rightVariant = BlockModelGenerators.plainVariant(
+				SHUTTER_RIGHT.createWithSuffix(block, "_right", tm, blockStateModelGenerator.modelOutput));
+
+		MultiPartGenerator multipart = MultiPartGenerator.multiPart(block);
+
+		for (boolean open : new boolean[]{false, true}) {
+			for (DoorHingeSide side : DoorHingeSide.values()) {
+				for (Direction dir : Direction.Plane.HORIZONTAL) {
+
+					MultiVariant model = !open
+							? (side == DoorHingeSide.LEFT ? leftVariant : rightVariant)
+							: (side == DoorHingeSide.LEFT ? rightVariant : leftVariant);
+
+					int baseRotation = switch (dir) {
+						case NORTH -> 0;
+						case EAST -> 90;
+						case SOUTH -> 180;
+						case WEST -> 270;
+						default -> throw new IllegalStateException("Unexpected direction: " + dir);
+					};
+					if (open) {
+						baseRotation += (side == DoorHingeSide.RIGHT ? 90 : 270);
+					}
+					baseRotation %= 360;
+
+					VariantMutator rotation = switch (baseRotation) {
+						case 0 -> BlockModelGenerators.NOP;
+						case 90 -> BlockModelGenerators.Y_ROT_90;
+						case 180 -> BlockModelGenerators.Y_ROT_180;
+						case 270 -> BlockModelGenerators.Y_ROT_270;
+						default -> throw new IllegalStateException("Invalid rotation: " + baseRotation);
+					};
+
+					multipart.with(
+							BlockModelGenerators.condition()
+									.term(ShutterBlock.OPEN, open)
+									.term(ShutterBlock.SIDE, side)
+									.term(ShutterBlock.FACING, dir),
+							model.with(rotation)
+					);
+				}
+			}
+		}
+
+		// Output blockstates
+		blockStateModelGenerator.blockStateOutput.accept(multipart);
+
+		// Inventory model
+		Identifier inventoryModel = SHUTTER_INVENTORY.createWithSuffix(block, "_inventory", tm, blockStateModelGenerator.modelOutput);
+		blockStateModelGenerator.registerSimpleItemModel(block, inventoryModel);
+	}
+
+
+	private enum SupportType {
+		HORIZONTAL_BIG,
+		HORIZONTAL_SMALL,
+		POST,
+		VERTICAL_BIG,
+		VERTICAL_SMALL,
+		NONE
 	}
 
 	private void generateRotatedCoreModels(MultiPartGenerator multipartBlockModelDefinitionCreator, Map<Integer, MultiVariant> coreWeightedVariantMap, int size) {
@@ -563,7 +816,7 @@ public class GWModelProvider extends FabricModelProvider {
 		};
 	}
 
-	private VariantMutator getBeamRotation(Direction dir) {
+	private VariantMutator getModelRotation(Direction dir) {
 		return switch (dir) {
 			case EAST -> BlockModelGenerators.Y_ROT_90;
 			case SOUTH -> BlockModelGenerators.Y_ROT_180;

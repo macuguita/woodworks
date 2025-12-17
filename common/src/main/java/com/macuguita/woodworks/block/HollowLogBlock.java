@@ -25,6 +25,7 @@ package com.macuguita.woodworks.block;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.utils.GWUtils;
 
 import net.minecraft.core.BlockPos;
@@ -32,11 +33,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -50,6 +54,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -94,26 +99,30 @@ public class HollowLogBlock extends RotatedPillarBlock implements SimpleWaterlog
 	}
 
 	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-		InteractionHand hand = player.getUsedItemHand();
-		ItemStack stack = player.getItemInHand(hand);
-		if (stack.getItem() instanceof AxeItem && strippable) {
+	protected InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+		Item item = itemStack.getItem();
+		if (itemStack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_HOLLOW_LOGS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
+				if (!player.getAbilities().instabuild)
+					itemStack.hurtAndBreak(1, player, interactionHand);
+				if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
+				level.playSound(player, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (world instanceof ServerLevel serverWorld) {
+				if (level instanceof ServerLevel serverWorld) {
 					BlockState strippedState = strippedBlock.defaultBlockState()
-							.setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS))
-							.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+							.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS))
+							.setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
 
-					serverWorld.setBlockAndUpdate(pos, strippedState);
+					serverWorld.setBlockAndUpdate(blockPos, strippedState);
+					level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
 				}
 				return InteractionResult.SUCCESS;
 			}
 		}
-		return super.useWithoutItem(state, world, pos, player, hit);
+		if (itemStack.is(GWItemTags.WATER_BUCKETS) || itemStack.is(GWItemTags.EMPTY_BUCKETS))
+			return InteractionResult.FAIL;
+		return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 
 	@Override

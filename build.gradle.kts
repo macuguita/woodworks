@@ -57,7 +57,6 @@ subprojects {
     apply(plugin = "me.modmuss50.mod-publish-plugin")
 
     val loom = project.extensions.getByType<net.fabricmc.loom.api.LoomGradleExtensionAPI>()
-    loom.silentMojangMappingsLicense()
 
     the<BasePluginExtension>().archivesName.set(BuildConfig.modId)
 
@@ -75,48 +74,55 @@ subprojects {
     var modLoader = name
     val changelogText: String = rootProject.file("CHANGELOG.md").readText()
 
-    publishMods {
-        changelog = changelogText
-        file.set((tasks.named("remapJar").get() as net.fabricmc.loom.task.RemapJarTask).archiveFile)
-        additionalFiles.from((tasks.named("remapSourcesJar").get() as net.fabricmc.loom.task.RemapSourcesJarTask).archiveFile)
-        displayName = BuildConfig.modName + " " + BuildConfig.modVersion + "-$modLoader"
-        version = BuildConfig.modVersion + "-$modLoader"
-        if (BuildConfig.modVersion.contains("beta")) {
-            type = BETA
-        } else {
-            type = STABLE
-        }
-        if (modLoader == "fabric") {
-            modLoaders.add("fabric")
-            modLoaders.add("quilt")
-        } else if (modLoader == "neoforge") {
-            modLoaders.add("neoforge")
-        }
-        dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
-        modrinth {
-            projectId = "NTFyR6MX"
-            accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-            for (version in BuildConfig.supportedVersions)
-                minecraftVersions.add(version)
-            if (modLoader == "fabric") {
-                requires("fabric-api")
+    if (project.name != "common") {
+        publishMods {
+            changelog = changelogText
+            file.set((tasks.named("remapJar").get() as net.fabricmc.loom.task.RemapJarTask).archiveFile)
+            additionalFiles.from(
+                (tasks.named("remapSourcesJar").get() as net.fabricmc.loom.task.RemapSourcesJarTask).archiveFile
+            )
+            displayName = BuildConfig.modName + " " + BuildConfig.modVersion + "-$modLoader"
+            version = BuildConfig.modVersion + "-$modLoader"
+            if (BuildConfig.modVersion.contains("beta")) {
+                type = BETA
+            } else {
+                type = STABLE
             }
-            requires("macu-lib")
-        }
-        curseforge {
-            projectId = "1308420"
-            changelogType = "markdown"
-            accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-            for (version in BuildConfig.supportedVersions)
-                minecraftVersions.add(version)
-            javaVersions.add(JavaVersion.VERSION_21)
-            clientRequired = true
-            serverRequired = true
-            projectSlug = "guitas-woodworks"
             if (modLoader == "fabric") {
-                requires("fabric-api")
+                modLoaders.add("fabric")
+                modLoaders.add("quilt")
+            } else if (modLoader == "neoforge") {
+                modLoaders.add("neoforge")
             }
-            requires("macu-lib")
+            dryRun = providers.environmentVariable("MODRINTH_TOKEN")
+                .getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
+            modrinth {
+                projectId = "NTFyR6MX"
+                accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+                for (version in BuildConfig.supportedVersions)
+                    minecraftVersions.add(version)
+                if (modLoader == "fabric") {
+                    requires("fabric-api")
+                }
+                requires("macu-lib")
+                optional("every-compat")
+            }
+            curseforge {
+                projectId = "1308420"
+                changelogType = "markdown"
+                accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+                for (version in BuildConfig.supportedVersions)
+                    minecraftVersions.add(version)
+                javaVersions.add(JavaVersion.VERSION_21)
+                clientRequired = true
+                serverRequired = true
+                projectSlug = "guitas-woodworks"
+                if (modLoader == "fabric") {
+                    requires("fabric-api")
+                }
+                requires("macu-lib")
+                optional("every-compat")
+            }
         }
     }
 

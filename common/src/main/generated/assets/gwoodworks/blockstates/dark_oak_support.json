@@ -1,0 +1,778 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big"
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small"
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big_upside_down"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small_upside_down"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big_upside_down"
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small_upside_down"
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post_upside_down"
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "north"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big_upside_down",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small_upside_down",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big_upside_down",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small_upside_down",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post_upside_down",
+        "y": 90
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "east"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big_upside_down",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small_upside_down",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big_upside_down",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small_upside_down",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post_upside_down",
+        "y": 180
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "south"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "true"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_big_upside_down",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_horizontal_small_upside_down",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_big_upside_down",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "big"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_vertical_small_upside_down",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "vertical": "small"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "gwoodworks:block/dark_oak_support_post_upside_down",
+        "y": 270
+      },
+      "when": {
+        "AND": [
+          {
+            "horizontal": "!hidden"
+          },
+          {
+            "vertical": "!hidden"
+          },
+          {
+            "up": "false"
+          },
+          {
+            "facing": "west"
+          }
+        ]
+      }
+    }
+  ]
+}

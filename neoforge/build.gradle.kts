@@ -46,17 +46,13 @@ repositories {
 dependencies {
     neoForge("net.neoforged:neoforge:${BuildConfig.neoforgeVersion}")
 
-    //modCompileOnly("dev.architectury:architectury-neoforge:${BuildConfig.architectureApiVersion}")
-
     "common"(project(":common", "namedElements")) {
         isTransitive = false
     }
     "shadowBundle"(project(":common", "transformProductionNeoForge"))
 
-    //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
-
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.9-neoforge")
+    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.11-neoforge")
     //modImplementation("com.macuguita.lib:macu_lib-neoforge:${BuildConfig.macuLibVersion}-1.21.9")
     //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
     //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true

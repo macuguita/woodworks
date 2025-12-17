@@ -95,6 +95,7 @@ public abstract class NoCornerModularSeatBlock extends HorizontalDirectionalBloc
 		InteractionHand hand = player.getUsedItemHand();
 		ItemStack stack = player.getItemInHand(hand);
 		if (stack.is(GWItemTags.WATER_BUCKETS)) return InteractionResult.FAIL;
+		if (stack.is(GWItemTags.CARVED_LOG)) return InteractionResult.FAIL;
 		return this.sitOn(world, pos, player, state.getValue(FACING)) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
 	}
 

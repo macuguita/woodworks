@@ -35,6 +35,8 @@ public class GWItemTags {
 	public static TagKey<Item> CARVED_LOG = createTag("carved_log");
 	public static TagKey<Item> BEAM = createTag("beam");
 	public static TagKey<Item> HOLLOW_LOG = createTag("hollow_log");
+	public static TagKey<Item> SUPPORT = createTag("support");
+	public static TagKey<Item> SHUTTER = createTag("shutter");
 	public static TagKey<Item> SECATEURS = createTag("secateurs");
 	public static TagKey<Item> WATER_BUCKETS = createCommonTag("buckets/water");
 	public static TagKey<Item> SHEARS = createCommonTag("tools/shear");

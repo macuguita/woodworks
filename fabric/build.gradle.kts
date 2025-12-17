@@ -62,7 +62,7 @@ dependencies {
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
 
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.9-fabric")
+    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.11-fabric")
     //modImplementation("com.macuguita.lib:macu_lib-fabric:${BuildConfig.macuLibVersion}-1.21.9")
     //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
     //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true

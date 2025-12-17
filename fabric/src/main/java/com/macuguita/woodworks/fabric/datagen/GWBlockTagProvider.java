@@ -28,6 +28,8 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 
@@ -44,43 +46,35 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.STUMP).add(block);
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.STUMP).add(block);
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(block);
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(block);
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.BEAM).add(block);
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
 			valueLookupBuilder(GWBlockTags.BEAM).add(block);
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
-			valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(block);
+			valueLookupBuilder(GWBlockTags.SUPPORT).add(block);
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			Block block = regEntry.get();
-			valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(block);
-			valueLookupBuilder(GWBlockTags.HOLLOW_LOG).add(block);
+			valueLookupBuilder(GWBlockTags.SHUTTER).add(block);
 		});
 		valueLookupBuilder(GWBlockTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get());
 		valueLookupBuilder(GWBlockTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get());
@@ -93,6 +87,12 @@ public class GWBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 				.add(GWObjects.MUSHROOM_STUMP.get())
 				.add(GWObjects.CARVED_MUSHROOM_STEM.get())
 				.add(GWObjects.MUSHROOM_BEAM.get())
-				.add(GWObjects.HOLLOW_MUSHROOM_STEM.get());
+				.add(GWObjects.HOLLOW_MUSHROOM_STEM.get())
+				.addTag(GWBlockTags.STUMP)
+				.addTag(GWBlockTags.CARVED_LOG)
+				.addTag(GWBlockTags.BEAM)
+				.addTag(GWBlockTags.HOLLOW_LOG)
+				.addTag(GWBlockTags.SUPPORT)
+				.addTag(GWBlockTags.SHUTTER);
 	}
 }

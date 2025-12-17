@@ -1,13 +1,8 @@
-@NullMarked
 @Environment(EnvType.CLIENT)
+@NullMarked
 package com.macuguita.woodworks.client.fabric;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
-import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jspecify.annotations.NullMarked;

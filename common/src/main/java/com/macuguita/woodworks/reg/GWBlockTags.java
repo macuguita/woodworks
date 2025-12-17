@@ -34,6 +34,8 @@ public class GWBlockTags {
 	public static TagKey<Block> CARVED_LOG = createTag("carved_log");
 	public static TagKey<Block> BEAM = createTag("beam");
 	public static TagKey<Block> HOLLOW_LOG = createTag("hollow_log");
+	public static TagKey<Block> SUPPORT = createTag("support");
+	public static TagKey<Block> SHUTTER = createTag("shutter");
 	public static TagKey<Block> CONNECTING_MUSHROOM = createTag("connecting_mushroom");
 
 	private static TagKey<Block> createTag(String name) {

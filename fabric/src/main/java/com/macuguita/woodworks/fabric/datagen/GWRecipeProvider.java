@@ -38,6 +38,8 @@ import net.minecraft.world.level.block.Block;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
+import net.minecraft.world.level.block.Blocks;
+
 public class GWRecipeProvider extends FabricRecipeProvider {
 
 	public GWRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
@@ -82,6 +84,16 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 				GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 					createHollowLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 				});
+				GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+					createSupportRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+				});
+				GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+					createShutterRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+				});
+				createStumpRecipe(recipeExporter, GWObjects.MUSHROOM_STUMP.get(), Blocks.MUSHROOM_STEM);
+				createCarvedLogRecipe(recipeExporter, GWObjects.CARVED_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
+				createBeamRecipe(recipeExporter, GWObjects.MUSHROOM_BEAM.get(), Blocks.MUSHROOM_STEM);
+				createHollowLogRecipe(recipeExporter, GWObjects.HOLLOW_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
 			}
 
 			private void createStumpRecipe(RecipeOutput exporter, Block stump, Block log) {
@@ -119,6 +131,25 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 						.pattern("# #")
 						.define('#', log)
 						.unlockedBy(getHasName(log), has(log))
+						.save(exporter);
+			}
+
+			private void createSupportRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
+						.pattern("##")
+						.pattern("# ")
+						.define('#', plank)
+						.unlockedBy(getHasName(plank), has(plank))
+						.save(exporter);
+			}
+
+			private void createShutterRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
+						.pattern("#")
+						.pattern("#")
+						.pattern("#")
+						.define('#', plank)
+						.unlockedBy(getHasName(plank), has(plank))
 						.save(exporter);
 			}
 		};

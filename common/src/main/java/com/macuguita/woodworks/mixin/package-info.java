@@ -20,4 +20,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.macuguita.woodworks.mixin;n
+@NullMarked
+package com.macuguita.woodworks.mixin;
+
+import org.jspecify.annotations.NullMarked;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 macuguita
+ * Copyright (c) 2025 macuguita.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,13 +11,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
- * OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package com.macuguita.woodworks;
@@ -36,6 +36,7 @@ import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,37 +61,52 @@ public final class GuitaWoodworks {
 		registerFuelAndRegisterStripped(GWObjects.CARVED_LOG_BLOCKS, GWObjects.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
 		registerFuelAndRegisterStripped(GWObjects.BEAM_BLOCKS, GWObjects.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
 		registerFuelAndRegisterStripped(GWObjects.HOLLOW_LOG_BLOCKS, GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS, HollowLogBlock.STRIPPED_HOLLOW_LOGS, 150);
+		registerFuel(GWObjects.SUPPORT_BLOCKS, null, 150);
+		registerFuel(GWObjects.SHUTTER_BLOCKS, null, 150);
 	}
 
 	private static void registerFuelAndRegisterStripped(GuitaRegistry<Block> blockReg, GuitaRegistry<Block> strippedBlockReg, Map<Block, Block> strippedMap, int fuelTime) {
+		registerFuel(blockReg, strippedBlockReg, fuelTime);
+		registerStripped(blockReg, strippedBlockReg, strippedMap);
+	}
+
+	private static void registerFuel(GuitaRegistry<Block> blockReg, @Nullable GuitaRegistry<Block> strippedBlockReg, int fuelTime) {
 		int index = 0;
 		for (GuitaRegistryEntry<Block> regEntry : blockReg.getEntries()) {
 			Identifier id = regEntry.getId();
 			Block block = regEntry.get();
 			Item item = block.asItem();
 
-			Optional<GuitaRegistryEntry<Block>> optionalEntry = strippedBlockReg.stream()
-					.skip(index)
-					.findFirst();
-
-			Block strippedBlock = null;
-			Item strippedItem = null;
-
-			if (optionalEntry.isPresent()) {
-				strippedBlock = optionalEntry.get().get();
-				strippedItem = strippedBlock.asItem();
-			}
-
+			Optional<GuitaRegistryEntry<Block>> optionalEntry = strippedBlockReg != null
+					? strippedBlockReg.stream().skip(index).findFirst()
+					: Optional.empty();
 
 			if (!id.getPath().matches(".*(crimson|warped).*")) {
 				GWUtils.registerFuel(fuelTime, item);
 				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
-				if (strippedItem != null) {
+
+				if (optionalEntry.isPresent()) {
+					Block strippedBlock = optionalEntry.get().get();
+					Item strippedItem = strippedBlock.asItem();
 					GWUtils.registerFuel(fuelTime, strippedItem);
 					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
 				}
 			}
-			if (strippedBlock != null) {
+			index++;
+		}
+	}
+
+	private static void registerStripped(GuitaRegistry<Block> blockReg, GuitaRegistry<Block> strippedBlockReg, Map<Block, Block> strippedMap) {
+		int index = 0;
+		for (GuitaRegistryEntry<Block> regEntry : blockReg.getEntries()) {
+			Block block = regEntry.get();
+
+			Optional<GuitaRegistryEntry<Block>> optionalEntry = strippedBlockReg.stream()
+					.skip(index)
+					.findFirst();
+
+			if (optionalEntry.isPresent()) {
+				Block strippedBlock = optionalEntry.get().get();
 				strippedMap.put(block, strippedBlock);
 			}
 			index++;

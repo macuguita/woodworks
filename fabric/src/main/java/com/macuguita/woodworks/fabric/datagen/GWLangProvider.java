@@ -76,6 +76,14 @@ public class GWLangProvider extends FabricLanguageProvider {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+			generateItemTranslations(translationBuilder, regEntry.get().asItem());
+		});
 		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get());
 		generateItemTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get().asItem());
 		generateBlockTranslations(translationBuilder, GWObjects.CARVED_MUSHROOM_STEM.get());
@@ -93,6 +101,8 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("block_type.gwoodworks.stripped_beam", "Stripped %s Beam");
 		translationBuilder.add("block_type.gwoodworks.hollow_log", "Hollow %s Log");
 		translationBuilder.add("block_type.gwoodworks.stripped_hollow_log", "Stripped Hollow %s Log");
+		translationBuilder.add("block_type.gwoodworks.support", "%s Support");
+		translationBuilder.add("block_type.gwoodworks.shutter", "%s Shutter");
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
 		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
 		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");
@@ -104,6 +114,20 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("tag.block.gwoodworks.hollow_log", "Hollow Log");
 		translationBuilder.add("tag.item.gwoodworks.secateurs", "Secateurs");
 		translationBuilder.add("tooltip.gwoodworks.beam_block", "Strip with axe, resize with shears, link with secateurs.");
+		translationBuilder.add("tooltip.gwoodworks.support.condition1", "Sneak right-click in air:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior1", "Flip block item upside down");
+		translationBuilder.add("tooltip.gwoodworks.support.condition2", "Right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior2", "Toggle a side between big and small");
+		translationBuilder.add("tooltip.gwoodworks.support.condition3", "Sneak right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior3", "Hide/unhide a side");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition1", "Right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior1", "Strip the block");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition2", "Right-click with shears:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior2", "Increase/decrease the radius");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition3", "Right-click with secateurs:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior3", "Hide/unhide a connection");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition4", "Place while sneaking:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior4", "On placed connect to opposite side");
 	}
 
 	private String capitalizeString(String string) {

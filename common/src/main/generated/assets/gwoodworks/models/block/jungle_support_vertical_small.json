@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_support_vertical_small",
+  "textures": {
+    "end": "gwoodworks:block/jungle_support_end",
+    "side": "gwoodworks:block/jungle_support_side"
+  }
+}

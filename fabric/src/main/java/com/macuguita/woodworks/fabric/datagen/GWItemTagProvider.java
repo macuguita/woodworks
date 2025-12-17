@@ -68,6 +68,12 @@ public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
 			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
 		});
+		GWObjects.SUPPORT_ITEMS.stream().forEach(regEntry -> {
+			valueLookupBuilder(GWItemTags.SUPPORT).add(regEntry.get());
+		});
+		GWObjects.SHUTTER_ITEMS.stream().forEach(regEntry -> {
+			valueLookupBuilder(GWItemTags.SHUTTER).add(regEntry.get());
+		});
 		valueLookupBuilder(GWItemTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get().asItem());
 		valueLookupBuilder(GWItemTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get().asItem());
 		valueLookupBuilder(GWItemTags.BEAM).add(GWObjects.MUSHROOM_BEAM.get().asItem());

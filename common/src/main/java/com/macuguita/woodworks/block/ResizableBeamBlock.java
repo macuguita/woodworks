@@ -35,12 +35,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -56,6 +58,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -77,7 +80,7 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 	public static final BooleanProperty UP = BlockStateProperties.UP;
 	public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
 
-	public static final Map<Direction, BooleanProperty> FACING_PROPERTIES = ImmutableMap.copyOf(
+	public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = ImmutableMap.copyOf(
 			Util.make(Maps.newEnumMap(Direction.class), directions -> {
 				directions.put(Direction.NORTH, NORTH);
 				directions.put(Direction.EAST, EAST);
@@ -119,12 +122,16 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		builder.add(RADIUS, NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
 	}
 
+	public boolean isStrippable() {
+		return strippable;
+	}
+
 	@Override
 	public BlockState rotate(BlockState state, Rotation rotation) {
 		BlockState rotated = state;
 		for (Direction dir : Direction.values()) {
 			Direction newDir = rotation.rotate(dir);
-			rotated = rotated.setValue(FACING_PROPERTIES.get(newDir), state.getValue(FACING_PROPERTIES.get(dir)));
+			rotated = rotated.setValue(PROPERTY_BY_DIRECTION.get(newDir), state.getValue(PROPERTY_BY_DIRECTION.get(dir)));
 		}
 		return rotated;
 	}
@@ -139,7 +146,7 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		BlockState mirrored = state;
 		for (Direction dir : Direction.values()) {
 			Direction newDir = mirror.mirror(dir);
-			mirrored = mirrored.setValue(FACING_PROPERTIES.get(newDir), state.getValue(FACING_PROPERTIES.get(dir)));
+			mirrored = mirrored.setValue(PROPERTY_BY_DIRECTION.get(newDir), state.getValue(PROPERTY_BY_DIRECTION.get(dir)));
 		}
 		return mirrored;
 	}
@@ -158,8 +165,8 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 			return state;
 		}
 
-		if (neighborState.getValue(FACING_PROPERTIES.get(dir.getOpposite()))) {
-			return state.setValue(FACING_PROPERTIES.get(dir), true);
+		if (neighborState.getValue(PROPERTY_BY_DIRECTION.get(dir.getOpposite()))) {
+			return state.setValue(PROPERTY_BY_DIRECTION.get(dir), true);
 		}
 		return state;
 	}
@@ -177,8 +184,8 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		Direction side = ctx.getClickedFace();
 
 		BlockState state = this.defaultBlockState()
-				.setValue(FACING_PROPERTIES.get(side.getOpposite()), true)
-				.setValue(FACING_PROPERTIES.get(side), ctx.getPlayer() != null && ctx.getPlayer().isShiftKeyDown())
+				.setValue(PROPERTY_BY_DIRECTION.get(side.getOpposite()), true)
+				.setValue(PROPERTY_BY_DIRECTION.get(side), ctx.getPlayer() != null && ctx.getPlayer().isShiftKeyDown())
 				.setValue(WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).is(Fluids.WATER));
 
 		return shouldConnectWithNeighbors(state, ctx.getClickedPos(), ctx.getLevel());
@@ -196,74 +203,63 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		return Optional.empty();
 	}
 
-	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+	public static void onResizableBeamActivation(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		InteractionHand hand = player.getUsedItemHand();
 		ItemStack stack = player.getItemInHand(hand);
-		if (stack.getItem() instanceof AxeItem && strippable) {
-			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
-			if (strippedBlock != null) {
+		Item item = stack.getItem();
+		if (stack.is(ItemTags.AXES)) {
+			Block stripped = STRIPPED_BEAM_BLOCKS.get(state.getBlock());
+			if (stripped != null) {
 				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
+				if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
 
-				BlockState strippedState = strippedBlock.defaultBlockState()
-						.setValue(RADIUS, state.getValue(RADIUS))
-						.setValue(NORTH, state.getValue(NORTH))
-						.setValue(EAST, state.getValue(EAST))
-						.setValue(SOUTH, state.getValue(SOUTH))
-						.setValue(WEST, state.getValue(WEST))
-						.setValue(UP, state.getValue(UP))
-						.setValue(DOWN, state.getValue(DOWN))
-						.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
-
-				world.setBlockAndUpdate(pos, strippedState);
-				return InteractionResult.SUCCESS;
-			}
-		}
-		if (stack.is(GWItemTags.SHEARS)) {
-			if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0f, 1.0f);
-
-			// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
-			BlockState newState = shiftRadius(state, 1);
-
-			world.setBlockAndUpdate(pos, newState);
-			return InteractionResult.SUCCESS;
-		}
-		if (stack.is(GWItemTags.SECATEURS)) {
-			Optional<Direction> oDir = getDirectionByVec(hit.getLocation(), pos, state);
-			if (oDir.isPresent()) {
-				Direction dir = oDir.get();
-				BlockState newState = state.setValue(FACING_PROPERTIES.get(dir), false);
-
-				BlockPos neighborPos = pos.relative(dir);
-				BlockState neighborState = world.getBlockState(neighborPos);
-
-				world.setBlock(pos, newState, UPDATE_ALL);
-				if (neighborState.getBlock() instanceof ResizableBeamBlock && neighborState.is(GWBlockTags.BEAM)) {
-					BlockState newNeighborState = neighborState.setValue(FACING_PROPERTIES.get(dir.getOpposite()), false);
-					world.setBlock(neighborPos, newNeighborState, UPDATE_ALL);
+				BlockState strippedState = stripped.defaultBlockState();
+				for (BooleanProperty prop : PROPERTY_BY_DIRECTION.values()) {
+					strippedState = strippedState.setValue(prop, state.getValue(prop));
 				}
+				strippedState = strippedState.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+				level.setBlockAndUpdate(pos, strippedState);
+				level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+				level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			}
+		} else if (stack.is(GWItemTags.SHEARS)) {
+			if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
+			if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
+			level.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-				world.playSound(player, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
-				return InteractionResult.SUCCESS;
+			BlockState newState = shiftRadius(state, player.isShiftKeyDown() ? -1 : 1);
+
+			level.setBlockAndUpdate(pos, newState);
+			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+		} else if (stack.is(GWItemTags.SECATEURS)) {
+			Direction dir = getDirectionByVec(hitResult.getLocation(), pos, state)
+					.orElse(hitResult.getDirection());
+			BooleanProperty prop = PROPERTY_BY_DIRECTION.get(dir);
+
+			boolean current = state.getValue(prop);
+			boolean next = !current;
+
+			BlockState newState = state.setValue(prop, next);
+			level.setBlockAndUpdate(pos, newState);
+			BlockPos neighborPos = pos.relative(dir);
+			BlockState neighborState = level.getBlockState(neighborPos);
+
+			if (neighborState.getBlock() instanceof ResizableBeamBlock && neighborState.is(GWBlockTags.BEAM)) {
+				BooleanProperty opp = PROPERTY_BY_DIRECTION.get(dir.getOpposite());
+				BlockState newNeighborState = neighborState.setValue(opp, next);
+				level.setBlockAndUpdate(neighborPos, newNeighborState);
 			}
 
-			Direction dir = hit.getDirection();
-
-			BlockState newState = state.setValue(FACING_PROPERTIES.get(dir), true);
-
-			world.setBlockAndUpdate(pos, newState);
-
-			if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-			world.playSound(player, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
-			return InteractionResult.SUCCESS;
+			level.gameEvent(player, next ? GameEvent.BLOCK_ATTACH : GameEvent.BLOCK_DETACH, pos);
+			if (!player.getAbilities().instabuild)
+				stack.hurtAndBreak(1, player, hand);
+			if (!level.isClientSide())
+				player.awardStat(Stats.ITEM_USED.get(item));
+			level.playSound(player, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
-		return super.useWithoutItem(state, world, pos, player, hit);
 	}
 
-	private BlockState shiftRadius(BlockState state, int amount) {
+	private static BlockState shiftRadius(BlockState state, int amount) {
 		int radius = state.getValue(RADIUS);
 		int newRadius = radius + amount;
 
@@ -338,7 +334,7 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		 * N E S W U D
 		 */
 		for (int i = 0; i < FACINGS.length; ++i) {
-			if (state.getValue(FACING_PROPERTIES.get(FACINGS[i]))) {
+			if (state.getValue(PROPERTY_BY_DIRECTION.get(FACINGS[i]))) {
 				mask |= 1 << i;
 			}
 		}

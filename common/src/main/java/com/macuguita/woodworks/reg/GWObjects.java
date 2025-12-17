@@ -24,6 +24,7 @@ package com.macuguita.woodworks.reg;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.macuguita.lib.platform.registry.GuitaRegistries;
@@ -33,16 +34,27 @@ import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
+import com.macuguita.woodworks.block.ShutterBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
+import com.macuguita.woodworks.block.SupportBlock;
+import com.macuguita.woodworks.item.SupportBlockItem;
+import com.macuguita.woodworks.item.TooltippedBlockItem;
 import com.macuguita.woodworks.utils.GWUtils;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -73,6 +85,12 @@ public class GWObjects {
 	public static final GuitaRegistry<Block> STRIPPED_HOLLOW_LOG_BLOCKS = GuitaRegistries.create(BLOCKS);
 	public static final GuitaRegistry<Item> HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 	public static final GuitaRegistry<Item> STRIPPED_HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
+
+	public static final GuitaRegistry<Block> SUPPORT_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Item> SUPPORT_ITEMS = GuitaRegistries.create(ITEMS);
+
+	public static final GuitaRegistry<Block> SHUTTER_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Item> SHUTTER_ITEMS = GuitaRegistries.create(ITEMS);
 
 	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Properties().durability(476).component(DataComponents.TOOL, ShearsItem.createToolProperties()).setId(keyOfItem("secateurs"))));
 
@@ -216,6 +234,50 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> HOLLOW_MUSHROOM_STEM = registerWithItem("hollow_mushroom_stem", settings -> new HollowLogBlock(settings, false), BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.defaultMapColor()), BLOCKS, ITEMS);
 
+	public static final GuitaRegistryEntry<Block> OAK_SUPPORT = createSupportBlock("oak_support", Blocks.OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> SPRUCE_SUPPORT = createSupportBlock("spruce_support", Blocks.SPRUCE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BIRCH_SUPPORT = createSupportBlock("birch_support", Blocks.BIRCH_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> JUNGLE_SUPPORT = createSupportBlock("jungle_support", Blocks.JUNGLE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> ACACIA_SUPPORT = createSupportBlock("acacia_support", Blocks.ACACIA_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> DARK_OAK_SUPPORT = createSupportBlock("dark_oak_support", Blocks.DARK_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> MANGROVE_SUPPORT = createSupportBlock("mangrove_support", Blocks.MANGROVE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CHERRY_SUPPORT = createSupportBlock("cherry_support", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> PALE_OAK_SUPPORT = createSupportBlock("pale_oak_support", Blocks.PALE_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CRIMSON_SUPPORT = createSupportBlock("crimson_support", Blocks.CRIMSON_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> WARPED_SUPPORT = createSupportBlock("warped_support", Blocks.WARPED_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> OAK_SHUTTER = createShutterBlock("oak_shutter", Blocks.OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> SPRUCE_SHUTTER = createShutterBlock("spruce_shutter", Blocks.SPRUCE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BIRCH_SHUTTER = createShutterBlock("birch_shutter", Blocks.BIRCH_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> JUNGLE_SHUTTER = createShutterBlock("jungle_shutter", Blocks.JUNGLE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> ACACIA_SHUTTER = createShutterBlock("acacia_shutter", Blocks.ACACIA_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> DARK_OAK_SHUTTER = createShutterBlock("dark_oak_shutter", Blocks.DARK_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> MANGROVE_SHUTTER = createShutterBlock("mangrove_shutter", Blocks.MANGROVE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CHERRY_SHUTTER = createShutterBlock("cherry_shutter", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> PALE_OAK_SHUTTER = createShutterBlock("pale_oak_shutter", Blocks.PALE_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CRIMSON_SHUTTER = createShutterBlock("crimson_shutter", Blocks.CRIMSON_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> WARPED_SHUTTER = createShutterBlock("warped_shutter", Blocks.WARPED_PLANKS);
+
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
 		GuitaRegistryEntry<Block> block = registerWithItem(name, StumpSeatBlock::new, BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), STUMP_BLOCKS, STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
@@ -241,13 +303,41 @@ public class GWObjects {
 	}
 
 	public static GuitaRegistryEntry<Block> createBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, ResizableBeamBlock::new, BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), BEAM_BLOCKS, BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, settings -> new ResizableBeamBlock(settings, false), BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), (beamBlock, prop) -> new TooltippedBlockItem(beamBlock, prop, (itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag) -> {
+			if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)) {
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition1").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior1").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition2").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior2").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition3").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior3").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition4").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior4").withStyle(ChatFormatting.DARK_AQUA));
+			}
+		}), new Item.Properties().setId(keyOfItem(name)), BEAM_BLOCKS, BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, settings -> new ResizableBeamBlock(settings, false), BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, settings -> new ResizableBeamBlock(settings, false), BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), (beamBlock, prop) -> new TooltippedBlockItem(beamBlock, prop, (itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag) -> {
+			if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)) {
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition1").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior1").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition2").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior2").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition3").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior3").withStyle(ChatFormatting.DARK_AQUA));
+				consumer.accept(Component.literal(""));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition4").withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior4").withStyle(ChatFormatting.DARK_AQUA));
+			}
+		}), new Item.Properties().setId(keyOfItem(name)), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
@@ -258,16 +348,31 @@ public class GWObjects {
 		return block;
 	}
 
-
 	public static GuitaRegistryEntry<Block> createStrippedHollowLog(String name, Block wood) {
 		GuitaRegistryEntry<Block> block = registerWithItem(name, settings -> new HollowLogBlock(settings, false), BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
+	public static GuitaRegistryEntry<Block> createSupportBlock(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, SupportBlock::new, BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), SupportBlockItem::new, new Item.Properties().setId(keyOfItem(name)), SUPPORT_BLOCKS, SUPPORT_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
+	public static GuitaRegistryEntry<Block> createShutterBlock(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, ShutterBlock::new, BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), SHUTTER_BLOCKS, SHUTTER_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
 	private static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Function<BlockBehaviour.Properties, T> blockFactory, BlockBehaviour.Properties settings, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
+		return registerWithItem(name, blockFactory, settings, BlockItem::new, new Item.Properties().setId(keyOfItem(name)),blockReg,itemReg);
+	}
+
+	private static <T extends Block, B extends BlockItem> GuitaRegistryEntry<T> registerWithItem(String name, Function<BlockBehaviour.Properties, T> blockFactory, BlockBehaviour.Properties settings, BiFunction<T, Item.Properties, B> itemFunc, Item.Properties itemProperties, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
 		GuitaRegistryEntry<T> toReturn = blockReg.register(name, () -> blockFactory.apply(settings.setId(keyOfBlock(name))));
-		itemReg.register(name, () -> new BlockItem(toReturn.get(),
+		itemReg.register(name, () -> itemFunc.apply(toReturn.get(),
 				new Item.Properties().setId(keyOfItem(name))));
 		return toReturn;
 	}

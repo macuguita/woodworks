@@ -5,10 +5,10 @@ object BuildConfig {
     val parchmentMappings: String? = null
 
     val fabricLoaderVersion: String = "0.18.2"
-    val neoforgeVersion: String = "21.11.0-beta"
+    val neoforgeVersion: String = "21.11.10-beta"
     val enabledPlatforms: String = "fabric,neoforge"
 
-    val modVersion: String = "1.1.2-" + minecraftVersion
+    val modVersion: String = "1.2.0-" + minecraftVersion
     val mavenGroup: String = "com.macuguita.woodworks"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
