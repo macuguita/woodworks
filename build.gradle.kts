@@ -1,15 +1,8 @@
-import com.matthewprenger.cursegradle.CurseArtifact
-import com.matthewprenger.cursegradle.CurseProject
-import com.matthewprenger.cursegradle.CurseRelation
-import com.matthewprenger.cursegradle.Options
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
-
 plugins {
-    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
-    id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
-    id("com.modrinth.minotaur") version "2.+"
-    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("dev.architectury.loom").version("1.13-SNAPSHOT").apply(false)
+    id("architectury-plugin").version("3.4-SNAPSHOT")
+    id("com.gradleup.shadow").version("8.3.6").apply(false)
+    id("me.modmuss50.mod-publish-plugin").version("1.0.0")
 }
 
 architectury {
@@ -61,10 +54,9 @@ allprojects {
 
 subprojects {
     apply(plugin = "dev.architectury.loom")
-    apply(plugin = "com.modrinth.minotaur")
-    apply(plugin = "com.matthewprenger.cursegradle")
+    apply(plugin = "me.modmuss50.mod-publish-plugin")
 
-    val loom = project.extensions.getByType<LoomGradleExtensionAPI>()
+    val loom = project.extensions.getByType<net.fabricmc.loom.api.LoomGradleExtensionAPI>()
 
     the<BasePluginExtension>().archivesName.set(BuildConfig.modId)
 
@@ -73,70 +65,66 @@ subprojects {
 
         "mappings"(
             loom.layered {
-                mappings("net.fabricmc:yarn:${BuildConfig.yarnMappings}:v2")
-                mappings("dev.architectury:yarn-mappings-patch-neoforge:${BuildConfig.yarnMappingsNeoforgePatchVersion}")
+                officialMojangMappings()
+                BuildConfig.parchmentMappings?.let { parchment("org.parchmentmc.data:parchment-${BuildConfig.minecraftVersion}:$it@zip") }
             }
         )
+        "compileOnly"("org.jspecify:jspecify:1.0.0")
     }
 
     var modLoader = name
     val changelogText: String = rootProject.file("CHANGELOG.md").readText()
 
-    modrinth {
-        token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set("NTFyR6MX")
-        versionNumber.set(BuildConfig.modVersion + "-" + modLoader)
-        versionName.set("guita's Woodworks " + versionNumber.get())
-        versionType.set("release")
-        uploadFile.set(tasks.named("remapJar").get())
-        additionalFiles.add(tasks.named("remapSourcesJar").get())
-        changelog.set(changelogText)
-        gameVersions.addAll(BuildConfig.minecraftVersion)
-        if (modLoader == "fabric") {
-            loaders.addAll("fabric", "quilt")
-            dependencies {
-                required.project("fabric-api")
-            }
-        } else if (modLoader == "neoforge") {
-            loaders.add("neoforge")
-        }
-        required.project("macu-lib")
-    }
-
-    curseforge {
-        options(closureOf<Options> {
-            forgeGradleIntegration = false
-        })
-
-        project(closureOf<CurseProject> {
-            apiKey = System.getenv("CURSEFORGE_TOKEN")
-            id = "1308420"
-            releaseType = "release"
-            addGameVersion(BuildConfig.minecraftVersion)
-            if (modLoader == "fabric") {
-                addGameVersion("Fabric")
-                addGameVersion("Quilt")
-            } else if (modLoader == "neoforge") {
-                addGameVersion("NeoForge")
-            }
-            addGameVersion("Java 21")
-
-            changelogType = "markdown"
+    if (project.name != "common") {
+        publishMods {
             changelog = changelogText
-
-            mainArtifact(tasks.named("remapJar").get(), closureOf<CurseArtifact> {
-                displayName = "${BuildConfig.modId}-${BuildConfig.modVersion}-${modLoader}"
-            })
-
-            addArtifact(tasks.named("remapSourcesJar").get())
-
-            relations(closureOf<CurseRelation> {
+            file.set((tasks.named("remapJar").get() as net.fabricmc.loom.task.RemapJarTask).archiveFile)
+            additionalFiles.from(
+                (tasks.named("remapSourcesJar").get() as net.fabricmc.loom.task.RemapSourcesJarTask).archiveFile
+            )
+            displayName = BuildConfig.modName + " " + BuildConfig.modVersion + "-$modLoader"
+            version = BuildConfig.modVersion + "-$modLoader"
+            if (BuildConfig.modVersion.contains("beta")) {
+                type = BETA
+            } else {
+                type = STABLE
+            }
+            if (modLoader == "fabric") {
+                modLoaders.add("fabric")
+                modLoaders.add("quilt")
+            } else if (modLoader == "neoforge") {
+                modLoaders.add("neoforge")
+            }
+            dryRun = providers.environmentVariable("MODRINTH_TOKEN")
+                .getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
+            modrinth {
+                projectId = "NTFyR6MX"
+                accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+                for (version in BuildConfig.supportedVersions)
+                    minecraftVersions.add(version)
                 if (modLoader == "fabric") {
-                    requiredDependency("fabric-api")
+                    requires("fabric-api")
                 }
-                requiredDependency("macu-lib")
-            })
-        })
+                requires("macu-lib")
+                optional("every-compat")
+            }
+            curseforge {
+                projectId = "1308420"
+                changelogType = "markdown"
+                accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+                for (version in BuildConfig.supportedVersions)
+                    minecraftVersions.add(version)
+                javaVersions.add(JavaVersion.VERSION_21)
+                clientRequired = true
+                serverRequired = true
+                projectSlug = "guitas-woodworks"
+                if (modLoader == "fabric") {
+                    requires("fabric-api")
+                }
+                requires("macu-lib")
+                optional("every-compat")
+            }
+        }
     }
 
     configure<JavaPluginExtension> {

@@ -26,46 +26,52 @@ import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
 public class GWBlockLootTableProvider extends FabricBlockLootTableProvider {
 
-	protected GWBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+	protected GWBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(dataOutput, registryLookup);
 	}
 
 	@Override
 	public void generate() {
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			addDrop(regEntry.get());
+			dropSelf(regEntry.get());
 		});
-		addDrop(GWObjects.MUSHROOM_STUMP.get());
-		addDrop(GWObjects.CARVED_MUSHROOM_STEM.get());
-		addDrop(GWObjects.MUSHROOM_BEAM.get());
-		addDrop(GWObjects.HOLLOW_MUSHROOM_STEM.get());
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			dropSelf(regEntry.get());
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			dropSelf(regEntry.get());
+		});
+		dropSelf(GWObjects.MUSHROOM_STUMP.get());
+		dropSelf(GWObjects.CARVED_MUSHROOM_STEM.get());
+		dropSelf(GWObjects.MUSHROOM_BEAM.get());
+		dropSelf(GWObjects.HOLLOW_MUSHROOM_STEM.get());
 	}
 }

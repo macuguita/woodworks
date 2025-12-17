@@ -23,17 +23,27 @@
 package com.macuguita.woodworks.client;
 
 import com.macuguita.woodworks.client.utils.ClientPlatformUtils;
+import com.macuguita.woodworks.item.SupportBlockItem;
+import com.macuguita.woodworks.item.SwitchableBlockItem;
 import com.macuguita.woodworks.reg.GWEntityTypes;
 
-import net.minecraft.client.render.entity.EmptyEntityRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
 
 public class GuitaWoodworksClient {
 
 	public static void init() {
+		for (Item item : BuiltInRegistries.ITEM) {
+			if (item instanceof SupportBlockItem supportBlock) {
+				ItemProperties.register(supportBlock, SupportBlockItem.OVERRIDE_TAG, (itemStack, clientLevel, livingEntity, i) -> SwitchableBlockItem.getValueForStack(itemStack) ? 0.0f : 1.0f);
+			}
+		}
 		registerEntityRenderers();
 	}
 
 	private static void registerEntityRenderers() {
-		ClientPlatformUtils.registerRenderer(GWEntityTypes.SEAT, EmptyEntityRenderer::new);
+		ClientPlatformUtils.registerRenderer(GWEntityTypes.SEAT, NoopRenderer::new);
 	}
 }

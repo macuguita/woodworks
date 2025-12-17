@@ -26,14 +26,14 @@ import java.util.function.Supplier;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 public class ClientPlatformUtils {
 
 	@ExpectPlatform
-	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererFactory<T> factory) {
+	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> factory) {
 		throw new AssertionError();
 	}
 

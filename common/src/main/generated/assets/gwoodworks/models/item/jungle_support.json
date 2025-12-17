@@ -1,0 +1,11 @@
+{
+  "parent": "gwoodworks:block/jungle_support_inventory",
+  "overrides": [
+    {
+      "model": "gwoodworks:block/jungle_support_inventory_upside_down",
+      "predicate": {
+        "gwoodworks:up": 1.0
+      }
+    }
+  ]
+}

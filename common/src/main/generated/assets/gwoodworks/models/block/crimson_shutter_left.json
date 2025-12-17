@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_shutter_left",
+  "textures": {
+    "end": "gwoodworks:block/crimson_support_end",
+    "side": "gwoodworks:block/crimson_support_side"
+  }
+}

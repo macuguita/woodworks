@@ -22,35 +22,46 @@
 
 package com.macuguita.woodworks.fabric.datagen;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.NoCornerModularSeatBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
+import com.macuguita.woodworks.block.ShutterBlock;
+import com.macuguita.woodworks.block.SupportBlock;
 import com.macuguita.woodworks.block.property.NoCornerModularSeatProperty;
+import com.macuguita.woodworks.block.property.SupportFaceShapeProperty;
+import com.macuguita.woodworks.item.SupportBlockItem;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import com.mojang.datafixers.util.Pair;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.BlockStateVariant;
-import net.minecraft.data.client.BlockStateVariantMap;
-import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Model;
-import net.minecraft.data.client.ModelIds;
-import net.minecraft.data.client.MultipartBlockStateSupplier;
-import net.minecraft.data.client.TextureKey;
-import net.minecraft.data.client.TextureMap;
-import net.minecraft.data.client.VariantSettings;
-import net.minecraft.data.client.VariantsBlockStateSupplier;
-import net.minecraft.data.client.When;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.blockstates.Condition;
+import net.minecraft.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.PropertyDispatch;
+import net.minecraft.data.models.blockstates.Variant;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -63,295 +74,396 @@ public class GWModelProvider extends FabricModelProvider {
 	}
 
 	@Override
-	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		blockStateModelGenerator.registerItemModel(GWObjects.SECATEURS.get());
+	public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
+		blockStateModelGenerator.createSimpleFlatItemModel(GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerStump(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(block, "_top")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top")));
 		});
 		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerStump(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(block, "_top")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top")));
 		});
 		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerCarvedLog(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
-							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")));
 		});
 		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerCarvedLog(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
-							.put(TextureKey.INSIDE, TextureMap.getSubId(block, "_inside")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")));
 		});
 		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerBeamBlock(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_2x2")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_4x4")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_6x6")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_8x8")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_10x10")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_12x12")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_14x14")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_2x2")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_4x4")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_6x6")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_8x8")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_10x10")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_12x12")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_14x14")));
 		});
 		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerBeamBlock(blockStateModelGenerator, block,
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_2x2")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_4x4")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_6x6")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_8x8")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_10x10")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_12x12")),
-					new TextureMap().put(TextureKey.SIDE, TextureMap.getId(log)).put(TextureKey.TOP, TextureMap.getSubId(block, "_top_14x14")));
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_2x2")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_4x4")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_6x6")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_8x8")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_10x10")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_12x12")),
+					new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_14x14")));
 		});
 		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerHollowLog(blockStateModelGenerator, block,
-					new TextureMap()
-							.put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
-							.put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log))));
+					new TextureMapping()
+							.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerHollowLog(blockStateModelGenerator, block,
-					new TextureMap()
-							.put(TextureKey.SIDE, TextureMap.getId(log))
-							.put(TextureKey.TOP, TextureMap.getSubId(log, "_top"))
-							.put(TextureKey.INSIDE, TextureMap.getId(GWUtils.getStrippedBlockOrSelf(log))));
+					new TextureMapping()
+							.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+							.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+							.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
+		});
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			registerSupportBlock(blockStateModelGenerator, block,
+					new TextureMapping()
+							.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
+							.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side")));
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			ResourceLocation id = regEntry.getId();
+			String basePath = id.getPath().replace("_shutter", "_support");
+			ResourceLocation endId = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + basePath + "_end");
+			ResourceLocation sideId = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + basePath + "_side");
+			registerShutterBlock(blockStateModelGenerator, block,
+					new TextureMapping()
+							.put(TextureSlot.END, endId)
+							.put(TextureSlot.SIDE, sideId));
 		});
 
 		registerStump(blockStateModelGenerator, GWObjects.MUSHROOM_STUMP.get(),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
-						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
+						.put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")));
 
 		registerCarvedLog(blockStateModelGenerator, GWObjects.CARVED_MUSHROOM_STEM.get(),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
-						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
-						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside"))
-						.put(TextureKey.INSIDE, TextureMap.getSubId(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")));
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
+						.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
+						.put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))
+						.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")));
 
 		registerBeamBlock(blockStateModelGenerator, GWObjects.MUSHROOM_BEAM.get(),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")),
-				new TextureMap().put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM)).put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")),
+				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")));
 
 		registerHollowLog(blockStateModelGenerator, GWObjects.HOLLOW_MUSHROOM_STEM.get(),
-				new TextureMap()
-						.put(TextureKey.SIDE, TextureMap.getId(Blocks.MUSHROOM_STEM))
-						.put(TextureKey.TOP, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside"))
-						.put(TextureKey.INSIDE, ModelIds.getMinecraftNamespacedBlock("mushroom_block_inside")));
+				new TextureMapping()
+						.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
+						.put(TextureSlot.TOP, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))
+						.put(TextureSlot.INSIDE, ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")));
 	}
 
 	@Override
-	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-
+	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			var block = regEntry.get();
+			var tm = new TextureMapping()
+					.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
+					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side"));
+			ResourceLocation inventory = SUPPORT_INVENTORY.createWithSuffix(block, "_inventory", tm, itemModelGenerator.output);
+			ResourceLocation uInventory = SUPPORT_INVENTORY_UPSIDE_DOWN.createWithSuffix(block, "_inventory_upside_down", tm, itemModelGenerator.output);
+			generateSupportItem(itemModelGenerator, block, inventory, uInventory);
+		});
 	}
 
-	private static final Model STUMP = new Model(
+	private static final ModelTemplate STUMP = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_stump")),
 			Optional.empty(),
-			TextureKey.TOP, TextureKey.SIDE);
+			TextureSlot.TOP, TextureSlot.SIDE);
 
-	private static final Model CARVED_LOG_MIDDLE = new Model(
+	private static final ModelTemplate CARVED_LOG_MIDDLE = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_carved_log_middle")),
 			Optional.of("_middle"),
-			TextureKey.SIDE, TextureKey.INSIDE);
+			TextureSlot.SIDE, TextureSlot.INSIDE);
 
-	private static final Model CARVED_LOG_LEFT = new Model(
+	private static final ModelTemplate CARVED_LOG_LEFT = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_carved_log_left")),
 			Optional.of("_left"),
-			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
+			TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.INSIDE);
 
-	private static final Model CARVED_LOG_RIGHT = new Model(
+	private static final ModelTemplate CARVED_LOG_RIGHT = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_carved_log_right")),
 			Optional.of("_right"),
-			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
+			TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.INSIDE);
 
-	private static final Model CARVED_LOG_SINGLE = new Model(
+	private static final ModelTemplate CARVED_LOG_SINGLE = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_carved_log_single")),
 			Optional.of("_single"),
-			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
+			TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.INSIDE);
 
-	private static final Model BEAM_SIDE_INVENTORY = new Model(
+	private static final ModelTemplate BEAM_SIDE_INVENTORY = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/template_beam_inventory")),
 			Optional.empty(),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_CORE_2X2 = new Model(
+	private static final ModelTemplate BEAM_CORE_2X2 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_2x2")),
 			Optional.of("_core_2x2"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_4X4 = new Model(
+	private static final ModelTemplate BEAM_CORE_4X4 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_4x4")),
 			Optional.of("_core_4x4"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_6X6 = new Model(
+	private static final ModelTemplate BEAM_CORE_6X6 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_6x6")),
 			Optional.of("_core_6x6"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_8X8 = new Model(
+	private static final ModelTemplate BEAM_CORE_8X8 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_8x8")),
 			Optional.of("_core_8x8"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_10X10 = new Model(
+	private static final ModelTemplate BEAM_CORE_10X10 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_10x10")),
 			Optional.of("_core_10x10"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_12X12 = new Model(
+	private static final ModelTemplate BEAM_CORE_12X12 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_12x12")),
 			Optional.of("_core_12x12"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_CORE_14X14 = new Model(
+	private static final ModelTemplate BEAM_CORE_14X14 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/cores/template_beam_core_14x14")),
 			Optional.of("_core_14x14"),
-			TextureKey.SIDE);
+			TextureSlot.SIDE);
 
-	private static final Model BEAM_SIDE_UP_2X2 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_2X2 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_2x2")),
 			Optional.of("_side_2x2"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_4X4 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_4X4 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_4x4")),
 			Optional.of("_side_4x4"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_6X6 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_6X6 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_6x6")),
 			Optional.of("_side_6x6"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_8X8 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_8X8 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_8x8")),
 			Optional.of("_side_8x8"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_10X10 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_10X10 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_10x10")),
 			Optional.of("_side_10x10"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_12X12 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_12X12 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_12x12")),
 			Optional.of("_side_12x12"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_UP_14X14 = new Model(
+	private static final ModelTemplate BEAM_SIDE_UP_14X14 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_up/template_beam_side_14x14")),
 			Optional.of("_side_14x14"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_2X2 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_2X2 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_2x2")),
 			Optional.of("_side_2x2"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_4X4 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_4X4 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_4x4")),
 			Optional.of("_side_4x4"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_6X6 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_6X6 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_6x6")),
 			Optional.of("_side_6x6"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_8X8 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_8X8 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_8x8")),
 			Optional.of("_side_8x8"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_10X10 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_10X10 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_10x10")),
 			Optional.of("_side_10x10"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_12X12 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_12X12 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_12x12")),
 			Optional.of("_side_12x12"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model BEAM_SIDE_DOWN_14X14 = new Model(
+	private static final ModelTemplate BEAM_SIDE_DOWN_14X14 = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/beams/sides_down/template_beam_side_14x14")),
 			Optional.of("_side_14x14"),
-			TextureKey.SIDE, TextureKey.TOP);
+			TextureSlot.SIDE, TextureSlot.TOP);
 
-	private static final Model HOLLOW_LOG = new Model(
+	private static final ModelTemplate HOLLOW_LOG = new ModelTemplate(
 			Optional.of(GuitaWoodworks.id("block/template_hollow_log")),
 			Optional.empty(),
-			TextureKey.SIDE, TextureKey.TOP, TextureKey.INSIDE);
+			TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.INSIDE);
 
-	private void registerStump(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tm) {
-		Identifier identifier = STUMP.upload(block, tm, blockStateModelGenerator.modelCollector);
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block, BlockStateVariant.create().put(VariantSettings.MODEL, identifier)));
-		blockStateModelGenerator.registerParentedItemModel(block, identifier);
+	private static final ModelTemplate SUPPORT_HORIZONTAL_BIG = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_big")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_SMALL = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_small")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_INVENTORY = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_inventory")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_POST = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_post")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_BIG = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_big")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_SMALL = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_small")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_BIG_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_big_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_HORIZONTAL_SMALL_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_horizontal_small_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_INVENTORY_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_inventory_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_POST_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_post_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_BIG_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_big_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SUPPORT_VERTICAL_SMALL_UPSIDE_DOWN = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_support_vertical_small_upside_down")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_LEFT = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_left")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_RIGHT = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_right")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private static final ModelTemplate SHUTTER_INVENTORY = new ModelTemplate(
+			Optional.of(GuitaWoodworks.id("block/template_shutter_inventory")),
+			Optional.empty(),
+			TextureSlot.END, TextureSlot.SIDE);
+
+	private void registerStump(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		ResourceLocation identifier = STUMP.create(block, tm, blockStateModelGenerator.modelOutput);
+		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, identifier)));
+		blockStateModelGenerator.delegateItemModel(block, identifier);
 	}
 
-	private void registerCarvedLog(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tmMiddle, TextureMap tmCommon) {
-		Identifier middleModel = CARVED_LOG_MIDDLE.upload(block, tmMiddle, blockStateModelGenerator.modelCollector);
-		Identifier leftModel = CARVED_LOG_LEFT.upload(block, tmCommon, blockStateModelGenerator.modelCollector);
-		Identifier rightModel = CARVED_LOG_RIGHT.upload(block, tmCommon, blockStateModelGenerator.modelCollector);
-		Identifier singleModel = CARVED_LOG_SINGLE.upload(block, tmCommon, blockStateModelGenerator.modelCollector);
-		Map<NoCornerModularSeatProperty, Identifier> modelMap = Map.of(
+	private void registerCarvedLog(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tmMiddle, TextureMapping tmCommon) {
+		ResourceLocation middleModel = CARVED_LOG_MIDDLE.create(block, tmMiddle, blockStateModelGenerator.modelOutput);
+		ResourceLocation leftModel = CARVED_LOG_LEFT.create(block, tmCommon, blockStateModelGenerator.modelOutput);
+		ResourceLocation rightModel = CARVED_LOG_RIGHT.create(block, tmCommon, blockStateModelGenerator.modelOutput);
+		ResourceLocation singleModel = CARVED_LOG_SINGLE.create(block, tmCommon, blockStateModelGenerator.modelOutput);
+		Map<NoCornerModularSeatProperty, ResourceLocation> modelMap = Map.of(
 				NoCornerModularSeatProperty.SINGLE, singleModel,
 				NoCornerModularSeatProperty.LEFT, leftModel,
 				NoCornerModularSeatProperty.MIDDLE, middleModel,
 				NoCornerModularSeatProperty.RIGHT, rightModel
 		);
 
-		BlockStateVariantMap.DoubleProperty<NoCornerModularSeatProperty, Direction> map = BlockStateVariantMap.create(NoCornerModularSeatBlock.SHAPE, NoCornerModularSeatBlock.FACING);
+		PropertyDispatch.C2<NoCornerModularSeatProperty, Direction> map = PropertyDispatch.properties(NoCornerModularSeatBlock.SHAPE, NoCornerModularSeatBlock.FACING);
 		for (var entry : modelMap.entrySet()) {
 			var shape = entry.getKey();
 			var model = entry.getValue();
-			map.register(shape, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, model))
-					.register(shape, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-					.register(shape, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R180))
-					.register(shape, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.Y, VariantSettings.Rotation.R270));
+			map.select(shape, Direction.NORTH, Variant.variant().with(VariantProperties.MODEL, model))
+					.select(shape, Direction.EAST, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+					.select(shape, Direction.SOUTH, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+					.select(shape, Direction.WEST, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270));
 		}
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(map));
-		blockStateModelGenerator.registerParentedItemModel(block, singleModel);
+		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(map));
+		blockStateModelGenerator.delegateItemModel(block, singleModel);
 	}
 
-	private void registerBeamBlock(BlockStateModelGenerator blockStateModelGenerator, Block block,
-								   TextureMap tmCore, TextureMap tmSide2x2, TextureMap tmSide4x4, TextureMap tmSide6x6,
-								   TextureMap tmSide8x8, TextureMap tmSide10x10, TextureMap tmSide12x12, TextureMap tmSide14x14) {
-		Map<Integer, TextureMap> textureMapSideMap = Map.of(
+	private void registerBeamBlock(BlockModelGenerators blockStateModelGenerator, Block block,
+								   TextureMapping tmCore, TextureMapping tmSide2x2, TextureMapping tmSide4x4, TextureMapping tmSide6x6,
+								   TextureMapping tmSide8x8, TextureMapping tmSide10x10, TextureMapping tmSide12x12, TextureMapping tmSide14x14) {
+		Map<Integer, TextureMapping> textureMapSideMap = Map.of(
 				1, tmSide2x2,
 				2, tmSide4x4,
 				3, tmSide6x6,
@@ -360,14 +472,14 @@ public class GWModelProvider extends FabricModelProvider {
 				6, tmSide12x12,
 				7, tmSide14x14
 		);
-		Identifier coreModel2 = BEAM_CORE_2X2.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel4 = BEAM_CORE_4X4.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel6 = BEAM_CORE_6X6.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel8 = BEAM_CORE_8X8.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel10 = BEAM_CORE_10X10.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel12 = BEAM_CORE_12X12.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Identifier coreModel14 = BEAM_CORE_14X14.upload(block, tmCore, blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> coreModelMap = Map.of(
+		ResourceLocation coreModel2 = BEAM_CORE_2X2.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel4 = BEAM_CORE_4X4.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel6 = BEAM_CORE_6X6.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel8 = BEAM_CORE_8X8.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel10 = BEAM_CORE_10X10.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel12 = BEAM_CORE_12X12.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		ResourceLocation coreModel14 = BEAM_CORE_14X14.create(block, tmCore, blockStateModelGenerator.modelOutput);
+		Map<Integer, ResourceLocation> coreModelMap = Map.of(
 				1, coreModel2,
 				2, coreModel4,
 				3, coreModel6,
@@ -376,14 +488,14 @@ public class GWModelProvider extends FabricModelProvider {
 				6, coreModel12,
 				7, coreModel14
 		);
-		Identifier sideUpModel2 = BEAM_SIDE_UP_2X2.upload(block, "_up", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel4 = BEAM_SIDE_UP_4X4.upload(block, "_up", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel6 = BEAM_SIDE_UP_6X6.upload(block, "_up", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel8 = BEAM_SIDE_UP_8X8.upload(block, "_up", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel10 = BEAM_SIDE_UP_10X10.upload(block, "_up", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel12 = BEAM_SIDE_UP_12X12.upload(block, "_up", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector);
-		Identifier sideUpModel14 = BEAM_SIDE_UP_14X14.upload(block, "_up", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> sideUpModelMap = Map.of(
+		ResourceLocation sideUpModel2 = BEAM_SIDE_UP_2X2.createWithSuffix(block, "_up", textureMapSideMap.get(1), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel4 = BEAM_SIDE_UP_4X4.createWithSuffix(block, "_up", textureMapSideMap.get(2), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel6 = BEAM_SIDE_UP_6X6.createWithSuffix(block, "_up", textureMapSideMap.get(3), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel8 = BEAM_SIDE_UP_8X8.createWithSuffix(block, "_up", textureMapSideMap.get(4), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel10 = BEAM_SIDE_UP_10X10.createWithSuffix(block, "_up", textureMapSideMap.get(5), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel12 = BEAM_SIDE_UP_12X12.createWithSuffix(block, "_up", textureMapSideMap.get(6), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideUpModel14 = BEAM_SIDE_UP_14X14.createWithSuffix(block, "_up", textureMapSideMap.get(7), blockStateModelGenerator.modelOutput);
+		Map<Integer, ResourceLocation> sideUpModelMap = Map.of(
 				1, sideUpModel2,
 				2, sideUpModel4,
 				3, sideUpModel6,
@@ -393,14 +505,14 @@ public class GWModelProvider extends FabricModelProvider {
 				7, sideUpModel14
 		);
 
-		Identifier sideDownModel2 = BEAM_SIDE_DOWN_2X2.upload(block, "_down", textureMapSideMap.get(1), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel4 = BEAM_SIDE_DOWN_4X4.upload(block, "_down", textureMapSideMap.get(2), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel6 = BEAM_SIDE_DOWN_6X6.upload(block, "_down", textureMapSideMap.get(3), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel8 = BEAM_SIDE_DOWN_8X8.upload(block, "_down", textureMapSideMap.get(4), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel10 = BEAM_SIDE_DOWN_10X10.upload(block, "_down", textureMapSideMap.get(5), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel12 = BEAM_SIDE_DOWN_12X12.upload(block, "_down", textureMapSideMap.get(6), blockStateModelGenerator.modelCollector);
-		Identifier sideDownModel14 = BEAM_SIDE_DOWN_14X14.upload(block, "_down", textureMapSideMap.get(7), blockStateModelGenerator.modelCollector);
-		Map<Integer, Identifier> sideDownModelMap = Map.of(
+		ResourceLocation sideDownModel2 = BEAM_SIDE_DOWN_2X2.createWithSuffix(block, "_down", textureMapSideMap.get(1), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel4 = BEAM_SIDE_DOWN_4X4.createWithSuffix(block, "_down", textureMapSideMap.get(2), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel6 = BEAM_SIDE_DOWN_6X6.createWithSuffix(block, "_down", textureMapSideMap.get(3), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel8 = BEAM_SIDE_DOWN_8X8.createWithSuffix(block, "_down", textureMapSideMap.get(4), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel10 = BEAM_SIDE_DOWN_10X10.createWithSuffix(block, "_down", textureMapSideMap.get(5), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel12 = BEAM_SIDE_DOWN_12X12.createWithSuffix(block, "_down", textureMapSideMap.get(6), blockStateModelGenerator.modelOutput);
+		ResourceLocation sideDownModel14 = BEAM_SIDE_DOWN_14X14.createWithSuffix(block, "_down", textureMapSideMap.get(7), blockStateModelGenerator.modelOutput);
+		Map<Integer, ResourceLocation> sideDownModelMap = Map.of(
 				1, sideDownModel2,
 				2, sideDownModel4,
 				3, sideDownModel6,
@@ -410,130 +522,341 @@ public class GWModelProvider extends FabricModelProvider {
 				7, sideDownModel14
 		);
 
-		MultipartBlockStateSupplier blockStateSupplier = MultipartBlockStateSupplier.create(block);
+		MultiPartGenerator blockStateSupplier = MultiPartGenerator.multiPart(block);
 
-		IntProperty radiusProp = ResizableBeamBlock.RADIUS;
-		Map<Direction, BooleanProperty> facingProperties = ResizableBeamBlock.FACING_PROPERTIES;
-		for (int size : radiusProp.getValues()) {
+		IntegerProperty radiusProp = ResizableBeamBlock.RADIUS;
+		Map<Direction, BooleanProperty> facingProperties = ResizableBeamBlock.PROPERTY_BY_DIRECTION;
+		for (int size : radiusProp.getPossibleValues()) {
 			generateRotatedCoreModels(blockStateSupplier, coreModelMap, size);
 			for (Direction dir : Direction.values()) {
 				BooleanProperty sideProp = facingProperties.get(dir);
-				blockStateSupplier.with(When.create().set(radiusProp, size).set(sideProp, true), rotateBeamModel(BlockStateVariant.create().put(VariantSettings.MODEL, getSidedModel(sideUpModelMap.get(size), sideDownModelMap.get(size), dir)), dir));
+				blockStateSupplier.with(Condition.condition().term(radiusProp, size).term(sideProp, true), rotateBeamModel(Variant.variant().with(VariantProperties.MODEL, getSidedModel(sideUpModelMap.get(size), sideDownModelMap.get(size), dir)), dir));
 			}
 		}
 
-		blockStateModelGenerator.blockStateCollector.accept(blockStateSupplier);
+		blockStateModelGenerator.blockStateOutput.accept(blockStateSupplier);
 
-		Identifier inventoryModel = BEAM_SIDE_INVENTORY.upload(block, tmSide8x8, blockStateModelGenerator.modelCollector);
-		blockStateModelGenerator.registerParentedItemModel(block, inventoryModel);
+		ResourceLocation inventoryModel = BEAM_SIDE_INVENTORY.create(block, tmSide8x8, blockStateModelGenerator.modelOutput);
+		blockStateModelGenerator.delegateItemModel(block, inventoryModel);
 	}
 
-	private void registerHollowLog(BlockStateModelGenerator blockStateModelGenerator, Block block, TextureMap tm) {
-		Identifier model = HOLLOW_LOG.upload(block, tm, blockStateModelGenerator.modelCollector);
+	private void registerHollowLog(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		ResourceLocation model = HOLLOW_LOG.create(block, tm, blockStateModelGenerator.modelOutput);
 
-		blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).coordinate(
-				BlockStateVariantMap.create(HollowLogBlock.AXIS)
-						.register(Direction.Axis.X, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90))
-						.register(Direction.Axis.Y, BlockStateVariant.create().put(VariantSettings.MODEL, model))
-						.register(Direction.Axis.Z, BlockStateVariant.create().put(VariantSettings.MODEL, model).put(VariantSettings.X, VariantSettings.Rotation.R90))
+		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(
+				PropertyDispatch.property(HollowLogBlock.AXIS)
+						.select(Direction.Axis.X, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+						.select(Direction.Axis.Y, Variant.variant().with(VariantProperties.MODEL, model))
+						.select(Direction.Axis.Z, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
 		));
-		blockStateModelGenerator.registerParentedItemModel(block, model);
+		blockStateModelGenerator.delegateItemModel(block, model);
 	}
 
-	private void generateRotatedCoreModels(MultipartBlockStateSupplier blockStateSupplier, Map<Integer, Identifier> coreModelMap, int size) {
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.anyOf(
-						When.create().setNegated(ResizableBeamBlock.UP, true),
-						When.create().setNegated(ResizableBeamBlock.DOWN, true),
-						When.create().setNegated(ResizableBeamBlock.NORTH, true),
-						When.create().setNegated(ResizableBeamBlock.SOUTH, true),
-						When.create().setNegated(ResizableBeamBlock.EAST, true),
-						When.create().setNegated(ResizableBeamBlock.WEST, true)
+	private void registerSupportBlock(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		Map<SupportType, Pair<ResourceLocation, ResourceLocation>> supportModels = new EnumMap<>(SupportType.class);
+
+		supportModels.put(SupportType.HORIZONTAL_BIG, Pair.of(
+				SUPPORT_HORIZONTAL_BIG.createWithSuffix(block, "_horizontal_big", tm, blockStateModelGenerator.modelOutput),
+				SUPPORT_HORIZONTAL_BIG_UPSIDE_DOWN.createWithSuffix(block, "_horizontal_big_upside_down", tm, blockStateModelGenerator.modelOutput)
+		));
+		supportModels.put(SupportType.HORIZONTAL_SMALL, Pair.of(
+				SUPPORT_HORIZONTAL_SMALL.createWithSuffix(block, "_horizontal_small", tm, blockStateModelGenerator.modelOutput),
+				SUPPORT_HORIZONTAL_SMALL_UPSIDE_DOWN.createWithSuffix(block, "_horizontal_small_upside_down", tm, blockStateModelGenerator.modelOutput)
+		));
+		supportModels.put(SupportType.POST, Pair.of(
+				SUPPORT_POST.createWithSuffix(block, "_post", tm, blockStateModelGenerator.modelOutput),
+				SUPPORT_POST_UPSIDE_DOWN.createWithSuffix(block, "_post_upside_down", tm, blockStateModelGenerator.modelOutput)
+		));
+		supportModels.put(SupportType.VERTICAL_BIG, Pair.of(
+				SUPPORT_VERTICAL_BIG.createWithSuffix(block, "_vertical_big", tm, blockStateModelGenerator.modelOutput),
+				SUPPORT_VERTICAL_BIG_UPSIDE_DOWN.createWithSuffix(block, "_vertical_big_upside_down", tm, blockStateModelGenerator.modelOutput)
+		));
+		supportModels.put(SupportType.VERTICAL_SMALL, Pair.of(
+				SUPPORT_VERTICAL_SMALL.createWithSuffix(block, "_vertical_small", tm, blockStateModelGenerator.modelOutput),
+				SUPPORT_VERTICAL_SMALL_UPSIDE_DOWN.createWithSuffix(block, "_vertical_small_upside_down", tm, blockStateModelGenerator.modelOutput)
+		));
+
+		MultiPartGenerator blockStateSupplier = MultiPartGenerator.multiPart(block);
+
+		for (Direction dir : Direction.Plane.HORIZONTAL) {
+			for (SupportFaceShapeProperty hProperty : SupportFaceShapeProperty.values()) {
+				for (SupportFaceShapeProperty vProperty : SupportFaceShapeProperty.values()) {
+					boolean hVisible = hProperty != SupportFaceShapeProperty.HIDDEN;
+					boolean vVisible = vProperty != SupportFaceShapeProperty.HIDDEN;
+
+					if (hVisible && vVisible) {
+						for (boolean isUp : new boolean[]{true, false}) {
+							blockStateSupplier.with(
+									Condition.condition()
+											.term(SupportBlock.UP, isUp)
+											.term(SupportBlock.FACING, dir)
+											.term(SupportBlock.HORIZONTAL_SHAPE, hProperty)
+											.term(SupportBlock.VERTICAL_SHAPE, vProperty),
+									rotateSupportModelVariant(
+											Variant.variant().with(VariantProperties.MODEL,
+													isUp ? supportModels.get(SupportType.POST).getFirst()
+															: supportModels.get(SupportType.POST).getSecond()),
+											dir
+									)
+							);
+						}
+					}
+				}
+			}
+
+			for (SupportFaceShapeProperty property : SupportFaceShapeProperty.values()) {
+				processShapeVariant(blockStateSupplier, supportModels, dir, property,
+						SupportBlock.HORIZONTAL_SHAPE, this::horizontalSupportType);
+
+				processShapeVariant(blockStateSupplier, supportModels, dir, property,
+						SupportBlock.VERTICAL_SHAPE, this::verticalSupportType);
+			}
+		}
+
+		blockStateModelGenerator.blockStateOutput.accept(blockStateSupplier);
+	}
+
+	private void registerShutterBlock(BlockModelGenerators blockStateModelGenerator, Block block, TextureMapping tm) {
+		ResourceLocation leftModel = SHUTTER_LEFT.createWithSuffix(block, "_left", tm, blockStateModelGenerator.modelOutput);
+		ResourceLocation rightModel = SHUTTER_RIGHT.createWithSuffix(block, "_right", tm, blockStateModelGenerator.modelOutput);
+
+		PropertyDispatch.C3<Boolean, Direction, DoorHingeSide> dispatch = PropertyDispatch.properties(
+				ShutterBlock.OPEN,
+				ShutterBlock.FACING,
+				ShutterBlock.SIDE
+		);
+
+		for (Boolean open : new Boolean[]{false, true}) {
+			for (DoorHingeSide side : DoorHingeSide.values()) {
+				for (Direction dir : Direction.Plane.HORIZONTAL) {
+					dispatch.select(open, dir, side, rotateShutterBlock(dir, open, side, leftModel, rightModel));
+				}
+			}
+		}
+
+		ResourceLocation inventory = SHUTTER_INVENTORY.createWithSuffix(block, "_inventory", tm, blockStateModelGenerator.modelOutput);
+		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(dispatch));
+		blockStateModelGenerator.delegateItemModel(block, inventory);
+	}
+
+	private enum SupportType {
+		HORIZONTAL_BIG,
+		HORIZONTAL_SMALL,
+		POST,
+		VERTICAL_BIG,
+		VERTICAL_SMALL,
+		NONE
+	}
+
+	private void generateRotatedCoreModels(MultiPartGenerator blockStateSupplier, Map<Integer, ResourceLocation> coreModelMap, int size) {
+		blockStateSupplier.with(Condition.and(
+				Condition.condition().term(ResizableBeamBlock.RADIUS, size),
+				Condition.or(
+						Condition.condition().negatedTerm(ResizableBeamBlock.UP, true),
+						Condition.condition().negatedTerm(ResizableBeamBlock.DOWN, true),
+						Condition.condition().negatedTerm(ResizableBeamBlock.NORTH, true),
+						Condition.condition().negatedTerm(ResizableBeamBlock.SOUTH, true),
+						Condition.condition().negatedTerm(ResizableBeamBlock.EAST, true),
+						Condition.condition().negatedTerm(ResizableBeamBlock.WEST, true)
 				),
-				When.anyOf(
-						When.create().set(ResizableBeamBlock.UP, true),
-						When.create().set(ResizableBeamBlock.DOWN, true),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.create().set(ResizableBeamBlock.NORTH, false),
-								When.create().set(ResizableBeamBlock.SOUTH, false),
-								When.create().set(ResizableBeamBlock.EAST, false),
-								When.create().set(ResizableBeamBlock.WEST, false)
+				Condition.or(
+						Condition.condition().term(ResizableBeamBlock.UP, true),
+						Condition.condition().term(ResizableBeamBlock.DOWN, true),
+						Condition.and(
+								Condition.condition().term(ResizableBeamBlock.UP, false),
+								Condition.condition().term(ResizableBeamBlock.DOWN, false),
+								Condition.condition().term(ResizableBeamBlock.NORTH, false),
+								Condition.condition().term(ResizableBeamBlock.SOUTH, false),
+								Condition.condition().term(ResizableBeamBlock.EAST, false),
+								Condition.condition().term(ResizableBeamBlock.WEST, false)
 						),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.anyOf(
-										When.create().set(ResizableBeamBlock.NORTH, false),
-										When.create().set(ResizableBeamBlock.SOUTH, false)
+						Condition.and(
+								Condition.condition().term(ResizableBeamBlock.UP, false),
+								Condition.condition().term(ResizableBeamBlock.DOWN, false),
+								Condition.or(
+										Condition.condition().term(ResizableBeamBlock.NORTH, false),
+										Condition.condition().term(ResizableBeamBlock.SOUTH, false)
 								),
-								When.anyOf(
-										When.create().set(ResizableBeamBlock.WEST, false),
-										When.create().set(ResizableBeamBlock.EAST, false)
+								Condition.or(
+										Condition.condition().term(ResizableBeamBlock.WEST, false),
+										Condition.condition().term(ResizableBeamBlock.EAST, false)
 								)
 						),
-						When.allOf(
-								When.create().set(ResizableBeamBlock.UP, false),
-								When.create().set(ResizableBeamBlock.DOWN, false),
-								When.create().set(ResizableBeamBlock.NORTH, true),
-								When.create().set(ResizableBeamBlock.SOUTH, true),
-								When.create().set(ResizableBeamBlock.EAST, true),
-								When.create().set(ResizableBeamBlock.WEST, true)
+						Condition.and(
+								Condition.condition().term(ResizableBeamBlock.UP, false),
+								Condition.condition().term(ResizableBeamBlock.DOWN, false),
+								Condition.condition().term(ResizableBeamBlock.NORTH, true),
+								Condition.condition().term(ResizableBeamBlock.SOUTH, true),
+								Condition.condition().term(ResizableBeamBlock.EAST, true),
+								Condition.condition().term(ResizableBeamBlock.WEST, true)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)));
+		), Variant.variant().with(VariantProperties.MODEL, coreModelMap.get(size)));
 
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.create().set(ResizableBeamBlock.UP, false),
-				When.create().set(ResizableBeamBlock.DOWN, false),
-				When.allOf(
-						When.allOf(
-								When.create().set(ResizableBeamBlock.NORTH, true),
-								When.create().set(ResizableBeamBlock.SOUTH, true)
+		blockStateSupplier.with(Condition.and(
+				Condition.condition().term(ResizableBeamBlock.RADIUS, size),
+				Condition.condition().term(ResizableBeamBlock.UP, false),
+				Condition.condition().term(ResizableBeamBlock.DOWN, false),
+				Condition.and(
+						Condition.and(
+								Condition.condition().term(ResizableBeamBlock.NORTH, true),
+								Condition.condition().term(ResizableBeamBlock.SOUTH, true)
 						),
-						When.anyOf(
-								When.create().set(ResizableBeamBlock.EAST, false),
-								When.create().set(ResizableBeamBlock.WEST, false)
+						Condition.or(
+								Condition.condition().term(ResizableBeamBlock.EAST, false),
+								Condition.condition().term(ResizableBeamBlock.WEST, false)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90));
+		), Variant.variant().with(VariantProperties.MODEL, coreModelMap.get(size)).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90));
 
-		blockStateSupplier.with(When.allOf(
-				When.create().set(ResizableBeamBlock.RADIUS, size),
-				When.create().set(ResizableBeamBlock.UP, false),
-				When.create().set(ResizableBeamBlock.DOWN, false),
-				When.allOf(
-						When.allOf(
-								When.create().set(ResizableBeamBlock.EAST, true),
-								When.create().set(ResizableBeamBlock.WEST, true)
+		blockStateSupplier.with(Condition.and(
+				Condition.condition().term(ResizableBeamBlock.RADIUS, size),
+				Condition.condition().term(ResizableBeamBlock.UP, false),
+				Condition.condition().term(ResizableBeamBlock.DOWN, false),
+				Condition.and(
+						Condition.and(
+								Condition.condition().term(ResizableBeamBlock.EAST, true),
+								Condition.condition().term(ResizableBeamBlock.WEST, true)
 						),
-						When.anyOf(
-								When.create().set(ResizableBeamBlock.NORTH, false),
-								When.create().set(ResizableBeamBlock.SOUTH, false)
+						Condition.or(
+								Condition.condition().term(ResizableBeamBlock.NORTH, false),
+								Condition.condition().term(ResizableBeamBlock.SOUTH, false)
 						)
 				)
-		), BlockStateVariant.create().put(VariantSettings.MODEL, coreModelMap.get(size)).put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90));
+		), Variant.variant().with(VariantProperties.MODEL, coreModelMap.get(size)).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90));
 	}
 
-	private Identifier getSidedModel(Identifier sideUp, Identifier sideDown, Direction dir) {
+	private ResourceLocation getSidedModel(ResourceLocation sideUp, ResourceLocation sideDown, Direction dir) {
 		return switch (dir) {
 			case UP, NORTH, EAST -> sideUp;
 			case DOWN, SOUTH, WEST -> sideDown;
 		};
 	}
 
-	private BlockStateVariant rotateBeamModel(BlockStateVariant blockStateVariant, Direction dir) {
+	private Variant rotateBeamModel(Variant blockStateVariant, Direction dir) {
 		switch (dir) {
-			case EAST -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R90);
-			case SOUTH -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R180);
-			case WEST -> blockStateVariant.put(VariantSettings.Y, VariantSettings.Rotation.R270);
-			case UP -> blockStateVariant.put(VariantSettings.X, VariantSettings.Rotation.R270);
-			case DOWN -> blockStateVariant.put(VariantSettings.X, VariantSettings.Rotation.R90);
+			case EAST -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90);
+			case SOUTH -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180);
+			case WEST -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270);
+			case UP -> blockStateVariant.with(VariantProperties.X_ROT, VariantProperties.Rotation.R270);
+			case DOWN -> blockStateVariant.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
 		}
 
 		return blockStateVariant;
 	}
+
+	private void processShapeVariant(
+			MultiPartGenerator blockStateSupplier,
+			Map<SupportType, Pair<ResourceLocation, ResourceLocation>> supportModels,
+			Direction dir,
+			SupportFaceShapeProperty property,
+			Property<SupportFaceShapeProperty> shapeProperty,
+			BiFunction<SupportFaceShapeProperty, Boolean, SupportType> supportTypeFunc
+	) {
+
+		for (boolean isUp : new boolean[]{true, false}) {
+			SupportType type = supportTypeFunc.apply(property, isUp);
+
+			if (type != SupportType.NONE && property != SupportFaceShapeProperty.HIDDEN) {
+				blockStateSupplier.with(
+						Condition.condition()
+								.term(SupportBlock.UP, isUp)
+								.term(SupportBlock.FACING, dir)
+								.term(shapeProperty, property),
+						rotateSupportModelVariant(
+								Variant.variant().with(VariantProperties.MODEL,
+										isUp ? supportModels.get(type).getFirst()
+												: supportModels.get(type).getSecond()),
+								dir
+						)
+				);
+			}
+		}
+	}
+
+	private Variant rotateSupportModelVariant(Variant blockStateVariant, Direction dir) {
+		switch (dir) {
+			case SOUTH -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180);
+			case EAST -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90);
+			case WEST -> blockStateVariant.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270);
+		}
+
+		return blockStateVariant;
+	}
+
+	private SupportType horizontalSupportType(SupportFaceShapeProperty prop, boolean up) {
+		return switch (prop) {
+			case BIG -> SupportType.HORIZONTAL_BIG;
+			case SMALL -> SupportType.HORIZONTAL_SMALL;
+			case HIDDEN -> SupportType.NONE;
+		};
+	}
+
+	private SupportType verticalSupportType(SupportFaceShapeProperty prop, boolean up) {
+		return switch (prop) {
+			case BIG -> SupportType.VERTICAL_BIG;
+			case SMALL -> SupportType.VERTICAL_SMALL;
+			case HIDDEN -> SupportType.NONE;
+		};
+	}
+
+	private void generateSupportItem(ItemModelGenerators itemModelGenerator, Block block, ResourceLocation blockModelParent, ResourceLocation upsideDownBlockModel) {
+		itemModelGenerator.output.accept(
+				ModelLocationUtils.getModelLocation(block.asItem()),
+				() -> {
+					JsonObject json = new JsonObject();
+					json.addProperty("parent", blockModelParent.toString());
+
+					JsonArray overrides = new JsonArray();
+					JsonObject override = new JsonObject();
+
+					JsonObject predicate = new JsonObject();
+					predicate.addProperty(SupportBlockItem.OVERRIDE_TAG.toString(), 1.0);
+					override.add("predicate", predicate);
+					override.addProperty("model", upsideDownBlockModel.toString());
+
+					overrides.add(override);
+					json.add("overrides", overrides);
+
+					return json;
+				}
+		);
+	}
+
+	private Variant rotateShutterBlock(Direction dir, boolean open, DoorHingeSide side, ResourceLocation leftModel, ResourceLocation rightModel) {
+		Variant variant = Variant.variant();
+		VariantProperties.Rotation baseRotation = switch (dir) {
+			case NORTH -> VariantProperties.Rotation.R0;
+			case EAST -> VariantProperties.Rotation.R90;
+			case SOUTH -> VariantProperties.Rotation.R180;
+			case WEST -> VariantProperties.Rotation.R270;
+			default -> throw new IllegalStateException("Unexpected direction: " + dir);
+		};
+
+		VariantProperties.Rotation finalRotation = open
+				? switch (side) {
+			case LEFT -> switch (baseRotation) {
+				case R0 -> VariantProperties.Rotation.R270;
+				case R90 -> VariantProperties.Rotation.R0;
+				case R180 -> VariantProperties.Rotation.R90;
+				case R270 -> VariantProperties.Rotation.R180;
+			};
+			case RIGHT -> switch (baseRotation) {
+				case R0 -> VariantProperties.Rotation.R90;
+				case R90 -> VariantProperties.Rotation.R180;
+				case R180 -> VariantProperties.Rotation.R270;
+				case R270 -> VariantProperties.Rotation.R0;
+			};
+		}
+				: baseRotation;
+
+		ResourceLocation model = open
+				? (side == DoorHingeSide.LEFT ? rightModel : leftModel)
+				: (side == DoorHingeSide.LEFT ? leftModel : rightModel);
+
+		return variant
+				.with(VariantProperties.Y_ROT, finalRotation)
+				.with(VariantProperties.MODEL, model);
+	}
+
 }

@@ -32,56 +32,59 @@ import com.google.common.collect.Maps;
 import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ResizableBeamBlock extends Block implements Waterloggable {
+public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock {
 
 	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
 
 	private static final Direction[] FACINGS = Direction.values();
 
-	public static final BooleanProperty NORTH = Properties.NORTH;
-	public static final BooleanProperty EAST = Properties.EAST;
-	public static final BooleanProperty SOUTH = Properties.SOUTH;
-	public static final BooleanProperty WEST = Properties.WEST;
-	public static final BooleanProperty UP = Properties.UP;
-	public static final BooleanProperty DOWN = Properties.DOWN;
+	public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
+	public static final BooleanProperty EAST = BlockStateProperties.EAST;
+	public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
+	public static final BooleanProperty WEST = BlockStateProperties.WEST;
+	public static final BooleanProperty UP = BlockStateProperties.UP;
+	public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
 
-	public static final Map<Direction, BooleanProperty> FACING_PROPERTIES = ImmutableMap.copyOf(
+	@SuppressWarnings("NullableProblems")
+	public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = ImmutableMap.copyOf(
 			Util.make(Maps.newEnumMap(Direction.class), directions -> {
 				directions.put(Direction.NORTH, NORTH);
 				directions.put(Direction.EAST, EAST);
@@ -92,110 +95,127 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			})
 	);
 
-	public static final IntProperty RADIUS = IntProperty.of("radius", 1, 7);
-	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final IntegerProperty RADIUS = IntegerProperty.create("radius", 1, 7);
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	private final VoxelShape[][] radiusToFacingsShape;
 
 	private final boolean strippable;
 
-	public ResizableBeamBlock(Settings settings) {
+	public ResizableBeamBlock(Properties settings) {
 		this(settings, true);
 	}
 
-	public ResizableBeamBlock(Settings settings, boolean strippable) {
+	public ResizableBeamBlock(Properties settings, boolean strippable) {
 		super(settings);
 		this.radiusToFacingsShape = this.generateRadiusToFacingsShapeMap();
-		this.setDefaultState(this.getStateManager().getDefaultState()
-				.with(RADIUS, 4)
-				.with(NORTH, false)
-				.with(EAST, false)
-				.with(SOUTH, false)
-				.with(WEST, false)
-				.with(UP, false)
-				.with(DOWN, false)
-				.with(WATERLOGGED, false));
+		this.registerDefaultState(this.getStateDefinition().any()
+				.setValue(RADIUS, 4)
+				.setValue(NORTH, false)
+				.setValue(EAST, false)
+				.setValue(SOUTH, false)
+				.setValue(WEST, false)
+				.setValue(UP, false)
+				.setValue(DOWN, false)
+				.setValue(WATERLOGGED, false));
 		this.strippable = strippable;
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(RADIUS, NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
 	}
 
-	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
-		tooltip.add(Text.translatable("tooltip.gwoodworks.beam_block").formatted(Formatting.DARK_GRAY));
+	public boolean isStrippable() {
+		return strippable;
 	}
 
 	@Override
-	public BlockState rotate(BlockState state, BlockRotation rotation) {
+	public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> tooltip, TooltipFlag tooltipFlag) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.condition1").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.behavior1").withStyle(ChatFormatting.DARK_AQUA));
+			tooltip.add(Component.literal(""));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.condition2").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.behavior2").withStyle(ChatFormatting.DARK_AQUA));
+			tooltip.add(Component.literal(""));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.condition3").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.behavior3").withStyle(ChatFormatting.DARK_AQUA));
+			tooltip.add(Component.literal(""));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.condition4").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("tooltip.gwoodworks.beam.behavior4").withStyle(ChatFormatting.DARK_AQUA));
+		}
+		super.appendHoverText(stack, ctx, tooltip, tooltipFlag);
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, Rotation rotation) {
 		BlockState rotated = state;
 		for (Direction dir : Direction.values()) {
 			Direction newDir = rotation.rotate(dir);
-			rotated = rotated.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+			rotated = rotated.setValue(PROPERTY_BY_DIRECTION.get(newDir), state.getValue(PROPERTY_BY_DIRECTION.get(dir)));
 		}
 		return rotated;
 	}
 
 	@Override
-	public BlockState mirror(BlockState state, BlockMirror mirror) {
-		BlockRotation rotation = mirror.getRotation(Direction.NORTH);
-		if (rotation != BlockRotation.NONE) {
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		Rotation rotation = mirror.getRotation(Direction.NORTH);
+		if (rotation != Rotation.NONE) {
 			return this.rotate(state, rotation);
 		}
 
 		BlockState mirrored = state;
 		for (Direction dir : Direction.values()) {
-			Direction newDir = mirror.apply(dir);
-			mirrored = mirrored.with(FACING_PROPERTIES.get(newDir), state.get(FACING_PROPERTIES.get(dir)));
+			Direction newDir = mirror.mirror(dir);
+			mirrored = mirrored.setValue(PROPERTY_BY_DIRECTION.get(newDir), state.getValue(PROPERTY_BY_DIRECTION.get(dir)));
 		}
 		return mirrored;
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		return shouldConnectWithNeighbor(super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos), neighborState, direction);
+		return shouldConnectWithNeighbor(super.updateShape(state, direction, neighborState, world, pos, neighborPos), neighborState, direction);
 	}
 
 	private BlockState shouldConnectWithNeighbor(BlockState state, BlockState neighborState, Direction dir) {
-		if (!neighborState.isIn(GWBlockTags.BEAM) || !(neighborState.getBlock() instanceof ResizableBeamBlock)) {
+		if (!neighborState.is(GWBlockTags.BEAM) || !(neighborState.getBlock() instanceof ResizableBeamBlock)) {
 			return state;
 		}
 
-		if (neighborState.get(FACING_PROPERTIES.get(dir.getOpposite()))) {
-			return state.with(FACING_PROPERTIES.get(dir), true);
+		if (neighborState.getValue(PROPERTY_BY_DIRECTION.get(dir.getOpposite()))) {
+			return state.setValue(PROPERTY_BY_DIRECTION.get(dir), true);
 		}
 		return state;
 	}
 
-	private BlockState shouldConnectWithNeighbors(BlockState state, BlockPos pos, World world) {
+	private BlockState shouldConnectWithNeighbors(BlockState state, BlockPos pos, Level world) {
 		BlockState temp = state;
 		for (Direction direction : Direction.values()) {
-			temp = shouldConnectWithNeighbor(temp, world.getBlockState(pos.offset(direction)), direction);
+			temp = shouldConnectWithNeighbor(temp, world.getBlockState(pos.relative(direction)), direction);
 		}
 		return temp;
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction side = ctx.getSide();
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		Direction side = ctx.getClickedFace();
 
-		BlockState state = this.getDefaultState()
-				.with(FACING_PROPERTIES.get(side.getOpposite()), true)
-				.with(FACING_PROPERTIES.get(side), ctx.getPlayer() != null && ctx.getPlayer().isSneaking())
-				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+		BlockState state = this.defaultBlockState()
+				.setValue(PROPERTY_BY_DIRECTION.get(side.getOpposite()), true)
+				.setValue(PROPERTY_BY_DIRECTION.get(side), ctx.getPlayer() != null && ctx.getPlayer().isShiftKeyDown())
+				.setValue(WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).is(Fluids.WATER));
 
-		return shouldConnectWithNeighbors(state, ctx.getBlockPos(), ctx.getWorld());
+		return shouldConnectWithNeighbors(state, ctx.getClickedPos(), ctx.getLevel());
 	}
 
-	private static Optional<Direction> getDirectionByVec(Vec3d hit, BlockPos pos, BlockState state) {
-		int radius = state.get(RADIUS);
-		var relativePos = hit.add(-pos.getX(), -pos.getY(), -pos.getZ()).multiply(16);
+	private static Optional<Direction> getDirectionByVec(Vec3 hit, BlockPos pos, BlockState state) {
+		int radius = state.getValue(RADIUS);
+		var relativePos = hit.add(-pos.getX(), -pos.getY(), -pos.getZ()).scale(16);
 		if (relativePos.x < (8.0f - radius)) return Optional.of(Direction.WEST);
 		else if (relativePos.x > (8.0f + radius)) return Optional.of(Direction.EAST);
 		else if (relativePos.z < (8.0f - radius)) return Optional.of(Direction.NORTH);
@@ -205,75 +225,64 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		return Optional.empty();
 	}
 
-	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
-		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem && strippable) {
-			Block strippedBlock = STRIPPED_BEAM_BLOCKS.get(this);
-			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+	public static void onResizableBeamActivation(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		InteractionHand hand = player.getUsedItemHand();
+		ItemStack stack = player.getItemInHand(hand);
+		Item item = stack.getItem();
+		if (stack.is(ItemTags.AXES)) {
+			Block stripped = STRIPPED_BEAM_BLOCKS.get(state.getBlock());
+			if (stripped != null) {
+				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+				if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
 
-				BlockState strippedState = strippedBlock.getDefaultState()
-						.with(RADIUS, state.get(RADIUS))
-						.with(NORTH, state.get(NORTH))
-						.with(EAST, state.get(EAST))
-						.with(SOUTH, state.get(SOUTH))
-						.with(WEST, state.get(WEST))
-						.with(UP, state.get(UP))
-						.with(DOWN, state.get(DOWN))
-						.with(WATERLOGGED, state.get(WATERLOGGED));
-
-				world.setBlockState(pos, strippedState);
-				return ActionResult.SUCCESS;
-			}
-		}
-		if (stack.isIn(GWItemTags.SHEARS)) {
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
-			world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0f, 1.0f);
-
-			// If I could make it so if the player is sneaking the radius decrements that'd be so much better.
-			BlockState newState = shiftRadius(state, 1);
-
-			world.setBlockState(pos, newState);
-			return ActionResult.SUCCESS;
-		}
-		if (stack.isIn(GWItemTags.SECATEURS)) {
-			Optional<Direction> oDir = getDirectionByVec(hit.getPos(), pos, state);
-			if (oDir.isPresent()) {
-				Direction dir = oDir.get();
-				BlockState newState = state.with(FACING_PROPERTIES.get(dir), false);
-
-				BlockPos neighborPos = pos.offset(dir);
-				BlockState neighborState = world.getBlockState(neighborPos);
-
-				world.setBlockState(pos, newState, NOTIFY_ALL);
-				if (neighborState.getBlock() instanceof ResizableBeamBlock && neighborState.isIn(GWBlockTags.BEAM)) {
-					BlockState newNeighborState = neighborState.with(FACING_PROPERTIES.get(dir.getOpposite()), false);
-					world.setBlockState(neighborPos, newNeighborState, NOTIFY_ALL);
+				BlockState strippedState = stripped.defaultBlockState();
+				for (BooleanProperty prop : PROPERTY_BY_DIRECTION.values()) {
+					strippedState = strippedState.setValue(prop, state.getValue(prop));
 				}
+				strippedState = strippedState.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+				level.setBlockAndUpdate(pos, strippedState);
+				level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+				level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			}
+		} else if (stack.is(GWItemTags.SHEARS)) {
+			if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+			if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
+			level.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
-				world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				return ActionResult.SUCCESS;
+			BlockState newState = shiftRadius(state, player.isShiftKeyDown() ? -1 : 1);
+
+			level.setBlockAndUpdate(pos, newState);
+			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+		} else if (stack.is(GWItemTags.SECATEURS)) {
+			Direction dir = getDirectionByVec(hitResult.getLocation(), pos, state)
+					.orElse(hitResult.getDirection());
+			BooleanProperty prop = PROPERTY_BY_DIRECTION.get(dir);
+
+			boolean current = state.getValue(prop);
+			boolean next = !current;
+
+			BlockState newState = state.setValue(prop, next);
+			level.setBlockAndUpdate(pos, newState);
+			BlockPos neighborPos = pos.relative(dir);
+			BlockState neighborState = level.getBlockState(neighborPos);
+
+			if (neighborState.getBlock() instanceof ResizableBeamBlock && neighborState.is(GWBlockTags.BEAM)) {
+				BooleanProperty opp = PROPERTY_BY_DIRECTION.get(dir.getOpposite());
+				BlockState newNeighborState = neighborState.setValue(opp, next);
+				level.setBlockAndUpdate(neighborPos, newNeighborState);
 			}
 
-			Direction dir = hit.getSide();
-
-			BlockState newState = state.with(FACING_PROPERTIES.get(dir), true);
-
-			world.setBlockState(pos, newState);
-
-			if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
-			world.playSound(player, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			return ActionResult.SUCCESS;
+			level.gameEvent(player, next ? GameEvent.BLOCK_ATTACH : GameEvent.BLOCK_DETACH, pos);
+			if (!player.getAbilities().instabuild)
+				stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+			if (!level.isClientSide())
+				player.awardStat(Stats.ITEM_USED.get(item));
+			level.playSound(player, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
-		return super.onUse(state, world, pos, player, hit);
 	}
 
-	private BlockState shiftRadius(BlockState state, int amount) {
-		int radius = state.get(RADIUS);
+	private static BlockState shiftRadius(BlockState state, int amount) {
+		int radius = state.getValue(RADIUS);
 		int newRadius = radius + amount;
 
 		if (newRadius > 7) {
@@ -282,7 +291,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 			newRadius += 7;
 		}
 
-		return state.with(RADIUS, newRadius);
+		return state.setValue(RADIUS, newRadius);
 	}
 
 	private VoxelShape[][] generateRadiusToFacingsShapeMap() {
@@ -298,18 +307,18 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	private VoxelShape[] generateFacingsToShapeMap(float radius) {
 		float f = 0.5f - radius;
 		float g = 0.5f + radius;
-		VoxelShape centerShape = Block.createCuboidShape(f * 16.0f, f * 16.0f, f * 16.0f, g * 16.0f, g * 16.0f, g * 16.0f);
+		VoxelShape centerShape = Block.box(f * 16.0f, f * 16.0f, f * 16.0f, g * 16.0f, g * 16.0f, g * 16.0f);
 		VoxelShape[] armShapes = new VoxelShape[FACINGS.length];
 
 		for (int i = 0; i < FACINGS.length; ++i) {
 			Direction direction = FACINGS[i];
-			armShapes[i] = VoxelShapes.cuboid(
-					0.5 + Math.min(-radius, direction.getOffsetX() * 0.5),
-					0.5 + Math.min(-radius, direction.getOffsetY() * 0.5),
-					0.5 + Math.min(-radius, direction.getOffsetZ() * 0.5),
-					0.5 + Math.max(radius, direction.getOffsetX() * 0.5),
-					0.5 + Math.max(radius, direction.getOffsetY() * 0.5),
-					0.5 + Math.max(radius, direction.getOffsetZ() * 0.5)
+			armShapes[i] = Shapes.box(
+					0.5 + Math.min(-radius, direction.getStepX() * 0.5),
+					0.5 + Math.min(-radius, direction.getStepY() * 0.5),
+					0.5 + Math.min(-radius, direction.getStepZ() * 0.5),
+					0.5 + Math.max(radius, direction.getStepX() * 0.5),
+					0.5 + Math.max(radius, direction.getStepY() * 0.5),
+					0.5 + Math.max(radius, direction.getStepZ() * 0.5)
 			);
 		}
 
@@ -320,7 +329,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 			for (int k = 0; k < FACINGS.length; k++) {
 				if ((mask & 1 << k) != 0) {
-					shape = VoxelShapes.union(shape, armShapes[k]);
+					shape = Shapes.or(shape, armShapes[k]);
 				}
 			}
 
@@ -331,8 +340,8 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		int radius = state.get(RADIUS);
+	protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		int radius = state.getValue(RADIUS);
 		int mask = this.getConnectionMask(state);
 		return this.radiusToFacingsShape[radius][mask];
 	}
@@ -347,7 +356,7 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 		 * N E S W U D
 		 */
 		for (int i = 0; i < FACINGS.length; ++i) {
-			if (state.get(FACING_PROPERTIES.get(FACINGS[i]))) {
+			if (state.getValue(PROPERTY_BY_DIRECTION.get(FACINGS[i]))) {
 				mask |= 1 << i;
 			}
 		}
@@ -357,6 +366,6 @@ public class ResizableBeamBlock extends Block implements Waterloggable {
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 }

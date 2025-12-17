@@ -27,103 +27,104 @@ import com.macuguita.woodworks.reg.GWBlockTags;
 import com.macuguita.woodworks.reg.GWItemTags;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 
-public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock implements Waterloggable, SittableBlock {
+public abstract class NoCornerModularSeatBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, SittableBlock {
 
-	public static final EnumProperty<NoCornerModularSeatProperty> SHAPE = EnumProperty.of("shape", NoCornerModularSeatProperty.class);
-	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final EnumProperty<NoCornerModularSeatProperty> SHAPE = EnumProperty.create("shape", NoCornerModularSeatProperty.class);
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	protected NoCornerModularSeatBlock(Settings settings) {
+	protected NoCornerModularSeatBlock(Properties settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState()
-				.with(SHAPE, NoCornerModularSeatProperty.SINGLE)
-				.with(FACING, Direction.NORTH)
-				.with(WATERLOGGED, false));
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(SHAPE, NoCornerModularSeatProperty.SINGLE)
+				.setValue(FACING, Direction.NORTH)
+				.setValue(WATERLOGGED, false)
+		);
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(SHAPE, FACING, WATERLOGGED);
 	}
 
 	@Override
-	protected BlockState mirror(BlockState state, BlockMirror mirror) {
-		Direction direction = state.get(FACING);
-		NoCornerModularSeatProperty couchShape = state.get(SHAPE);
+	protected BlockState mirror(BlockState state, Mirror mirror) {
+		Direction direction = state.getValue(FACING);
+		NoCornerModularSeatProperty couchShape = state.getValue(SHAPE);
 		switch (mirror) {
 			case LEFT_RIGHT -> {
 				if (direction.getAxis() == Direction.Axis.Z) {
-					return state.rotate(BlockRotation.CLOCKWISE_180).with(SHAPE, couchShape);
+					return state.rotate(Rotation.CLOCKWISE_180).setValue(SHAPE, couchShape);
 				}
 			}
 			case FRONT_BACK -> {
 				if (direction.getAxis() == Direction.Axis.X) {
-					return state.rotate(BlockRotation.CLOCKWISE_180).with(SHAPE, couchShape);
+					return state.rotate(Rotation.CLOCKWISE_180).setValue(SHAPE, couchShape);
 				}
 			}
 		}
-		return state.rotate(mirror.getRotation(state.get(FACING)));
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
-		ItemStack stack = player.getStackInHand(hand);
-		if (stack.isIn(GWItemTags.WATER_BUCKETS)) return ActionResult.FAIL;
-		if (stack.isIn(GWItemTags.CARVED_LOG)) return ActionResult.FAIL;
-		return this.sitOn(world, pos, player, state.get(FACING)) ? ActionResult.SUCCESS : ActionResult.FAIL;
+	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+		InteractionHand hand = player.getUsedItemHand();
+		ItemStack stack = player.getItemInHand(hand);
+		if (stack.is(GWItemTags.WATER_BUCKETS)) return InteractionResult.FAIL;
+		if (stack.is(GWItemTags.CARVED_LOG)) return InteractionResult.FAIL;
+		return this.sitOn(world, pos, player, state.getValue(FACING)) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		return direction.getAxis().isHorizontal() ? state.with(SHAPE, getShape(state, world, pos)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return direction.getAxis().isHorizontal() ? state.setValue(SHAPE, getShape(state, world, pos)) : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Override
-	public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
-		BlockPos pos = ctx.getBlockPos();
-		Direction dir = ctx.getHorizontalPlayerFacing().getOpposite();
-		BlockState state = this.getDefaultState()
-				.with(FACING, dir)
-				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
-		return state.with(SHAPE, getShape(state, ctx.getWorld(), pos));
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		BlockPos pos = ctx.getClickedPos();
+		Direction dir = ctx.getHorizontalDirection().getOpposite();
+		BlockState state = this.defaultBlockState()
+				.setValue(FACING, dir)
+				.setValue(WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).is(Fluids.WATER));
+		return state.setValue(SHAPE, getShape(state, ctx.getLevel(), pos));
 	}
 
-	private NoCornerModularSeatProperty getShape(BlockState state, WorldAccess world, BlockPos pos) {
-		Direction dir = state.get(FACING);
+	private NoCornerModularSeatProperty getShape(BlockState state, LevelAccessor world, BlockPos pos) {
+		Direction dir = state.getValue(FACING);
 
-		Direction left = dir.rotateCounterclockwise(Direction.Axis.Y);
-		Direction right = dir.rotateClockwise(Direction.Axis.Y);
+		Direction left = dir.getCounterClockWise(Direction.Axis.Y);
+		Direction right = dir.getClockWise(Direction.Axis.Y);
 
-		boolean hasLeft = world.getBlockState(pos.offset(left)).isIn(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.offset(left)).get(FACING) == dir;
-		boolean hasRight = world.getBlockState(pos.offset(right)).isIn(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.offset(right)).get(FACING) == dir;
+		boolean hasLeft = world.getBlockState(pos.relative(left)).is(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.relative(left)).getValue(FACING) == dir;
+		boolean hasRight = world.getBlockState(pos.relative(right)).is(GWBlockTags.CARVED_LOG) && world.getBlockState(pos.relative(right)).getValue(FACING) == dir;
 
 		if (hasLeft && hasRight) {
 			return NoCornerModularSeatProperty.MIDDLE;
@@ -138,11 +139,11 @@ public abstract class NoCornerModularSeatBlock extends HorizontalFacingBlock imp
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
 	@Override
-	protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+	protected boolean isPathfindable(BlockState state, PathComputationType type) {
 		return false;
 	}
 }

@@ -27,21 +27,21 @@ import com.macuguita.lib.platform.registry.GuitaRegistry;
 import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class GWItemGroups {
 
-	public static final GuitaRegistry<ItemGroup> ITEM_GROUPS = GuitaRegistries.create(Registries.ITEM_GROUP, GuitaWoodworks.MOD_ID);
+	public static final GuitaRegistry<CreativeModeTab> ITEM_GROUPS = GuitaRegistries.create(BuiltInRegistries.CREATIVE_MODE_TAB, GuitaWoodworks.MOD_ID);
 
-	public static final GuitaRegistryEntry<ItemGroup> GW_TAB = ITEM_GROUPS.register("gwoodworks", () ->
-			ItemGroup.create(ItemGroup.Row.TOP, 0)
-					.displayName(Text.translatable("itemGroup." + GuitaWoodworks.MOD_ID + ".gwoodworks"))
+	public static final GuitaRegistryEntry<CreativeModeTab> GW_TAB = ITEM_GROUPS.register("gwoodworks", () ->
+			CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+					.title(Component.translatable("itemGroup." + GuitaWoodworks.MOD_ID + ".gwoodworks"))
 					.icon(() -> new ItemStack(GWObjects.OAK_STUMP.get().asItem()))
-					.entries((itemDisplayParameters, output) ->
-							GWObjects.ITEMS.stream().map(item -> item.get().getDefaultStack()).forEach(output::add)
+					.displayItems((itemDisplayParameters, output) ->
+							GWObjects.ITEMS.stream().map(item -> item.get().getDefaultInstance()).forEach(output::accept)
 					).build());
 
 	public static void init() {

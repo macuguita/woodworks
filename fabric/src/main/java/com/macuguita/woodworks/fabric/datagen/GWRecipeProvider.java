@@ -26,33 +26,33 @@ import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
 public class GWRecipeProvider extends FabricRecipeProvider {
 
-	public GWRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+	public GWRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 		super(output, registriesFuture);
 	}
 
 	@Override
-	public void generate(RecipeExporter recipeExporter) {
-		ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, GWObjects.SECATEURS.get(), 1)
+	public void buildRecipes(RecipeOutput recipeExporter) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, GWObjects.SECATEURS.get(), 1)
 				.pattern("#$")
 				.pattern(" #")
-				.input('#', Items.IRON_NUGGET)
-				.input('$', Items.SHEARS)
-				.criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
-				.criterion(hasItem(Items.SHEARS), conditionsFromItem(Items.SHEARS))
-				.offerTo(recipeExporter);
+				.define('#', Items.IRON_NUGGET)
+				.define('$', Items.SHEARS)
+				.unlockedBy(getHasName(Items.IRON_NUGGET), has(Items.IRON_NUGGET))
+				.unlockedBy(getHasName(Items.SHEARS), has(Items.SHEARS))
+				.save(recipeExporter);
 
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			createStumpRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
@@ -78,47 +78,72 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			createHollowLogRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
 		});
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			createSupportRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			createShutterRecipe(recipeExporter, regEntry.get(), GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get()));
+		});
 		createStumpRecipe(recipeExporter, GWObjects.MUSHROOM_STUMP.get(), Blocks.MUSHROOM_STEM);
 		createCarvedLogRecipe(recipeExporter, GWObjects.CARVED_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
 		createBeamRecipe(recipeExporter, GWObjects.MUSHROOM_BEAM.get(), Blocks.MUSHROOM_STEM);
 		createHollowLogRecipe(recipeExporter, GWObjects.HOLLOW_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
 	}
 
-	private void createStumpRecipe(RecipeExporter exporter, Block stump, Block log) {
-		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, stump, 6)
+	private void createStumpRecipe(RecipeOutput exporter, Block stump, Block log) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, stump, 6)
 				.pattern("###")
-				.input('#', log)
-				.criterion(hasItem(log), conditionsFromItem(log))
-				.offerTo(exporter);
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
 	}
 
-	private void createCarvedLogRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
-		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 6)
+	private void createCarvedLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, carvedLog, 6)
 				.pattern("#  ")
 				.pattern("#  ")
 				.pattern("###")
-				.input('#', log)
-				.criterion(hasItem(log), conditionsFromItem(log))
-				.offerTo(exporter);
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
 	}
 
-	private void createBeamRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
-		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 12)
+	private void createBeamRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, carvedLog, 12)
 				.pattern("#")
 				.pattern("#")
 				.pattern("#")
-				.input('#', log)
-				.criterion(hasItem(log), conditionsFromItem(log))
-				.offerTo(exporter);
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
 	}
 
-	private void createHollowLogRecipe(RecipeExporter exporter, Block carvedLog, Block log) {
-		ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, carvedLog, 12)
+	private void createHollowLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, carvedLog, 12)
 				.pattern("# #")
 				.pattern("# #")
 				.pattern("# #")
-				.input('#', log)
-				.criterion(hasItem(log), conditionsFromItem(log))
-				.offerTo(exporter);
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
+	}
+
+	private void createSupportRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, supportBlock, 6)
+				.pattern("##")
+				.pattern("# ")
+				.define('#', plank)
+				.unlockedBy(getHasName(plank), has(plank))
+				.save(exporter);
+	}
+
+	private void createShutterRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, supportBlock, 6)
+				.pattern("#")
+				.pattern("#")
+				.pattern("#")
+				.define('#', plank)
+				.unlockedBy(getHasName(plank), has(plank))
+				.save(exporter);
 	}
 }

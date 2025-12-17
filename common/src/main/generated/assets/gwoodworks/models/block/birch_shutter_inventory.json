@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_shutter_inventory",
+  "textures": {
+    "end": "gwoodworks:block/birch_support_end",
+    "side": "gwoodworks:block/birch_support_side"
+  }
+}

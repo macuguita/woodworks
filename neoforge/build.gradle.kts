@@ -1,7 +1,5 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 version = BuildConfig.modVersion + "-neoforge"
@@ -55,21 +53,19 @@ dependencies {
     }
     "shadowBundle"(project(":common", "transformProductionNeoForge"))
 
-    //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
-
     // Modrinth
     modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-neoforge")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
+
     val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
     if (isMyPc) {
         modImplementation("net.mehvahdjukaar:moonlight-neoforge:${BuildConfig.moonlightLibVersion}")
     } else {
         modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-neoforge")
     }
-    modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
-    // Other Mavens
-    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
 
+    modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
+    modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
     modApi("me.shedaniel:RoughlyEnoughItems-neoforge:${BuildConfig.reiVersion}")
 }
 
@@ -92,11 +88,15 @@ tasks.processResources {
     }
 }
 
-tasks.withType<ShadowJar>().configureEach {
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
     configurations = listOf(project.configurations.getByName("shadowBundle"))
     archiveClassifier.set("dev-shadow")
 }
 
 tasks.remapJar {
-    inputFile.set(tasks.shadowJar.flatMap { it.archiveFile })
+    val shadowJar = tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar")
+    inputs.file(shadowJar.flatMap { it.archiveFile })
+    doFirst {
+        println("Remapping shadow jar: ${shadowJar.get().archiveFile.get().asFile}")
+    }
 }

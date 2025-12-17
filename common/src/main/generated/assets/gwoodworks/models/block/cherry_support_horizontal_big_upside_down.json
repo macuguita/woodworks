@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_support_horizontal_big_upside_down",
+  "textures": {
+    "end": "gwoodworks:block/cherry_support_end",
+    "side": "gwoodworks:block/cherry_support_side"
+  }
+}

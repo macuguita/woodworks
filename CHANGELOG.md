@@ -1,1 +1,2 @@
-- Added mushroom variants
+- Added support block
+- Added shutter block

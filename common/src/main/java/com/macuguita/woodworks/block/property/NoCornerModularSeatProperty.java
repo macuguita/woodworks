@@ -26,21 +26,21 @@ import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum NoCornerModularSeatProperty implements StringIdentifiable {
+public enum NoCornerModularSeatProperty implements StringRepresentable {
 	SINGLE,
 	LEFT,
 	MIDDLE,
 	RIGHT;
 
 	@Override
-	public @NotNull String asString() {
+	public @NotNull String getSerializedName() {
 		return name().toLowerCase(Locale.ROOT);
 	}
 
 	@Override
 	public String toString() {
-		return asString();
+		return getSerializedName();
 	}
 }

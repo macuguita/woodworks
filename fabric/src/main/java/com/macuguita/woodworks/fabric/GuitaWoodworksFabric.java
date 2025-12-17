@@ -23,8 +23,10 @@
 package com.macuguita.woodworks.fabric;
 
 import com.macuguita.woodworks.GuitaWoodworks;
+import com.macuguita.woodworks.compat.Callbacks;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 public final class GuitaWoodworksFabric implements ModInitializer {
 
@@ -32,5 +34,8 @@ public final class GuitaWoodworksFabric implements ModInitializer {
 	public void onInitialize() {
 		GuitaWoodworks.init();
 		GuitaWoodworks.commonSetup();
+
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult)
+				-> Callbacks.onRightClickBlock(player, world, player.getItemInHand(hand), hitResult));
 	}
 }

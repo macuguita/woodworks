@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_support_inventory_upside_down",
+  "textures": {
+    "end": "gwoodworks:block/acacia_support_end",
+    "side": "gwoodworks:block/acacia_support_side"
+  }
+}

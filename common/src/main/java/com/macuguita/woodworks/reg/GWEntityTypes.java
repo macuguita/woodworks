@@ -28,20 +28,20 @@ import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.entity.Seat;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 
 public class GWEntityTypes {
 
-	public static final GuitaRegistry<EntityType<?>> ENTITY_TYPES = GuitaRegistries.create(Registries.ENTITY_TYPE, GuitaWoodworks.MOD_ID);
+	public static final GuitaRegistry<EntityType<?>> ENTITY_TYPES = GuitaRegistries.create(BuiltInRegistries.ENTITY_TYPE, GuitaWoodworks.MOD_ID);
 
 	public static final GuitaRegistryEntry<EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () ->
-			EntityType.Builder.<Seat>create(Seat::new, SpawnGroup.MISC)
-					.dimensions(1, 1)
-					.disableSaving()
-					.makeFireImmune()
-					.disableSummon()
+			EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC)
+					.sized(1, 1)
+					.noSave()
+					.fireImmune()
+					.noSummon()
 					.build("seat"));
 
 	public static void init() {

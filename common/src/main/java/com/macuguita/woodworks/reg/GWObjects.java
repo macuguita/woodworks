@@ -24,6 +24,7 @@ package com.macuguita.woodworks.reg;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import com.macuguita.lib.platform.registry.GuitaRegistries;
@@ -33,24 +34,27 @@ import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
+import com.macuguita.woodworks.block.ShutterBlock;
 import com.macuguita.woodworks.block.StumpSeatBlock;
+import com.macuguita.woodworks.block.SupportBlock;
+import com.macuguita.woodworks.item.SupportBlockItem;
 import com.macuguita.woodworks.utils.GWUtils;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class GWObjects {
 
 	public static final Map<Block, Block> WOOD_ASSOCIATIONS = new HashMap<>();
 
-	public static final GuitaRegistry<Block> BLOCKS = GuitaRegistries.create(Registries.BLOCK, GuitaWoodworks.MOD_ID);
-	public static final GuitaRegistry<Item> ITEMS = GuitaRegistries.create(Registries.ITEM, GuitaWoodworks.MOD_ID);
+	public static final GuitaRegistry<Block> BLOCKS = GuitaRegistries.create(BuiltInRegistries.BLOCK, GuitaWoodworks.MOD_ID);
+	public static final GuitaRegistry<Item> ITEMS = GuitaRegistries.create(BuiltInRegistries.ITEM, GuitaWoodworks.MOD_ID);
 
 	public static final GuitaRegistry<Block> STUMP_BLOCKS = GuitaRegistries.create(BLOCKS);
 	public static final GuitaRegistry<Block> STRIPPED_STUMP_BLOCKS = GuitaRegistries.create(BLOCKS);
@@ -72,7 +76,13 @@ public class GWObjects {
 	public static final GuitaRegistry<Item> HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 	public static final GuitaRegistry<Item> STRIPPED_HOLLOW_LOG_ITEMS = GuitaRegistries.create(ITEMS);
 
-	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Settings().maxDamage(476).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent())));
+	public static final GuitaRegistry<Block> SUPPORT_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Item> SUPPORT_ITEMS = GuitaRegistries.create(ITEMS);
+
+	public static final GuitaRegistry<Block> SHUTTER_BLOCKS = GuitaRegistries.create(BLOCKS);
+	public static final GuitaRegistry<Item> SHUTTER_ITEMS = GuitaRegistries.create(ITEMS);
+
+	public static final GuitaRegistryEntry<Item> SECATEURS = ITEMS.register("secateurs", () -> new Item(new Item.Properties().durability(476).component(DataComponents.TOOL, ShearsItem.createToolProperties())));
 
 	public static final GuitaRegistryEntry<Block> OAK_STUMP = createStump("oak_stump", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_STUMP = createStrippedStump("stripped_oak_stump", Blocks.STRIPPED_OAK_LOG);
@@ -104,7 +114,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> WARPED_STUMP = createStump("warped_stump", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_WARPED_STUMP = createStrippedStump("stripped_warped_stump", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> MUSHROOM_STUMP = registerWithItem("mushroom_stump", () -> new StumpSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> MUSHROOM_STUMP = registerWithItem("mushroom_stump", () -> new StumpSeatBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.defaultMapColor()), false), BLOCKS, ITEMS);
 
 	public static final GuitaRegistryEntry<Block> CARVED_OAK_LOG = createCarvedLog("carved_oak_log", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_OAK_LOG = createStrippedCarvedLog("stripped_carved_oak_log", Blocks.STRIPPED_OAK_LOG);
@@ -136,7 +146,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CARVED_WARPED_STEM = createCarvedLog("carved_warped_stem", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_WARPED_STEM = createStrippedCarvedLog("stripped_carved_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> CARVED_MUSHROOM_STEM = registerWithItem("carved_mushroom_stem", () -> new CarvedLogSeatBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.defaultMapColor()), false), BLOCKS, ITEMS);
 
 	public static final GuitaRegistryEntry<Block> OAK_BEAM = createBeam("oak_beam", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_OAK_BEAM = createStrippedBeam("stripped_oak_beam", Blocks.STRIPPED_OAK_LOG);
@@ -168,7 +178,7 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> WARPED_BEAM = createBeam("warped_beam", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_WARPED_BEAM = createStrippedBeam("stripped_warped_beam", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> MUSHROOM_BEAM = registerWithItem("mushroom_beam", () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> MUSHROOM_BEAM = registerWithItem("mushroom_beam", () -> new ResizableBeamBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.defaultMapColor()), false), BLOCKS, ITEMS);
 
 	public static final GuitaRegistryEntry<Block> HOLLOW_OAK_LOG = createHollowLog("hollow_oak_log", Blocks.OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_OAK_LOG = createStrippedHollowLog("stripped_hollow_oak_log", Blocks.STRIPPED_OAK_LOG);
@@ -200,59 +210,115 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> HOLLOW_WARPED_STEM = createHollowLog("hollow_warped_stem", Blocks.WARPED_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_WARPED_STEM = createStrippedHollowLog("stripped_hollow_warped_stem", Blocks.STRIPPED_WARPED_STEM);
 
-	public static final GuitaRegistryEntry<Block> HOLLOW_MUSHROOM_STEM = registerWithItem("hollow_mushroom_stem", () -> new HollowLogBlock(AbstractBlock.Settings.copy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.getDefaultMapColor()), false), BLOCKS, ITEMS);
+	public static final GuitaRegistryEntry<Block> HOLLOW_MUSHROOM_STEM = registerWithItem("hollow_mushroom_stem", () -> new HollowLogBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(Blocks.MUSHROOM_STEM.defaultMapColor()), false), BLOCKS, ITEMS);
+
+	public static final GuitaRegistryEntry<Block> OAK_SUPPORT = createSupportBlock("oak_support", Blocks.OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> SPRUCE_SUPPORT = createSupportBlock("spruce_support", Blocks.SPRUCE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BIRCH_SUPPORT = createSupportBlock("birch_support", Blocks.BIRCH_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> JUNGLE_SUPPORT = createSupportBlock("jungle_support", Blocks.JUNGLE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> ACACIA_SUPPORT = createSupportBlock("acacia_support", Blocks.ACACIA_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> DARK_OAK_SUPPORT = createSupportBlock("dark_oak_support", Blocks.DARK_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> MANGROVE_SUPPORT = createSupportBlock("mangrove_support", Blocks.MANGROVE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CHERRY_SUPPORT = createSupportBlock("cherry_support", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CRIMSON_SUPPORT = createSupportBlock("crimson_support", Blocks.CRIMSON_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> WARPED_SUPPORT = createSupportBlock("warped_support", Blocks.WARPED_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> OAK_SHUTTER = createShutterBlock("oak_shutter", Blocks.OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> SPRUCE_SHUTTER = createShutterBlock("spruce_shutter", Blocks.SPRUCE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BIRCH_SHUTTER = createShutterBlock("birch_shutter", Blocks.BIRCH_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> JUNGLE_SHUTTER = createShutterBlock("jungle_shutter", Blocks.JUNGLE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> ACACIA_SHUTTER = createShutterBlock("acacia_shutter", Blocks.ACACIA_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> DARK_OAK_SHUTTER = createShutterBlock("dark_oak_shutter", Blocks.DARK_OAK_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> MANGROVE_SHUTTER = createShutterBlock("mangrove_shutter", Blocks.MANGROVE_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CHERRY_SHUTTER = createShutterBlock("cherry_shutter", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> CRIMSON_SHUTTER = createShutterBlock("crimson_shutter", Blocks.CRIMSON_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> WARPED_SHUTTER = createShutterBlock("warped_shutter", Blocks.WARPED_PLANKS);
 
 	public static GuitaRegistryEntry<Block> createStump(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), STUMP_BLOCKS, STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedStump(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), false), STRIPPED_STUMP_BLOCKS, STRIPPED_STUMP_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new StumpSeatBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), false), STRIPPED_STUMP_BLOCKS, STRIPPED_STUMP_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createCarvedLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), CARVED_LOG_BLOCKS, CARVED_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), CARVED_LOG_BLOCKS, CARVED_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedCarvedLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), false), STRIPPED_CARVED_LOG_BLOCKS, STRIPPED_CARVED_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new CarvedLogSeatBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), false), STRIPPED_CARVED_LOG_BLOCKS, STRIPPED_CARVED_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), BEAM_BLOCKS, BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), BEAM_BLOCKS, BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedBeam(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), false), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ResizableBeamBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), false), STRIPPED_BEAM_BLOCKS, STRIPPED_BEAM_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createHollowLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor())), HOLLOW_LOG_BLOCKS, HOLLOW_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), HOLLOW_LOG_BLOCKS, HOLLOW_LOG_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static GuitaRegistryEntry<Block> createStrippedHollowLog(String name, Block wood) {
-		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(AbstractBlock.Settings.copy(wood).mapColor(wood.getDefaultMapColor()), false), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new HollowLogBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor()), false), STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOG_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
+	public static GuitaRegistryEntry<Block> createSupportBlock(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new SupportBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), (funcBlock, settings) -> new SupportBlockItem(funcBlock, settings), SUPPORT_BLOCKS, SUPPORT_ITEMS);
+		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
+		return block;
+	}
+
+	public static GuitaRegistryEntry<Block> createShutterBlock(String name, Block wood) {
+		GuitaRegistryEntry<Block> block = registerWithItem(name, () -> new ShutterBlock(BlockBehaviour.Properties.ofFullCopy(wood).mapColor(wood.defaultMapColor())), SHUTTER_BLOCKS, SHUTTER_ITEMS);
 		if (GWUtils.isFabric()) WOOD_ASSOCIATIONS.put(block.get(), wood);
 		return block;
 	}
 
 	public static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Supplier<T> block, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
+		return registerWithItem(name, block, BlockItem::new, blockReg, itemReg);
+	}
+
+	public static <T extends Block> GuitaRegistryEntry<T> registerWithItem(String name, Supplier<T> block, BiFunction<Block, Item.Properties, BlockItem> blockItemBiFunction, GuitaRegistry<Block> blockReg, GuitaRegistry<Item> itemReg) {
 		GuitaRegistryEntry<T> toReturn = blockReg.register(name, block);
-		itemReg.register(name, () -> new BlockItem(toReturn.get(), new Item.Settings()));
+		itemReg.register(name, () -> blockItemBiFunction.apply(toReturn.get(), new Item.Properties()));
 		return toReturn;
 	}
 

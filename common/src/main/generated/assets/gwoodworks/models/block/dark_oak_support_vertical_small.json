@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_support_vertical_small",
+  "textures": {
+    "end": "gwoodworks:block/dark_oak_support_end",
+    "side": "gwoodworks:block/dark_oak_support_side"
+  }
+}

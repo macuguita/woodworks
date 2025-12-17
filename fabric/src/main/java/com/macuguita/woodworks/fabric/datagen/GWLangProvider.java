@@ -27,22 +27,22 @@ import java.util.concurrent.CompletableFuture;
 
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 public class GWLangProvider extends FabricLanguageProvider {
 
-	public GWLangProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+	public GWLangProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(dataOutput, "en_us", registryLookup);
 	}
 
 	@Override
-	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+	public void generateTranslations(HolderLookup.Provider wrapperLookup, TranslationBuilder translationBuilder) {
 		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
 		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
@@ -68,6 +68,12 @@ public class GWLangProvider extends FabricLanguageProvider {
 		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 		});
+		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+		});
+		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+			generateBlockTranslations(translationBuilder, regEntry.get());
+		});
 		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get());
 		generateBlockTranslations(translationBuilder, GWObjects.CARVED_MUSHROOM_STEM.get());
 		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_BEAM.get());
@@ -81,6 +87,8 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("block_type.gwoodworks.stripped_beam", "Stripped %s Beam");
 		translationBuilder.add("block_type.gwoodworks.hollow_log", "Hollow %s Log");
 		translationBuilder.add("block_type.gwoodworks.stripped_hollow_log", "Stripped Hollow %s Log");
+		translationBuilder.add("block_type.gwoodworks.support", "%s Support");
+		translationBuilder.add("block_type.gwoodworks.shutter", "%s Shutter");
 		translationBuilder.add("itemGroup.gwoodworks.gwoodworks", "guita's Woodworks");
 		translationBuilder.add("tag.item.gwoodworks.stump", "Stump");
 		translationBuilder.add("tag.block.gwoodworks.stump", "Stump");
@@ -92,6 +100,20 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add("tag.block.gwoodworks.hollow_log", "Hollow Log");
 		translationBuilder.add("tag.item.gwoodworks.secateurs", "Secateurs");
 		translationBuilder.add("tooltip.gwoodworks.beam_block", "Strip with axe, resize with shears, link with secateurs.");
+		translationBuilder.add("tooltip.gwoodworks.support.condition1", "Sneak right-click in air:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior1", "Flip block item upside down");
+		translationBuilder.add("tooltip.gwoodworks.support.condition2", "Right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior2", "Toggle a side between big and small");
+		translationBuilder.add("tooltip.gwoodworks.support.condition3", "Sneak right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.support.behavior3", "Hide/unhide a side");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition1", "Right-click with an axe:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior1", "Strip the block");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition2", "Right-click with shears:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior2", "Increase/decrease the radius");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition3", "Right-click with secateurs:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior3", "Hide/unhide a connection");
+		translationBuilder.add("tooltip.gwoodworks.beam.condition4", "Place while sneaking:");
+		translationBuilder.add("tooltip.gwoodworks.beam.behavior4", "On placed connect to opposite side");
 	}
 
 	private String capitalizeString(String string) {
@@ -109,12 +131,12 @@ public class GWLangProvider extends FabricLanguageProvider {
 	}
 
 	private void generateBlockTranslations(TranslationBuilder translationBuilder, Block block) {
-		String temp = capitalizeString(Registries.BLOCK.getId(block).getPath().replace("_", " "));
+		String temp = capitalizeString(BuiltInRegistries.BLOCK.getKey(block).getPath().replace("_", " "));
 		translationBuilder.add(block, temp);
 	}
 
 	private void generateItemTranslations(TranslationBuilder translationBuilder, Item item) {
-		String temp = capitalizeString(Registries.ITEM.getId(item).getPath().replace("_", " "));
+		String temp = capitalizeString(BuiltInRegistries.ITEM.getKey(item).getPath().replace("_", " "));
 		translationBuilder.add(item, temp);
 	}
 }

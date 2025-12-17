@@ -24,15 +24,15 @@ package com.macuguita.woodworks.client.utils.fabric;
 
 import java.util.function.Supplier;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 public class ClientPlatformUtilsImpl {
 
-	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererFactory<T> factory) {
+	public static <T extends Entity> void registerRenderer(Supplier<EntityType<T>> entity, EntityRendererProvider<T> factory) {
 		EntityRendererRegistry.register(entity.get(), factory);
 	}
 }

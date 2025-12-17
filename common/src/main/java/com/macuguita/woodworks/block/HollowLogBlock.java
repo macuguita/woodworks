@@ -3,100 +3,108 @@ package com.macuguita.woodworks.block;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.utils.GWUtils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class HollowLogBlock extends PillarBlock implements Waterloggable {
+public class HollowLogBlock extends RotatedPillarBlock implements SimpleWaterloggedBlock {
 
 	public static final Map<Block, Block> STRIPPED_HOLLOW_LOGS = new HashMap<>();
-	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-	protected static final VoxelShape VOXEL_SHAPE = VoxelShapes.combineAndSimplify(
-			VoxelShapes.fullCube(),
-			VoxelShapes.union(
-					createCuboidShape(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
+	protected static final VoxelShape VOXEL_SHAPE = Shapes.join(
+			Shapes.block(),
+			Shapes.or(
+					box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0)
 			),
-			BooleanBiFunction.ONLY_FIRST
+			BooleanOp.ONLY_FIRST
 	);
 	private final boolean strippable;
 
-	public HollowLogBlock(Settings settings) {
+	public HollowLogBlock(Properties settings) {
 		this(settings, true);
 	}
 
-	public HollowLogBlock(Settings settings, boolean strippable) {
+	public HollowLogBlock(Properties settings, boolean strippable) {
 		super(settings);
 		this.strippable = strippable;
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(WATERLOGGED);
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState()
-				.with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER))
-				.with(AXIS, ctx.getSide().getAxis());
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		return this.defaultBlockState()
+				.setValue(WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).is(Fluids.WATER))
+				.setValue(AXIS, ctx.getClickedFace().getAxis());
 	}
 
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		Hand hand = player.getActiveHand();
-		ItemStack stack = player.getStackInHand(hand);
-		if (stack.getItem() instanceof AxeItem && strippable) {
+	protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+		Item item = itemStack.getItem();
+		if (itemStack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_HOLLOW_LOGS.get(this);
 			if (strippedBlock != null) {
-				if (!player.getAbilities().creativeMode) stack.damage(1, player, LivingEntity.getSlotForHand(hand));
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+				if (!player.getAbilities().instabuild)
+					itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
+				if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));
+				level.playSound(player, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (world instanceof ServerWorld serverWorld) {
-					BlockState strippedState = strippedBlock.getDefaultState()
-							.with(PillarBlock.AXIS, state.get(PillarBlock.AXIS))
-							.with(WATERLOGGED, state.get(WATERLOGGED));
+				if (level instanceof ServerLevel serverWorld) {
+					BlockState strippedState = strippedBlock.defaultBlockState()
+							.setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS))
+							.setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
 
-					serverWorld.setBlockState(pos, strippedState);
+					serverWorld.setBlockAndUpdate(blockPos, strippedState);
+					level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
 				}
-				return ActionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
 		}
-		return super.onUse(state, world, pos, player, hit);
+		if (itemStack.is(GWItemTags.WATER_BUCKETS) || itemStack.is(GWItemTags.EMPTY_BUCKETS))
+			return ItemInteractionResult.FAIL;
+		return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return switch (state.get(PillarBlock.AXIS)) {
+	protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return switch (state.getValue(RotatedPillarBlock.AXIS)) {
 			case X ->
 					GWUtils.rotateVoxelShape(GWUtils.rotateVoxelShape(VOXEL_SHAPE, Direction.Axis.X, 90), Direction.Axis.Y, 90);
 			case Y -> VOXEL_SHAPE;
@@ -105,16 +113,16 @@ public class HollowLogBlock extends PillarBlock implements Waterloggable {
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 }

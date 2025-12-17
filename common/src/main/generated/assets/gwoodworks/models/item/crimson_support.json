@@ -1,0 +1,11 @@
+{
+  "parent": "gwoodworks:block/crimson_support_inventory",
+  "overrides": [
+    {
+      "model": "gwoodworks:block/crimson_support_inventory_upside_down",
+      "predicate": {
+        "gwoodworks:up": 1.0
+      }
+    }
+  ]
+}

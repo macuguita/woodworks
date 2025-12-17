@@ -28,6 +28,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(GuitaWoodworks.MOD_ID)
 public final class GuitaWoodworksNeoForge {
@@ -37,11 +38,11 @@ public final class GuitaWoodworksNeoForge {
 		if (FMLEnvironment.dist.isClient()) {
 			GuitaWoodworksNeoforgeClient.init();
 		}
-		assert modEventBus != null;
 		modEventBus.addListener(this::commonSetup);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
 		GuitaWoodworks.commonSetup();
+		NeoForge.EVENT_BUS.register(EventHandler.class);
 	}
 }

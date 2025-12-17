@@ -27,50 +27,64 @@ import java.util.concurrent.CompletableFuture;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 public class GWItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-	public GWItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+	public GWItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 		super(output, completableFuture);
 	}
 
 	@Override
-	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-		getOrCreateTagBuilder(GWItemTags.SECATEURS)
-				.add(GWObjects.SECATEURS.get())
-				.addOptionalTag(GWItemTags.KNIVES);
+	protected void addTags(HolderLookup.Provider wrapperLookup) {
+		tag(GWItemTags.SECATEURS)
+				.add(getRes(GWObjects.SECATEURS.get(), wrapperLookup))
+				.addOptionalTag(GWItemTags.KNIVES.location());
 
 		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+			tag(GWItemTags.STUMP).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.STUMP).add(regEntry.get());
+			tag(GWItemTags.STUMP).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+			tag(GWItemTags.CARVED_LOG).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+			tag(GWItemTags.CARVED_LOG).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.BEAM_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
+			tag(GWItemTags.BEAM).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.BEAM).add(regEntry.get());
+			tag(GWItemTags.BEAM).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+			tag(GWItemTags.HOLLOW_LOG).add(getRes(regEntry.get(), wrapperLookup));
 		});
 		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+			tag(GWItemTags.HOLLOW_LOG).add(getRes(regEntry.get(), wrapperLookup));
 		});
-		getOrCreateTagBuilder(GWItemTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get().asItem());
-		getOrCreateTagBuilder(GWItemTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get().asItem());
-		getOrCreateTagBuilder(GWItemTags.BEAM).add(GWObjects.MUSHROOM_BEAM.get().asItem());
-		getOrCreateTagBuilder(GWItemTags.HOLLOW_LOG).add(GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem());
+		GWObjects.SUPPORT_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.SUPPORT).add(getRes(regEntry.get(), wrapperLookup));
+		});
+		GWObjects.SHUTTER_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.SHUTTER).add(getRes(regEntry.get(), wrapperLookup));
+		});
+		tag(GWItemTags.STUMP).add(getRes(GWObjects.MUSHROOM_STUMP.get().asItem(), wrapperLookup));
+		tag(GWItemTags.CARVED_LOG).add(getRes(GWObjects.CARVED_MUSHROOM_STEM.get().asItem(), wrapperLookup));
+		tag(GWItemTags.BEAM).add(getRes(GWObjects.MUSHROOM_BEAM.get().asItem(), wrapperLookup));
+		tag(GWItemTags.HOLLOW_LOG).add(getRes(GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem(), wrapperLookup));
+	}
+
+	private ResourceKey<Item> getRes(Item item, HolderLookup.Provider wrapperLookup) {
+		var lookup = wrapperLookup.lookupOrThrow(Registries.ITEM);
+		return lookup.get(item.builtInRegistryHolder().key()).orElseThrow().key();
 	}
 }
