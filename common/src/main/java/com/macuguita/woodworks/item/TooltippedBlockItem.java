@@ -22,15 +22,13 @@
 
 package com.macuguita.woodworks.item;
 
+import java.util.function.Consumer;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.function.Consumer;
 
 public class TooltippedBlockItem extends BlockItem {
 
