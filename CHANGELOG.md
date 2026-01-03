@@ -1,2 +1,1 @@
-- Added support block
-- Added shutter block
+- Added bamboo blocks
