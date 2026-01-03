@@ -568,7 +568,8 @@ public class WoodGood extends SimpleModule {
 		collager.apply(original, target);
 
 		target.forEachPixel((pixel) -> {
-			if (!((pixel.frameX() >= offset && pixel.frameX() <= offset + boxSize) && (pixel.frameY() >= offset && pixel.frameY() <= offset + boxSize))) {
+			if (!((pixel.frameX() >= offset && pixel.frameX() < offset + boxSize) &&
+					(pixel.frameY() >= offset && pixel.frameY() < offset + boxSize))) {
 				pixel.setValue(0);
 			}
 		});
@@ -594,7 +595,7 @@ public class WoodGood extends SimpleModule {
 			supportedMod = ModId;
 			supportedBlockName = blockName;
 
-			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|crimson|warped)", ".*")) {
+			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|bamboo|crimson|warped)", ".*")) {
 			//	return false;
 			//}
 
