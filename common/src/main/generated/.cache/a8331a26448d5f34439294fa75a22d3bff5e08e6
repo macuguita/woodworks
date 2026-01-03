@@ -1,9 +1,9 @@
 // 1.21.11	-999999999-01-01T00:00:00	guita's Woodworks/Tags for minecraft:block
-10ba09e93cced5389542bb829aeaeb962d0ad9e9 data/gwoodworks/tags/block/beam.json
-82003c88900a313f4856c9f5eb141fb08bbeaee9 data/gwoodworks/tags/block/carved_log.json
+88da72cbaf913907e63768ca7f1c29098de93c63 data/gwoodworks/tags/block/beam.json
+32ce6d001fe83fb74159c00af0421b8a26bb649f data/gwoodworks/tags/block/carved_log.json
 151096883832b9db433395162ee34c0b8a74cc0c data/gwoodworks/tags/block/connecting_mushroom.json
 c3bd72a93f529d814bc4260c20eb2b09c0376b89 data/gwoodworks/tags/block/hollow_log.json
-d866a5f03cfcde86a2d4e10bbfa874468adc5a36 data/gwoodworks/tags/block/shutter.json
-cc48ab68897e0eebd5e0ce521f11d1564e184a4c data/gwoodworks/tags/block/stump.json
-04d3106103f9012fc04a95084af91018b60d0690 data/gwoodworks/tags/block/support.json
+957953c104e92eec1334a92c8f6ea1f909ffe40d data/gwoodworks/tags/block/shutter.json
+bba12928c13683e64ba223e1637dd734fe4783d1 data/gwoodworks/tags/block/stump.json
+409ee56d00a24492f8d20554df3ce82b11d5272a data/gwoodworks/tags/block/support.json
 ec7dd3bcf2383d6da0d2f7729f332f0f962044c8 data/minecraft/tags/block/mineable/axe.json

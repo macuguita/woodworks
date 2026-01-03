@@ -52,9 +52,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -118,6 +116,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_STUMP = createStump("cherry_stump", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_STUMP = createStrippedStump("stripped_cherry_stump", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_STUMP = createStump("bamboo_stump", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_BAMBOO_STUMP = createStrippedStump("stripped_bamboo_stump", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> PALE_OAK_STUMP = createStump("pale_oak_stump", Blocks.PALE_OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_PALE_OAK_STUMP = createStrippedStump("stripped_pale_oak_stump", Blocks.STRIPPED_PALE_OAK_LOG);
 
@@ -152,6 +153,9 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> CARVED_CHERRY_LOG = createCarvedLog("carved_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CHERRY_LOG = createStrippedCarvedLog("stripped_carved_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+
+	public static final GuitaRegistryEntry<Block> CARVED_BAMBOO_LOG = createCarvedLog("carved_bamboo_log", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_BAMBOO_LOG = createStrippedCarvedLog("stripped_carved_bamboo_log", Blocks.STRIPPED_BAMBOO_BLOCK);
 
 	public static final GuitaRegistryEntry<Block> CARVED_PALE_OAK_LOG = createCarvedLog("carved_pale_oak_log", Blocks.PALE_OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_PALE_OAK_LOG = createStrippedCarvedLog("stripped_carved_pale_oak_log", Blocks.STRIPPED_PALE_OAK_LOG);
@@ -188,6 +192,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_BEAM = createBeam("cherry_beam", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_BEAM = createStrippedBeam("stripped_cherry_beam", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_BEAM = createBeam("bamboo_beam", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_BAMBOO_BEAM = createStrippedBeam("stripped_bamboo_beam", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> PALE_OAK_BEAM = createBeam("pale_oak_beam", Blocks.PALE_OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_PALE_OAK_BEAM = createStrippedBeam("stripped_pale_oak_beam", Blocks.STRIPPED_PALE_OAK_LOG);
 
@@ -223,6 +230,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> HOLLOW_CHERRY_LOG = createHollowLog("hollow_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CHERRY_LOG = createStrippedHollowLog("stripped_hollow_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> HOLLOW_BAMBOO_LOG = createHollowLog("hollow_bamboo_log", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_BAMBOO_LOG = createStrippedHollowLog("stripped_hollow_bamboo_log", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> HOLLOW_PALE_OAK_LOG = createHollowLog("hollow_pale_oak_log", Blocks.PALE_OAK_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_PALE_OAK_LOG = createStrippedHollowLog("stripped_hollow_pale_oak_log", Blocks.STRIPPED_PALE_OAK_LOG);
 
@@ -250,6 +260,8 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> CHERRY_SUPPORT = createSupportBlock("cherry_support", Blocks.CHERRY_PLANKS);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_SUPPORT = createSupportBlock("bamboo_support", Blocks.BAMBOO_PLANKS);
+
 	public static final GuitaRegistryEntry<Block> PALE_OAK_SUPPORT = createSupportBlock("pale_oak_support", Blocks.PALE_OAK_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> CRIMSON_SUPPORT = createSupportBlock("crimson_support", Blocks.CRIMSON_PLANKS);
@@ -271,6 +283,8 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> MANGROVE_SHUTTER = createShutterBlock("mangrove_shutter", Blocks.MANGROVE_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> CHERRY_SHUTTER = createShutterBlock("cherry_shutter", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BAMBOO_SHUTTER = createShutterBlock("bamboo_shutter", Blocks.BAMBOO_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> PALE_OAK_SHUTTER = createShutterBlock("pale_oak_shutter", Blocks.PALE_OAK_PLANKS);
 
