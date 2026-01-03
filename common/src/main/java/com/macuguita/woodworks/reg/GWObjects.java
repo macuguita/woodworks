@@ -108,6 +108,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_STUMP = createStump("cherry_stump", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_STUMP = createStrippedStump("stripped_cherry_stump", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_STUMP = createStump("bamboo_stump", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_BAMBOO_STUMP = createStrippedStump("stripped_bamboo_stump", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> CRIMSON_STUMP = createStump("crimson_stump", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CRIMSON_STUMP = createStrippedStump("stripped_crimson_stump", Blocks.STRIPPED_CRIMSON_STEM);
 
@@ -139,6 +142,9 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> CARVED_CHERRY_LOG = createCarvedLog("carved_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CHERRY_LOG = createStrippedCarvedLog("stripped_carved_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+
+	public static final GuitaRegistryEntry<Block> CARVED_BAMBOO_LOG = createCarvedLog("carved_bamboo_log", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_BAMBOO_LOG = createStrippedCarvedLog("stripped_carved_bamboo_log", Blocks.STRIPPED_BAMBOO_BLOCK);
 
 	public static final GuitaRegistryEntry<Block> CARVED_CRIMSON_STEM = createCarvedLog("carved_crimson_stem", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CARVED_CRIMSON_STEM = createStrippedCarvedLog("stripped_carved_crimson_stem", Blocks.STRIPPED_CRIMSON_STEM);
@@ -172,6 +178,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> CHERRY_BEAM = createBeam("cherry_beam", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CHERRY_BEAM = createStrippedBeam("stripped_cherry_beam", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_BEAM = createBeam("bamboo_beam", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_BAMBOO_BEAM = createStrippedBeam("stripped_bamboo_beam", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> CRIMSON_BEAM = createBeam("crimson_beam", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_CRIMSON_BEAM = createStrippedBeam("stripped_crimson_beam", Blocks.STRIPPED_CRIMSON_STEM);
 
@@ -204,6 +213,9 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> HOLLOW_CHERRY_LOG = createHollowLog("hollow_cherry_log", Blocks.CHERRY_LOG);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CHERRY_LOG = createStrippedHollowLog("stripped_hollow_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
 
+	public static final GuitaRegistryEntry<Block> HOLLOW_BAMBOO_LOG = createHollowLog("hollow_bamboo_log", Blocks.BAMBOO_BLOCK);
+	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_BAMBOO_LOG = createStrippedHollowLog("stripped_hollow_bamboo_log", Blocks.STRIPPED_BAMBOO_BLOCK);
+
 	public static final GuitaRegistryEntry<Block> HOLLOW_CRIMSON_STEM = createHollowLog("hollow_crimson_stem", Blocks.CRIMSON_STEM);
 	public static final GuitaRegistryEntry<Block> STRIPPED_HOLLOW_CRIMSON_STEM = createStrippedHollowLog("stripped_hollow_crimson_stem", Blocks.STRIPPED_CRIMSON_STEM);
 
@@ -228,6 +240,8 @@ public class GWObjects {
 
 	public static final GuitaRegistryEntry<Block> CHERRY_SUPPORT = createSupportBlock("cherry_support", Blocks.CHERRY_PLANKS);
 
+	public static final GuitaRegistryEntry<Block> BAMBOO_SUPPORT = createSupportBlock("bamboo_support", Blocks.BAMBOO_PLANKS);
+
 	public static final GuitaRegistryEntry<Block> CRIMSON_SUPPORT = createSupportBlock("crimson_support", Blocks.CRIMSON_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> WARPED_SUPPORT = createSupportBlock("warped_support", Blocks.WARPED_PLANKS);
@@ -247,6 +261,8 @@ public class GWObjects {
 	public static final GuitaRegistryEntry<Block> MANGROVE_SHUTTER = createShutterBlock("mangrove_shutter", Blocks.MANGROVE_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> CHERRY_SHUTTER = createShutterBlock("cherry_shutter", Blocks.CHERRY_PLANKS);
+
+	public static final GuitaRegistryEntry<Block> BAMBOO_SHUTTER = createShutterBlock("bamboo_shutter", Blocks.BAMBOO_PLANKS);
 
 	public static final GuitaRegistryEntry<Block> CRIMSON_SHUTTER = createShutterBlock("crimson_shutter", Blocks.CRIMSON_PLANKS);
 
