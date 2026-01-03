@@ -217,7 +217,8 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 				for (BooleanProperty prop : PROPERTY_BY_DIRECTION.values()) {
 					strippedState = strippedState.setValue(prop, state.getValue(prop));
 				}
-				strippedState = strippedState.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+				strippedState = strippedState.setValue(WATERLOGGED, state.getValue(WATERLOGGED))
+						.setValue(RADIUS, state.getValue(RADIUS));
 				level.setBlockAndUpdate(pos, strippedState);
 				level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 				level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
