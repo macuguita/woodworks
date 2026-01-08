@@ -1,6 +1,7 @@
 plugins {
     id("dev.architectury.loom").version("1.13-SNAPSHOT").apply(false)
     id("architectury-plugin").version("3.4-SNAPSHOT")
+    id("co.uzzu.dotenv.gradle").version("4.0.0")
     id("com.gradleup.shadow").version("8.3.6").apply(false)
     id("me.modmuss50.mod-publish-plugin").version("1.0.0")
 }
@@ -47,6 +48,40 @@ allprojects {
             }
             filter {
                 includeGroup("curse.maven")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "macuguita"
+                    url = uri("https://maven.macuguita.com/releases/")
+                }
+            }
+            filter {
+                includeGroup("com.macuguita")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Sisby Maven"
+                    url = uri("https://repo.sleeping.town/")
+                }
+            }
+            filter {
+                includeGroup("folk.sisby")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Xander Maven"
+                    url = uri("https://maven.isxander.dev/releases/")
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("dev.isxander")
+                includeGroupAndSubgroups("org.quiltmc.parsers")
             }
         }
     }
@@ -136,16 +171,5 @@ subprojects {
 
     tasks.withType<JavaCompile>().configureEach {
         options.release.set(21)
-    }
-
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                artifactId = the<BasePluginExtension>().archivesName.get()
-                from(components.getByName("java"))
-            }
-        }
-
-        repositories {}
     }
 }

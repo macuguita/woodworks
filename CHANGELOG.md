@@ -1,1 +1,1 @@
-- Added bamboo blocks
+- Updated compatibility with new macu_lib

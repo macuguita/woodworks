@@ -53,8 +53,9 @@ dependencies {
     }
     "shadowBundle"(project(":common", "transformProductionNeoForge"))
 
+    modImplementation("com.macuguita:macu_lib-neoforge:${BuildConfig.macuLibVersion}+${BuildConfig.minecraftVersion}")
+
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-${BuildConfig.minecraftVersion}-neoforge")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
 
     val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
@@ -98,5 +99,28 @@ tasks.remapJar {
     inputs.file(shadowJar.flatMap { it.archiveFile })
     doFirst {
         println("Remapping shadow jar: ${shadowJar.get().archiveFile.get().asFile}")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            groupId = BuildConfig.modId
+            artifactId = BuildConfig.modId + "-neoforge"
+            version = BuildConfig.modVersion
+            from(components["java"])
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            name = "macuguita"
+            url = uri("https://maven.macuguita.com/releases")
+
+            credentials {
+                username = env.MAVEN_USERNAME.orNull()
+                password = env.MAVEN_KEY.orNull()
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ object BuildConfig {
     val architectureApiVersion: String = "13.0.8"
     val enabledPlatforms: String = "fabric,neoforge"
 
-    val modVersion: String = "1.2.1-" + minecraftVersion
+    val modVersion: String = "1.2.2+" + minecraftVersion
     val mavenGroup: String = "com.macuguita.woodworks"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
@@ -22,7 +22,7 @@ object BuildConfig {
     val fabricVersion: String = "0.116.7+" + minecraftVersion
     val everyCompatVersion: String = "1.21-2.11.22"
     val moonlightLibVersion: String = "1.21-2.28.2"
-    val macuLibVersion: String = "1.0.5"
+    val macuLibVersion: String = "2.0.0"
     val modmenuVersion: String = "11.0.3"
     val reiVersion: String = "16.0.799"
 
