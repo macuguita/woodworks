@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.macuguita.lib.platform.registry.GuitaRegistries;
-import com.macuguita.lib.platform.registry.GuitaRegistry;
-import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
+import com.macuguita.lib.reg.GuitaRegistries;
+import com.macuguita.lib.reg.GuitaRegistry;
+import com.macuguita.lib.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;

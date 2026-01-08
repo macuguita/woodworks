@@ -62,8 +62,7 @@ dependencies {
     //modImplementation "com.macuguita.lib:macu_lib-neoforge:${project.macu_lib_version}-${project.minecraft_version}"
 
     // Modrinth
-    modImplementation("maven.modrinth:macu-lib:${BuildConfig.macuLibVersion}-1.21.11-fabric")
-    //modImplementation("com.macuguita.lib:macu_lib-fabric:${BuildConfig.macuLibVersion}-1.21.9")
+    modImplementation("com.macuguita:macu_lib-fabric:${BuildConfig.macuLibVersion}")
     //modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
     //val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
     //if (isMyPc) {
@@ -106,4 +105,27 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().con
 
 tasks.remapJar {
     inputFile.set(tasks.shadowJar.flatMap { it.archiveFile })
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            groupId = BuildConfig.mavenGroup
+            artifactId = BuildConfig.modId + "-fabric"
+            version = BuildConfig.modVersion
+            from(components["java"])
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            name = "macuguita"
+            url = uri("https://maven.macuguita.com/releases")
+
+            credentials {
+                username = env.MAVEN_USERNAME.orNull()
+                password = env.MAVEN_KEY.orNull()
+            }
+        }
+    }
 }

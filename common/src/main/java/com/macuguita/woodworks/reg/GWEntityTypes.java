@@ -22,9 +22,9 @@
 
 package com.macuguita.woodworks.reg;
 
-import com.macuguita.lib.platform.registry.GuitaRegistries;
-import com.macuguita.lib.platform.registry.GuitaRegistry;
-import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
+import com.macuguita.lib.reg.GuitaRegistries;
+import com.macuguita.lib.reg.GuitaRegistry;
+import com.macuguita.lib.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.entity.Seat;
 

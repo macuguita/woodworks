@@ -25,8 +25,8 @@ package com.macuguita.woodworks;
 import java.util.Map;
 import java.util.Optional;
 
-import com.macuguita.lib.platform.registry.GuitaRegistry;
-import com.macuguita.lib.platform.registry.GuitaRegistryEntry;
+import com.macuguita.lib.reg.GuitaRegistry;
+import com.macuguita.lib.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.block.HollowLogBlock;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
