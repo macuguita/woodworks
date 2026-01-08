@@ -10,7 +10,7 @@ object BuildConfig {
     val enabledPlatforms: String = "fabric,neoforge"
 
     val modVersion: String = "1.2.2+" + minecraftVersion
-    val mavenGroup: String = "com.macuguita.woodworks"
+    val mavenGroup: String = "com.macuguita"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
     val description: String = "Decorations that have some sort of chopped charm!"

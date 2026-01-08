@@ -109,7 +109,7 @@ tasks.remapJar {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            groupId = BuildConfig.modId
+            groupId = BuildConfig.mavenGroup
             artifactId = BuildConfig.modId + "-fabric"
             version = BuildConfig.modVersion
             from(components["java"])

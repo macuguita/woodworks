@@ -105,7 +105,7 @@ tasks.remapJar {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            groupId = BuildConfig.modId
+            groupId = BuildConfig.mavenGroup
             artifactId = BuildConfig.modId + "-neoforge"
             version = BuildConfig.modVersion
             from(components["java"])
