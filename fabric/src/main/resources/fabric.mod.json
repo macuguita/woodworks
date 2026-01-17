@@ -32,7 +32,7 @@
   "depends": {
     "fabricloader": ">=${loaderVersion}",
     "minecraft": "${minecraftVersionRange}",
-    "java": ">=21",
+    "java": ">=17",
     "macu_lib": ">=${macuLibVersion}-${minecraftVersion}",
     "fabric-api": "*"
   },

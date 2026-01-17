@@ -8,7 +8,7 @@ object BuildConfig {
     val architectureApiVersion: String = "9.2.14"
     val enabledPlatforms: String = "fabric,forge"
 
-    val modVersion: String = "1.1.1-" + minecraftVersion
+    val modVersion: String = "1.1.1a-" + minecraftVersion
     val mavenGroup: String = "com.macuguita.woodworks"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
