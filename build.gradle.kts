@@ -128,9 +128,12 @@ subprojects {
                     minecraftVersions.add(version)
                 if (modLoader == "fabric") {
                     requires("fabric-api")
+                    optional("modmenu")
                 }
                 requires("macu-lib")
                 optional("every-compat")
+                optional("mcqoy")
+                optional("qomc")
             }
             curseforge {
                 projectId = "1308420"
@@ -144,9 +147,12 @@ subprojects {
                 projectSlug = "guitas-woodworks"
                 if (modLoader == "fabric") {
                     requires("fabric-api")
+                    optional("modmenu")
                 }
                 requires("macu-lib")
                 optional("every-compat")
+                optional("mcqoy")
+                optional("qomc")
             }
         }
     }
