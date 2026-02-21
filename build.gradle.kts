@@ -131,7 +131,6 @@ subprojects {
                     optional("modmenu")
                 }
                 requires("macu-lib")
-                optional("every-compat")
                 optional("mcqoy")
                 optional("qomc")
             }
@@ -150,7 +149,6 @@ subprojects {
                     optional("modmenu")
                 }
                 requires("macu-lib")
-                optional("every-compat")
                 optional("mcqoy")
                 optional("qomc")
             }

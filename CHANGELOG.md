@@ -1,1 +1,2 @@
-- Updated compatibility with new macu_lib
+- Added a new config [#3](https://github.com/macuguita/woodworks/issues/3)
+- Fixed dependency metadata stuff
