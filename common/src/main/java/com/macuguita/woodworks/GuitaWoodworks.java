@@ -36,6 +36,8 @@ import com.macuguita.woodworks.reg.GWEntityTypes;
 import com.macuguita.woodworks.reg.GWItemGroups;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
+import folk.sisby.kaleido.api.WrappedConfig;
+import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +52,34 @@ public final class GuitaWoodworks {
 	public static final String MOD_ID = "gwoodworks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	public static final Config CONFIG = WrappedConfig.createToml(GWUtils.getConfigDir(), "", MOD_ID, Config.class);
+
+	public static final class Config extends WrappedConfig {
+
+		@Comment("!!! DISCLAIMER !!!")
+		@Comment("If you disable blocks after loading a world")
+		@Comment("the disabled blocks will be removed")
+		@Comment("with no way to bring them back if you've not done a previous backup.")
+		@Comment("")
+		@Comment("For the best experience make sure that the configs are the same in the client and server")
+		@Comment("so clients don't hallucinate blocks that are not available in recipe viewers or creative menus")
+		@Comment("")
+		@Comment("If false, hides/disables Stump blocks for all wood types.")
+		public boolean enableStumps = true;
+		@Comment("If false, hides/disables Carved Log blocks for all wood types.")
+		public boolean enableCarvedLogs = true;
+		@Comment("If false, hides/disables Beam blocks for all wood types and the Secateurs item.")
+		public boolean enableBeams = true;
+		@Comment("Allow resizing resizable beams using shears.")
+		public boolean enableResizingBeams = true;
+		@Comment("If false, hides/disables Hollow Log blocks for all wood types.")
+		public boolean enableHollowLogs = true;
+		@Comment("If false, hides/disables Support blocks for all wood types.")
+		public boolean enableSupports = true;
+		@Comment("If false, hides/disables Shutter blocks for all wood types.")
+		public boolean enableShutters = true;
+	}
+
 	public static void init() {
 		GWObjects.init();
 		GWEntityTypes.init();
@@ -57,12 +87,24 @@ public final class GuitaWoodworks {
 	}
 
 	public static void commonSetup() {
-		registerFuelAndRegisterStripped(GWObjects.STUMP_BLOCKS, GWObjects.STRIPPED_STUMP_BLOCKS, StumpSeatBlock.STRIPPED_STUMPS, 150);
-		registerFuelAndRegisterStripped(GWObjects.CARVED_LOG_BLOCKS, GWObjects.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
-		registerFuelAndRegisterStripped(GWObjects.BEAM_BLOCKS, GWObjects.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
-		registerFuelAndRegisterStripped(GWObjects.HOLLOW_LOG_BLOCKS, GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS, HollowLogBlock.STRIPPED_HOLLOW_LOGS, 150);
-		registerFuel(GWObjects.SUPPORT_BLOCKS, null, 150);
-		registerFuel(GWObjects.SHUTTER_BLOCKS, null, 150);
+		if (CONFIG.enableStumps) {
+			registerFuelAndRegisterStripped(GWObjects.STUMP_BLOCKS, GWObjects.STRIPPED_STUMP_BLOCKS, StumpSeatBlock.STRIPPED_STUMPS, 150);
+		}
+		if (CONFIG.enableCarvedLogs) {
+			registerFuelAndRegisterStripped(GWObjects.CARVED_LOG_BLOCKS, GWObjects.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
+		}
+		if (CONFIG.enableBeams) {
+			registerFuelAndRegisterStripped(GWObjects.BEAM_BLOCKS, GWObjects.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
+		}
+		if (CONFIG.enableHollowLogs) {
+			registerFuelAndRegisterStripped(GWObjects.HOLLOW_LOG_BLOCKS, GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS, HollowLogBlock.STRIPPED_HOLLOW_LOGS, 150);
+		}
+		if (CONFIG.enableSupports) {
+			registerFuel(GWObjects.SUPPORT_BLOCKS, null, 150);
+		}
+		if (CONFIG.enableShutters) {
+			registerFuel(GWObjects.SHUTTER_BLOCKS, null, 150);
+		}
 	}
 
 	private static void registerFuelAndRegisterStripped(GuitaRegistry<Block> blockReg, GuitaRegistry<Block> strippedBlockReg, Map<Block, Block> strippedMap, int fuelTime) {

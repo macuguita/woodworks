@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.utils;
 
+import java.nio.file.Path;
 import java.util.Objects;
 
 import com.macuguita.woodworks.mixin.AxeItemAccessor;
@@ -36,6 +37,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GWUtils {
+
+	@ExpectPlatform
+	public static Path getConfigDir() {
+		throw new AssertionError();
+	}
 
 	@ExpectPlatform
 	public static boolean isModLoaded(String id) {

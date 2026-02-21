@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.utils.neoforge;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 
@@ -40,6 +42,10 @@ public class GWUtilsImpl {
 
 	private static final Object2IntMap<ItemLike> FUEL_ITEMS = new Object2IntLinkedOpenHashMap<>();
 	private static final Map<Block, Pair<Integer, Integer>> FLAMMABLE_BLOCKS = new HashMap<>();
+
+	public static Path getConfigDir() {
+		return FMLPaths.CONFIGDIR.get();
+	}
 
 	public static boolean isModLoaded(String id) {
 		return ModList.get().isLoaded(id);
