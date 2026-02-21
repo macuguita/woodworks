@@ -46,16 +46,13 @@ repositories {
 dependencies {
     neoForge("net.neoforged:neoforge:${BuildConfig.neoforgeVersion}")
 
-    modCompileOnly("dev.architectury:architectury-neoforge:${BuildConfig.architectureApiVersion}")
-
     "common"(project(":common", "namedElements")) {
         isTransitive = false
     }
     "shadowBundle"(project(":common", "transformProductionNeoForge"))
 
-    modImplementation("com.macuguita:macu_lib-neoforge:${BuildConfig.macuLibVersion}+${BuildConfig.minecraftVersion}")
-
     // Modrinth
+    modImplementation("com.macuguita:macu_lib-neoforge:${BuildConfig.macuLibVersion}+${BuildConfig.minecraftVersion}")
     modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
 
     val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
@@ -66,6 +63,7 @@ dependencies {
     }
 
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
+    // Other Mavens
     modImplementation("com.github.glitchfiend:TerraBlender-neoforge:${BuildConfig.minecraftVersion}-${BuildConfig.terrablenderVersion}")
     modApi("me.shedaniel:RoughlyEnoughItems-neoforge:${BuildConfig.reiVersion}")
 }
@@ -95,11 +93,7 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().con
 }
 
 tasks.remapJar {
-    val shadowJar = tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar")
-    inputs.file(shadowJar.flatMap { it.archiveFile })
-    doFirst {
-        println("Remapping shadow jar: ${shadowJar.get().archiveFile.get().asFile}")
-    }
+    inputFile.set(tasks.shadowJar.flatMap { it.archiveFile })
 }
 
 publishing {

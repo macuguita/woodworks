@@ -1,1 +1,3 @@
-- Updated compatibility with new macu_lib
+- Added a new config
+- Fixed a mixin neoforge mixin issue
+- Fixed dependency metadata stuff

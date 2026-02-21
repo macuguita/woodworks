@@ -33,7 +33,7 @@
     "fabricloader": ">=${loaderVersion}",
     "minecraft": "${minecraftVersionRange}",
     "java": ">=21",
-    "macu_lib": ">=${macuLibVersion}-${minecraftVersion}",
+    "macu_lib": ">=${macuLibVersion}+${minecraftVersion}",
     "fabric-api": "*"
   },
   "suggests": {
