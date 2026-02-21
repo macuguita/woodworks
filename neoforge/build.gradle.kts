@@ -34,6 +34,8 @@ loom {
             }
         }
     }
+
+    accessWidenerPath = file("src/main/resources/${BuildConfig.modId}.neoforge.accesswidener")
 }
 
 repositories {
@@ -94,6 +96,7 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().con
 
 tasks.remapJar {
     inputFile.set(tasks.shadowJar.flatMap { it.archiveFile })
+    atAccessWideners.add("${BuildConfig.modId}.neoforge.accesswidener")
 }
 
 publishing {

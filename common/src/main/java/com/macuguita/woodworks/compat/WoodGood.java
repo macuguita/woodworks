@@ -102,8 +102,8 @@ public class WoodGood extends SimpleModule {
 						GWObjects.STRIPPED_OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
 				)
-				.requiresChildren("stripped_log")
 				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
 				.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.STRIPPED_LOG_SIDE_STANDARD)
 				.addTag(GWItemTags.STUMP, Registries.ITEM)
 				.addTag(GWBlockTags.STUMP, Registries.BLOCK)
@@ -142,6 +142,7 @@ public class WoodGood extends SimpleModule {
 						w -> new CarvedLogSeatBlock(Utils.copyPropertySafe(w.log))
 				)
 				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
 				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.CARVED_LOG, Registries.ITEM)
 				.addTag(GWBlockTags.CARVED_LOG, Registries.BLOCK)
@@ -176,6 +177,8 @@ public class WoodGood extends SimpleModule {
 						GWObjects.STRIPPED_OAK_BEAM, () -> VanillaWoodTypes.OAK,
 						w -> new ResizableBeamBlock(Utils.copyPropertySafe(w.log))
 				)
+				//TEXTURE: stripped_log
+				.requiresChildren("stripped_log")
 				.addTag(GWItemTags.BEAM, Registries.ITEM)
 				.addTag(GWBlockTags.BEAM, Registries.BLOCK)
 				.setTabKey(tab)

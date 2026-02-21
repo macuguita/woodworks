@@ -58,18 +58,9 @@ allprojects {
                 }
             }
             filter {
-                includeGroup("com.macuguita")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = "Sisby Maven"
-                    url = uri("https://repo.sleeping.town/")
-                }
-            }
-            filter {
-                includeGroup("folk.sisby")
+                includeGroupAndSubgroups("com.macuguita")
+                includeGroupAndSubgroups("folk.sisby")
+                includeGroupAndSubgroups("org.quiltmc.parsers")
             }
         }
         exclusiveContent {

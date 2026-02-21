@@ -32,13 +32,14 @@ side = "BOTH"
 modId = "macu_lib"
 type = "required"
 versionRange = "[${macuLibVersion}+${minecraftVersion},)"
+ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.${ modId }]]
 modId = "everycomp"
 type = "optional"
 versionRange = "*"
-ordering = "BEFORE"
+ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
