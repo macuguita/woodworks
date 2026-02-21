@@ -1,5 +1,6 @@
 package com.macuguita.woodworks.compat;
 
+import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.block.ResizableBeamBlock;
 import com.macuguita.woodworks.block.SupportBlock;
 import com.macuguita.woodworks.reg.GWItemTags;
@@ -24,7 +25,11 @@ public class Callbacks {
 		if (item.is(ItemTags.AXES) && block instanceof SupportBlock) {
 			SupportBlock.onSupportActivation(item, state, level, pos, player, hitResult.getLocation());
 			return InteractionResult.sidedSuccess(level.isClientSide);
-		} else if ((item.is(ItemTags.AXES) || item.is(GWItemTags.SHEARS) || item.is(GWItemTags.SECATEURS)) && block instanceof ResizableBeamBlock beamBlock && beamBlock.isStrippable()) {
+		} else if (GuitaWoodworks.CONFIG.enableResizingBeams
+				&& ((item.is(ItemTags.AXES)
+				|| item.is(GWItemTags.SHEARS)
+				|| item.is(GWItemTags.SECATEURS))
+				&& block instanceof ResizableBeamBlock beamBlock && beamBlock.isStrippable())) {
 			ResizableBeamBlock.onResizableBeamActivation(state, level, pos, player, hitResult);
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}

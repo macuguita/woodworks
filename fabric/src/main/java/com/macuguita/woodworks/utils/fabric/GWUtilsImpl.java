@@ -27,7 +27,13 @@ import net.minecraft.world.level.ItemLike;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.nio.file.Path;
+
 public class GWUtilsImpl {
+
+	public static Path getConfigDir() {
+		return FabricLoader.getInstance().getConfigDir();
+	}
 
 	public static boolean isModLoaded(String id) {
 		return FabricLoader.getInstance().isModLoaded(id);

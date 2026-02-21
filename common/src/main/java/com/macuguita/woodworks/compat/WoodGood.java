@@ -78,6 +78,7 @@ public class WoodGood extends SimpleModule {
 		super(modId, "gww", EveryCompat.MOD_ID);
 		ResourceLocation tab = modRes("main");
 
+		var config = GuitaWoodworks.CONFIG;
 		stump = SimpleEntrySet.builder(WoodType.class, "stump",
 						GWObjects.OAK_STUMP, () -> VanillaWoodTypes.OAK,
 						w -> new StumpSeatBlock(Utils.copyPropertySafe(w.log))
@@ -94,7 +95,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(stump);
+		if (config.enableStumps)
+			this.addEntry(stump);
 
 		strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
 						GWObjects.STRIPPED_OAK_STUMP, () -> VanillaWoodTypes.OAK,
@@ -113,7 +115,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(strippedStump);
+		if (config.enableStumps)
+			this.addEntry(strippedStump);
 
 		carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
 						GWObjects.CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
@@ -131,7 +134,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(carvedLog);
+		if (config.enableCarvedLogs)
+			this.addEntry(carvedLog);
 
 		strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
 						GWObjects.STRIPPED_CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
@@ -149,7 +153,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(strippedCarvedLog);
+		if (config.enableCarvedLogs)
+			this.addEntry(strippedCarvedLog);
 
 		beam = SimpleEntrySet.builder(WoodType.class, "beam",
 						GWObjects.OAK_BEAM, () -> VanillaWoodTypes.OAK,
@@ -164,7 +169,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(beam);
+		if (config.enableBeams)
+			this.addEntry(beam);
 
 		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
 						GWObjects.STRIPPED_OAK_BEAM, () -> VanillaWoodTypes.OAK,
@@ -180,7 +186,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(strippedBeam);
+		if (config.enableBeams)
+			this.addEntry(strippedBeam);
 
 		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
 						GWObjects.HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
@@ -198,7 +205,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(hollowLog);
+		if (config.enableHollowLogs)
+			this.addEntry(hollowLog);
 
 		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
 						GWObjects.STRIPPED_HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
@@ -216,7 +224,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(strippedHollowLog);
+		if (config.enableHollowLogs)
+			this.addEntry(strippedHollowLog);
 
 		supportBlock = SimpleEntrySet.builder(WoodType.class, "support",
 						GWObjects.OAK_SUPPORT, () -> VanillaWoodTypes.OAK,
@@ -235,7 +244,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(supportBlock);
+		if (config.enableSupports)
+			this.addEntry(supportBlock);
 
 		shutterBlock = SimpleEntrySet.builder(WoodType.class, "shutter",
 						GWObjects.OAK_SHUTTER, () -> VanillaWoodTypes.OAK,
@@ -253,7 +263,8 @@ public class WoodGood extends SimpleModule {
 				.excludeBlockTypes("terrestria", "yucca_palm")
 				.defaultRecipe()
 				.build();
-		this.addEntry(shutterBlock);
+		if (config.enableShutters)
+			this.addEntry(shutterBlock);
 	}
 
 	@Override
