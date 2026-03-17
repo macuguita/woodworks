@@ -158,14 +158,10 @@ public final class GuitaWoodworks {
 	}
 
 	private static void everyCompatModule() {
-		try {
-			if (GWUtils.isModLoaded("everycomp")) {
-				ModCompat.initWoodGood();
-			} else {
-				LOGGER.info("EveryCompat module is not loaded");
-			}
-		} catch (Exception e) {
-			LOGGER.error("Failed to start EveryComp module", e);
+		if (GWUtils.isModLoaded("everycomp")) {
+			ModCompat.initWoodGood();
+		} else {
+			LOGGER.info("EveryCompat module is not loaded");
 		}
 	}
 
