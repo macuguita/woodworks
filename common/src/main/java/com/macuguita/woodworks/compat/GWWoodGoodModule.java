@@ -34,15 +34,16 @@ import com.macuguita.woodworks.block.SupportBlock;
 import com.macuguita.woodworks.item.SupportBlockItem;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 import com.macuguita.woodworks.reg.GWBlockTags;
+import com.macuguita.woodworks.reg.GWItemGroups;
 import com.macuguita.woodworks.reg.GWItemTags;
 import com.macuguita.woodworks.reg.GWObjects;
 import com.macuguita.woodworks.utils.GWUtils;
 import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.api.PaletteStrategies;
 import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
-import net.mehvahdjukaar.every_compat.api.SimpleModule;
 import net.mehvahdjukaar.every_compat.misc.CompatSpritesHelper;
 import net.mehvahdjukaar.every_compat.misc.HardcodedBlockType;
+import net.mehvahdjukaar.every_compat.modules.EveryCompatModule;
 import net.mehvahdjukaar.moonlight.api.resources.BlockTypeResTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.RPUtils;
 import net.mehvahdjukaar.moonlight.api.resources.pack.ResourceGenTask;
@@ -53,6 +54,10 @@ import net.mehvahdjukaar.moonlight.api.set.BlockType;
 import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
+
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Registry;
@@ -61,22 +66,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-public class WoodGood extends SimpleModule {
+public class GWWoodGoodModule extends EveryCompatModule {
 
-	public final SimpleEntrySet<WoodType, Block> stump;
-	public final SimpleEntrySet<WoodType, Block> strippedStump;
-	public final SimpleEntrySet<WoodType, Block> carvedLog;
-	public final SimpleEntrySet<WoodType, Block> strippedCarvedLog;
-	public final SimpleEntrySet<WoodType, Block> beam;
-	public final SimpleEntrySet<WoodType, Block> strippedBeam;
-	public final SimpleEntrySet<WoodType, Block> hollowLog;
-	public final SimpleEntrySet<WoodType, Block> strippedHollowLog;
+	public final SimpleEntrySet<WoodType, Block> stump, strippedStump;
+	public final SimpleEntrySet<WoodType, Block> carvedLog, strippedCarvedLog;
+	public final SimpleEntrySet<WoodType, Block> beam, strippedBeam;
+	public final SimpleEntrySet<WoodType, Block> hollowLog, strippedHollowLog;
 	public final SimpleEntrySet<WoodType, Block> supportBlock;
 	public final SimpleEntrySet<WoodType, Block> shutterBlock;
 
-	public WoodGood(String modId) {
-		super(modId, "gww", EveryCompat.MOD_ID);
-		ResourceLocation tab = modRes("main");
+	public GWWoodGoodModule() {
+		super(GuitaWoodworks.MOD_ID, "gww");
+		ResourceKey<CreativeModeTab> tab = GWItemGroups.GW_TAB_KEY;
 
 		var config = GuitaWoodworks.CONFIG;
 		stump = SimpleEntrySet.builder(WoodType.class, "stump",
@@ -590,8 +591,9 @@ public class WoodGood extends SimpleModule {
 	}
 
 	@Override
-	public boolean isEntryAlreadyRegistered(String entrySetId, String blockId, BlockType blockType, Registry<?> registry) {
-		String blockName = blockId.substring(blockId.lastIndexOf("/") + 1);
+	public boolean isEntryAlreadyRegistered(String entrySetId, ResourceLocation blockId, BlockType blockType, Registry<?> registry) {
+		String blockPath = blockId.getPath();
+		String blockName = blockPath.substring(blockPath.lastIndexOf("/") + 1);
 
 		if (blockType instanceof WoodType wt) {
 			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(entrySetId, blockName, wt, modId);

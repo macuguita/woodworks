@@ -160,7 +160,7 @@ public final class GuitaWoodworks {
 	private static void everyCompatModule() {
 		try {
 			if (GWUtils.isModLoaded("everycomp")) {
-				ModCompat.init();
+				ModCompat.initWoodGood();
 			} else {
 				LOGGER.info("EveryCompat module is not loaded");
 			}

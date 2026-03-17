@@ -52,23 +52,14 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${BuildConfig.fabricVersion}")
 
-    modCompileOnly("dev.architectury:architectury-fabric:${BuildConfig.architectureApiVersion}")
-
     "common"(project(":common", "namedElements")) {
         isTransitive = false
     }
     "shadowBundle"(project(":common", "transformProductionFabric"))
 
     modImplementation("com.macuguita:macu_lib-fabric:${BuildConfig.macuLibVersion}+${BuildConfig.minecraftVersion}")
+    modImplementation("net.mehvahdjukaar:everycomp-fabric:${BuildConfig.everyCompatVersion}")
 
-    // Modrinth
-    modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-fabric")
-    val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
-    if (isMyPc) {
-        modImplementation("net.mehvahdjukaar:moonlight-fabric:${BuildConfig.moonlightLibVersion}")
-    } else {
-        modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-fabric")
-    }
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionFabric}")
 
     // Other Mavens

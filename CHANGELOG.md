@@ -1,5 +1,1 @@
-- Added a new config [#3](https://github.com/macuguita/woodworks/issues/3)
-- Fixed a mixin neoforge mixin issue
-- Fixed dependency metadata stuff
-- Fixed access transformer issue on neoforge
-- Fixed stripped log issues with every compat, now makes sure that the stripped logs are correct, Fixes [#4](https://github.com/macuguita/woodworks/issues/4)
+- Updated every compat module

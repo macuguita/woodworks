@@ -4,12 +4,11 @@ object BuildConfig {
     val minecraftVersionRange: String = "~1.21.1"
     val parchmentMappings: String? = null
 
-    val fabricLoaderVersion: String = "0.18.2"
-    val neoforgeVersion: String = "21.1.216"
-    val architectureApiVersion: String = "13.0.8"
+    val fabricLoaderVersion: String = "0.18.4"
+    val neoforgeVersion: String = "21.1.220"
     val enabledPlatforms: String = "fabric,neoforge"
 
-    val modVersion: String = "1.2.3+" + minecraftVersion
+    val modVersion: String = "1.2.4+" + minecraftVersion
     val mavenGroup: String = "com.macuguita"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"
@@ -19,9 +18,8 @@ object BuildConfig {
     val source: String = "https://github.com/macuguita/woodworks"
     val issues: String = "https://github.com/macuguita/woodworks/issues"
 
-    val fabricVersion: String = "0.116.7+" + minecraftVersion
-    val everyCompatVersion: String = "1.21-2.11.22"
-    val moonlightLibVersion: String = "1.21-2.28.2"
+    val fabricVersion: String = "0.116.9+" + minecraftVersion
+    val everyCompatVersion: String = "1.21-2.11.31"
     val macuLibVersion: String = "2.0.2"
     val modmenuVersion: String = "11.0.3"
     val reiVersion: String = "16.0.799"

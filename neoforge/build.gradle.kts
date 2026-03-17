@@ -55,14 +55,7 @@ dependencies {
 
     // Modrinth
     modImplementation("com.macuguita:macu_lib-neoforge:${BuildConfig.macuLibVersion}+${BuildConfig.minecraftVersion}")
-    modImplementation("maven.modrinth:every-compat:${BuildConfig.everyCompatVersion}-neoforge")
-
-    val isMyPc = System.getenv("macuguita")?.equals("true", ignoreCase = true) == true
-    if (isMyPc) {
-        modImplementation("net.mehvahdjukaar:moonlight-neoforge:${BuildConfig.moonlightLibVersion}")
-    } else {
-        modImplementation("maven.modrinth:moonlight:${BuildConfig.moonlightLibVersion}-neoforge")
-    }
+    modImplementation("net.mehvahdjukaar:everycomp-neoforge:${BuildConfig.everyCompatVersion}")
 
     modRuntimeOnly("maven.modrinth:natures-spirit:${BuildConfig.naturesSpiritVersionNeoforge}")
     // Other Mavens

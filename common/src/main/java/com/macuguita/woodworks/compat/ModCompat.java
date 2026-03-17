@@ -22,7 +22,6 @@
 
 package com.macuguita.woodworks.compat;
 
-import com.macuguita.woodworks.GuitaWoodworks;
 import net.mehvahdjukaar.every_compat.api.EveryCompatAPI;
 
 public class ModCompat {
@@ -31,7 +30,7 @@ public class ModCompat {
 	 * This is a dirty "hack" because when every compat is not installed
 	 * it tries to import the `EveryCompatAPI` class on the mod init making it crash.
 	 */
-	public static void init() {
-		EveryCompatAPI.registerModule(new WoodGood(GuitaWoodworks.MOD_ID));
+	public static void initWoodGood() {
+		EveryCompatAPI.registerModule(new GWWoodGoodModule());
 	}
 }
