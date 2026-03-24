@@ -1,1 +1,3 @@
-- Updated every compat module
+- Fix sitting issues [#5](https://github.com/macuguita/woodworks/issues/5)
+- Fix interaction issues [#7](https://github.com/macuguita/woodworks/issues/7)
+- Add ja_jp [#6](https://github.com/macuguita/pull/issues/6)
