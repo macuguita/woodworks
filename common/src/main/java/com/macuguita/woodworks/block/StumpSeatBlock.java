@@ -111,6 +111,7 @@ public class StumpSeatBlock extends Block implements SittableBlock, SimpleWaterl
 		}
 		if (itemStack.is(GWItemTags.WATER_BUCKETS) || itemStack.is(GWItemTags.EMPTY_BUCKETS))
 			return ItemInteractionResult.FAIL;
+		sitOn(level, blockPos, player, null);
 		return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 

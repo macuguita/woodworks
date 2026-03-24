@@ -31,9 +31,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import org.jspecify.annotations.Nullable;
+
 public interface SittableBlock {
 
-	default boolean sitOn(Level world, BlockPos pos, Player player, Direction dir) {
+	default boolean sitOn(Level world, BlockPos pos, Player player, @Nullable Direction dir) {
 		if (!world.isClientSide && !Seat.SITTING_POSITIONS.get(world.dimension()).contains(pos)) {
 			Seat entity = Seat.of(world, pos, dir);
 			if (world.addFreshEntity(entity)) {

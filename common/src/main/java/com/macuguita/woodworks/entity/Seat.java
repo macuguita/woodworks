@@ -50,6 +50,8 @@ import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import org.jspecify.annotations.Nullable;
+
 @MethodsReturnNonnullByDefault
 public class Seat extends Entity {
 
@@ -69,7 +71,7 @@ public class Seat extends Entity {
 		this.shape = copyBox(shape);
 	}
 
-	public static Seat of(Level world, BlockPos pos, Direction dir) {
+	public static Seat of(Level world, BlockPos pos, @Nullable Direction dir) {
 		BlockState state = world.getBlockState(pos);
 		AABB shape = new AABB(pos);
 		if (state.getBlock() instanceof SittableBlock seat) {

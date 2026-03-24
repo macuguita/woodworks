@@ -103,6 +103,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		}
 		if (itemStack.is(GWItemTags.WATER_BUCKETS) || itemStack.is(GWItemTags.EMPTY_BUCKETS))
 			return ItemInteractionResult.FAIL;
+		sitOn(level, blockPos, player, blockState.getValue(FACING));
 		return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 
