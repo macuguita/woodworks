@@ -71,7 +71,7 @@ public class Seat extends Entity {
 	}
 
 	@Nullable
-	public static Seat of(Level world, BlockPos pos, Direction dir) {
+	public static Seat of(Level world, BlockPos pos, @Nullable Direction dir) {
 		BlockState state = world.getBlockState(pos);
 		AABB shape = new AABB(pos);
 		if (state.getBlock() instanceof SittableBlock seat) {

@@ -87,27 +87,27 @@ public class StumpSeatBlock extends Block implements SittableBlock, SimpleWaterl
 	}
 
 	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+	protected InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 		InteractionHand hand = player.getUsedItemHand();
 		ItemStack stack = player.getItemInHand(hand);
 		if (stack.getItem() instanceof AxeItem && strippable) {
 			Block strippedBlock = STRIPPED_STUMPS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
-				world.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
+				level.playSound(player, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
 
-				if (world instanceof ServerLevel serverWorld) {
+				if (level instanceof ServerLevel serverWorld) {
 					BlockState strippedState = strippedBlock.defaultBlockState()
-							.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+							.setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
 
-					serverWorld.setBlockAndUpdate(pos, strippedState);
+					serverWorld.setBlockAndUpdate(blockPos, strippedState);
 				}
 				return InteractionResult.SUCCESS;
 			}
 		}
 		if (stack.is(GWItemTags.STUMP)) return InteractionResult.FAIL;
 		if (stack.is(GWItemTags.WATER_BUCKETS) || stack.is(GWItemTags.EMPTY_BUCKETS)) return InteractionResult.FAIL;
-		return this.sitOn(world, pos, player, null) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+		return sitOn(level, blockPos, player, null) ? InteractionResult.SUCCESS : super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 
 	@Override
