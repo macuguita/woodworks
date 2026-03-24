@@ -26,10 +26,10 @@ public class Callbacks {
 			SupportBlock.onSupportActivation(item, state, level, pos, player, hitResult.getLocation());
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		} else if (GuitaWoodworks.CONFIG.enableResizingBeams
-				&& ((item.is(ItemTags.AXES)
+				&& block instanceof ResizableBeamBlock
+				&& (item.is(ItemTags.AXES)
 				|| item.is(GWItemTags.SHEARS)
-				|| item.is(GWItemTags.SECATEURS))
-				&& block instanceof ResizableBeamBlock beamBlock && beamBlock.isStrippable())) {
+				|| item.is(GWItemTags.SECATEURS))) {
 			ResizableBeamBlock.onResizableBeamActivation(state, level, pos, player, hitResult);
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
