@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2026 macuguita
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package com.macuguita.woodworks.common.reg;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+
+import com.macuguita.lib.reg.GuitaRegistries;
+import com.macuguita.lib.reg.GuitaRegistry;
+import com.macuguita.lib.reg.GuitaRegistryEntry;
+import com.macuguita.woodworks.GuitaWoodworks;
+import com.macuguita.woodworks.common.entity.Seat;
+
+public class GWEntityTypes {
+
+	public static final GuitaRegistry<EntityType<?>> ENTITY_TYPES = GuitaRegistries.create(BuiltInRegistries.ENTITY_TYPE, GuitaWoodworks.MOD_ID);
+
+	public static final GuitaRegistryEntry<EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () ->
+		EntityType.Builder.of(Seat::new, MobCategory.MISC)
+			.noLootTable()
+			.sized(0.25f, 0.25f)
+			.clientTrackingRange(10)
+			.updateInterval(Integer.MAX_VALUE)
+			.build(ResourceKey.create(Registries.ENTITY_TYPE, GuitaWoodworks.id("seat"))));
+
+	public static void init() {
+		ENTITY_TYPES.init();
+	}
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/dark_oak_log",
+    "top": "gwoodworks:block/dark_oak_stump_top"
+  }
+}

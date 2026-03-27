@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,shape=left": {
+      "model": "gwoodworks:block/carved_cherry_log_left",
+      "y": 90
+    },
+    "facing=east,shape=middle": {
+      "model": "gwoodworks:block/carved_cherry_log_middle",
+      "y": 90
+    },
+    "facing=east,shape=right": {
+      "model": "gwoodworks:block/carved_cherry_log_right",
+      "y": 90
+    },
+    "facing=east,shape=single": {
+      "model": "gwoodworks:block/carved_cherry_log_single",
+      "y": 90
+    },
+    "facing=north,shape=left": {
+      "model": "gwoodworks:block/carved_cherry_log_left"
+    },
+    "facing=north,shape=middle": {
+      "model": "gwoodworks:block/carved_cherry_log_middle"
+    },
+    "facing=north,shape=right": {
+      "model": "gwoodworks:block/carved_cherry_log_right"
+    },
+    "facing=north,shape=single": {
+      "model": "gwoodworks:block/carved_cherry_log_single"
+    },
+    "facing=south,shape=left": {
+      "model": "gwoodworks:block/carved_cherry_log_left",
+      "y": 180
+    },
+    "facing=south,shape=middle": {
+      "model": "gwoodworks:block/carved_cherry_log_middle",
+      "y": 180
+    },
+    "facing=south,shape=right": {
+      "model": "gwoodworks:block/carved_cherry_log_right",
+      "y": 180
+    },
+    "facing=south,shape=single": {
+      "model": "gwoodworks:block/carved_cherry_log_single",
+      "y": 180
+    },
+    "facing=west,shape=left": {
+      "model": "gwoodworks:block/carved_cherry_log_left",
+      "y": 270
+    },
+    "facing=west,shape=middle": {
+      "model": "gwoodworks:block/carved_cherry_log_middle",
+      "y": 270
+    },
+    "facing=west,shape=right": {
+      "model": "gwoodworks:block/carved_cherry_log_right",
+      "y": 270
+    },
+    "facing=west,shape=single": {
+      "model": "gwoodworks:block/carved_cherry_log_single",
+      "y": 270
+    }
+  }
+}

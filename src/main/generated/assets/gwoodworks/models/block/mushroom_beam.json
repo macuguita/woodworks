@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/beams/template_beam_inventory",
+  "textures": {
+    "side": "minecraft:block/mushroom_stem",
+    "top": "minecraft:block/mushroom_block_inside"
+  }
+}

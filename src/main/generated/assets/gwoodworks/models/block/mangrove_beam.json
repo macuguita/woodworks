@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/beams/template_beam_inventory",
+  "textures": {
+    "side": "minecraft:block/mangrove_log",
+    "top": "gwoodworks:block/mangrove_beam_top_8x8"
+  }
+}

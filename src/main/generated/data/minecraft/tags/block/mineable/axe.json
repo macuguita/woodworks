@@ -1,0 +1,14 @@
+{
+  "values": [
+    "gwoodworks:mushroom_stump",
+    "gwoodworks:carved_mushroom_stem",
+    "gwoodworks:mushroom_beam",
+    "gwoodworks:hollow_mushroom_stem",
+    "#gwoodworks:stump",
+    "#gwoodworks:carved_log",
+    "#gwoodworks:beam",
+    "#gwoodworks:hollow_log",
+    "#gwoodworks:support",
+    "#gwoodworks:shutter"
+  ]
+}

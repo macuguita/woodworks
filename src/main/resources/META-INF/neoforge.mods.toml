@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+license = "MIT"
+
+[[mods]]
+modId = "gwoodworks"
+displayName = "guita's Woodworks"
+version = "${version}"
+displayURL = ""
+logoFile = "assets/icon.png"
+authors = "macuguita"
+description = '''Decorations that have some sort of chopped charm!'''
+
+[[mixins]]
+config = "gwoodworks.mixins.json"
+
+[[dependencies.gwoodworks]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.181,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gwoodworks]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"

@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "component": "minecraft:block_state",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "gwoodworks:block/oak_support_inventory"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "gwoodworks:block/oak_support_inventory_upside_down"
+    },
+    "property": "minecraft:has_component"
+  }
+}

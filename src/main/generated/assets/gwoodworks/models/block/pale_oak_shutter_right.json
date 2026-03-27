@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_shutter_right",
+  "textures": {
+    "end": "gwoodworks:block/pale_oak_support_end",
+    "side": "gwoodworks:block/pale_oak_support_side"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/beams/template_beam_inventory",
+  "textures": {
+    "side": "minecraft:block/stripped_crimson_stem",
+    "top": "gwoodworks:block/stripped_crimson_beam_top_8x8"
+  }
+}

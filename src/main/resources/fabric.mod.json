@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "gwoodworks",
+  "name": "guita's Woodworks",
+  "version": "${version}",
+  "authors": ["macuguita"],
+  "contact": {
+    "sources": "",
+    "issues": ""
+  },
+  "description": "Decorations that have some sort of chopped charm!",
+  "icon": "assets/icon.png",
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.macuguita.woodworks.fabric.FabricEntrypoint"
+    ],
+    "client": [
+      "com.macuguita.woodworks.fabric.FabricClientEntrypoint"
+    ],
+    "fabric-datagen": [
+      "com.macuguita.woodworks.fabric.datagen.FabricDataGeneratorEntrypoint"
+    ]
+  },
+  "mixins": [
+    "gwoodworks.mixins.json"
+  ],
+  "depends": {
+    "fabric-api": "*"
+  }
+}

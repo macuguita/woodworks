@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_stump",
+  "textures": {
+    "side": "minecraft:block/stripped_bamboo_block",
+    "top": "gwoodworks:block/stripped_bamboo_stump_top"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_middle",
+  "textures": {
+    "inside": "gwoodworks:block/carved_oak_log_inside",
+    "side": "minecraft:block/oak_log"
+  }
+}

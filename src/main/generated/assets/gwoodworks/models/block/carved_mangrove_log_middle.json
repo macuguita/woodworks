@@ -1,0 +1,7 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_middle",
+  "textures": {
+    "inside": "gwoodworks:block/carved_mangrove_log_inside",
+    "side": "minecraft:block/mangrove_log"
+  }
+}

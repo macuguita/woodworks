@@ -1,0 +1,8 @@
+{
+  "parent": "gwoodworks:block/template_carved_log_single",
+  "textures": {
+    "inside": "gwoodworks:block/stripped_carved_cherry_log_inside",
+    "side": "minecraft:block/stripped_cherry_log",
+    "top": "minecraft:block/stripped_cherry_log_top"
+  }
+}
