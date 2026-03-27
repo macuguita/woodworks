@@ -1,0 +1,1 @@
+- Add ru_ru [#9](https://github.com/macuguita/woodworks/pull/9)
