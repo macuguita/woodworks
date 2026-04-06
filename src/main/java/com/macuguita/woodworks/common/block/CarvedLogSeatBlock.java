@@ -36,6 +36,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -102,6 +103,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		}
 		if (itemStack.is(GWItemTags.WATER_BUCKETS) || itemStack.is(GWItemTags.EMPTY_BUCKETS))
 			return InteractionResult.FAIL;
+		if (itemStack.getItem() instanceof BlockItem) return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 		return sitOn(level, blockPos, player, blockState.getValue(FACING)) ? InteractionResult.SUCCESS : super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);
 	}
 
