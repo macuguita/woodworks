@@ -224,6 +224,11 @@ public class Seat extends Entity {
 	}
 
 	@Override
+	protected void onItemPickup(ItemEntity item) {
+		// Do not pick up items
+	}
+
+	@Override
 	public void setLevelCallback(EntityInLevelCallback callback) {
 		super.setLevelCallback(new WrappedCallback(callback));
 	}

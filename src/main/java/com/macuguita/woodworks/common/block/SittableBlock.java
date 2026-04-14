@@ -41,8 +41,11 @@ public interface SittableBlock {
 			Seat entity = Seat.of(serverWorld, pos, dir);
 			if (entity != null) {
 				if (serverWorld.addFreshEntity(entity)) {
-					player.startRiding(entity);
-					return true;
+					if (player.startRiding(entity)) {
+						Seat.SITTING_POSITIONS.put(world.dimension(), pos);
+						return true;
+					}
+					entity.removeSeat();
 				} else {
 					entity.removeSeat();
 				}
