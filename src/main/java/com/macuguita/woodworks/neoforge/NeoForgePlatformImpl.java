@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.neoforge;
 
 //? neoforge {
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+/*import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.nio.file.Path;
 
@@ -79,4 +79,4 @@ public class NeoForgePlatformImpl implements Platform {
 		FUEL_ITEMS.put(item, tickTime);
 	}
 }
-//?}
+*///?}

@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric;
 
 //? fabric {
-/*import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import com.macuguita.woodworks.GWEventHandler;
@@ -39,4 +39,4 @@ public class FabricEntrypoint implements ModInitializer {
 	}
 
 }
-*///?}
+//?}

@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 //? fabric {
-/*import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.core.HolderLookup;
 
@@ -81,4 +81,4 @@ public class GWItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 		valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem());
 	}
 }
-*///?}
+//?}

@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric;
 
 //? fabric {
-/*import java.nio.file.Path;
+import java.nio.file.Path;
 
 import net.minecraft.world.level.ItemLike;
 
@@ -62,4 +62,4 @@ public class FabricPlatformImpl implements Platform {
 	}
 
 }
-*///?}
+//?}

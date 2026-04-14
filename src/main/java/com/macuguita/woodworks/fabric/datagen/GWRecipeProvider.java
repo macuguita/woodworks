@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 //? fabric {
-/*import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -160,4 +160,4 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 		return "guita's Woodworks";
 	}
 }
-*///?}
+//?}

@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric;
 
 //? fabric {
-/*import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
 import com.macuguita.woodworks.client.GuitaWoodworksClient;
 
@@ -35,4 +35,4 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 	}
 
 }
-*///?}
+//?}

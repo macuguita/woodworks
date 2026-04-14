@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 //? fabric {
-/*import java.util.Locale;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.core.HolderLookup;
@@ -155,4 +155,4 @@ public class GWLangProvider extends FabricLanguageProvider {
 		translationBuilder.add(item, temp);
 	}
 }
-*///?}
+//?}

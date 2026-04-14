@@ -23,7 +23,7 @@
 package com.macuguita.woodworks.neoforge;
 
 //? neoforge {
-import net.minecraft.util.TriState;
+/*import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionResult;
 
 import net.neoforged.api.distmarker.Dist;
@@ -73,4 +73,4 @@ public class NeoforgeEntrypoint {
 	}
 
 }
-//?}
+*///?}

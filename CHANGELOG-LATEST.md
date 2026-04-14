@@ -1,1 +1,1 @@
-- Add ru_ru [#9](https://github.com/macuguita/woodworks/pull/9)
+- Merge [#10](https://github.com/macuguita/woodworks/pull/10) Enhance seat block interactions and prevent item pickup in Seat entity by @kalive-dev
