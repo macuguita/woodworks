@@ -88,7 +88,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.addTexture(modRes("block/oak_stump_top"), PaletteStrategies.LOG_SIDE_STANDARD)
 				.addTag(GWItemTags.STUMP, Registries.ITEM)
 				.addTag(GWBlockTags.STUMP, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -108,7 +108,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.STRIPPED_LOG_SIDE_STANDARD)
 				.addTag(GWItemTags.STUMP, Registries.ITEM)
 				.addTag(GWBlockTags.STUMP, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -127,7 +127,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				//TEXTURE: manually generated texture below (carved_oak_log_inside.png)
 				.addTag(GWItemTags.CARVED_LOG, Registries.ITEM)
 				.addTag(GWBlockTags.CARVED_LOG, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -147,7 +147,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
 				.addTag(GWItemTags.CARVED_LOG, Registries.ITEM)
 				.addTag(GWBlockTags.CARVED_LOG, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -164,7 +164,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				)
 				.addTag(GWItemTags.BEAM, Registries.ITEM)
 				.addTag(GWBlockTags.BEAM, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
@@ -182,7 +182,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.requiresChildren("stripped_log")
 				.addTag(GWItemTags.BEAM, Registries.ITEM)
 				.addTag(GWBlockTags.BEAM, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -201,7 +201,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.requiresChildren("stripped_log")
 				.addTag(GWItemTags.BEAM, Registries.ITEM)
 				.addTag(GWBlockTags.BEAM, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -220,7 +220,7 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.requiresChildren("stripped_log")
 				.addTag(GWItemTags.BEAM, Registries.ITEM)
 				.addTag(GWBlockTags.BEAM, Registries.BLOCK)
-				.setTabKey(tab)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
@@ -240,8 +240,8 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.addTag(GWItemTags.SUPPORT, Registries.ITEM)
 				.addTag(GWBlockTags.SUPPORT, Registries.BLOCK)
 				.addCustomItem((w, b, p) -> new SupportBlockItem(b, p))
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
-				.setTabKey(tab)
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")
@@ -259,8 +259,8 @@ public class GWWoodGoodModule extends EveryCompatModule {
 				.addTexture(modRes("block/oak_support_side"), PaletteStrategies.SIGN_LIKE)
 				.addTag(GWItemTags.SHUTTER, Registries.ITEM)
 				.addTag(GWBlockTags.SHUTTER, Registries.BLOCK)
+				.setTab(GWItemGroups.GW_TAB)
 				//REASON: take a look at their textures, you'll see why.
-				.setTabKey(tab)
 				.excludeBlockTypes("natures_spirit", "joshua")
 				.excludeBlockTypes("natures_spirit", "coconut")
 				.excludeBlockTypes("terrestria", "sakura")

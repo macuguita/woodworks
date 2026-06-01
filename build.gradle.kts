@@ -63,17 +63,17 @@ allprojects {
                 includeGroupAndSubgroups("org.quiltmc.parsers")
             }
         }
-        exclusiveContent {
-            forRepository {
+//        exclusiveContent { // TODO: when they publish there use this again
+//            forRepository {
                 maven {
                     name = "Every Compat"
                     url = uri("https://registry.somethingcatchy.net/repository/maven-releases/")
                 }
-            }
-            filter {
-                includeGroupAndSubgroups("net.mehvahdjukaar")
-            }
-        }
+//            }
+//            filter {
+//                includeGroupAndSubgroups("net.mehvahdjukaar")
+//            }
+//        }
         exclusiveContent {
             forRepository {
                 maven {

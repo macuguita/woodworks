@@ -19,7 +19,7 @@ object BuildConfig {
     val issues: String = "https://github.com/macuguita/woodworks/issues"
 
     val fabricVersion: String = "0.116.9+" + minecraftVersion
-    val everyCompatVersion: String = "1.21-2.11.31"
+    val everyCompatVersion: String = "1.21-2.11.41"
     val macuLibVersion: String = "2.0.2"
     val modmenuVersion: String = "11.0.3"
     val reiVersion: String = "16.0.799"
