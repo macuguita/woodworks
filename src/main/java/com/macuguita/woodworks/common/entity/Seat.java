@@ -24,6 +24,9 @@ package com.macuguita.woodworks.common.entity;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+
+import net.minecraft.world.entity.item.ItemEntity;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
@@ -221,11 +224,6 @@ public class Seat extends Entity {
 		if (!canRotate()) {
 			clampRotation(entity);
 		}
-	}
-
-	@Override
-	protected void onItemPickup(ItemEntity item) {
-		// Do not pick up items
 	}
 
 	@Override

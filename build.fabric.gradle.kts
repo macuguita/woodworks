@@ -83,7 +83,7 @@ dependencies {
     compileOnly("org.jspecify:jspecify:1.0.0")
 
     if (hasProperty("deps.macu_lib")) {
-        implementation("com.macuguita:macu_lib-fabric:${property("deps.macu_lib")}+${property("deps.minecraft")}") {
+        implementation("com.macuguita:macu_lib-fabric:${property("deps.macu_lib")}") {
             exclude(group = "net.fabricmc.fabric-api")
         }
     }

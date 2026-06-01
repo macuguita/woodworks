@@ -102,7 +102,7 @@ neoForge {
 dependencies {
     // macu lib
     if (hasProperty("deps.macu_lib")) {
-        implementation("com.macuguita:macu_lib-neoforge:${property("deps.macu_lib")}+${property("deps.minecraft")}")
+        implementation("com.macuguita:macu_lib-neoforge:${property("deps.macu_lib")}")
     }
     compileOnly("org.jspecify:jspecify:1.0.0")
 
