@@ -8,7 +8,7 @@ object BuildConfig {
     val neoforgeVersion: String = "21.1.220"
     val enabledPlatforms: String = "fabric,neoforge"
 
-    val modVersion: String = "1.2.7+" + minecraftVersion
+    val modVersion: String = "1.2.7a+" + minecraftVersion
     val mavenGroup: String = "com.macuguita"
     val modId: String = "gwoodworks"
     val modName: String = "guita's Woodworks"

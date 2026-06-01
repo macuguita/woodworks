@@ -590,32 +590,32 @@ public class GWWoodGoodModule extends EveryCompatModule {
 		});
 	}
 
-	@Override
-	public boolean isEntryAlreadyRegistered(String entrySetId, ResourceLocation blockId, BlockType blockType, Registry<?> registry) {
-		String blockPath = blockId.getPath();
-		String blockName = blockPath.substring(blockPath.lastIndexOf("/") + 1);
-
-		if (blockType instanceof WoodType wt) {
-			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(entrySetId, blockName, wt, modId);
-			if (hardcoded != null) return hardcoded;
-		}
-
-		return super.isEntryAlreadyRegistered(entrySetId, blockId, blockType, registry);
-	}
-
-	public static class CustomHardcodedBlockType extends HardcodedBlockType {
-
-		public static @Nullable Boolean isWoodBlockAlreadyRegistered(String entrySetId, String blockName, WoodType woodType, String ModId) {
-			woodTypeFromMod = woodType.getNamespace();
-			woodidentify = woodType.getId().toString();
-			supportedMod = ModId;
-			supportedBlockName = blockName;
-
-			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|bamboo|crimson|warped)", ".*")) {
-			//	return false;
-			//}
-
-			return null;
-		}
-	}
+//	@Override
+//	public boolean isEntryAlreadyRegistered(String entrySetId, ResourceLocation blockId, BlockType blockType, Registry<?> registry) {
+//		String blockPath = blockId.getPath();
+//		String blockName = blockPath.substring(blockPath.lastIndexOf("/") + 1);
+//
+//		if (blockType instanceof WoodType wt) {
+//			Boolean hardcoded = CustomHardcodedBlockType.isWoodBlockAlreadyRegistered(entrySetId, blockName, wt, modId);
+//			if (hardcoded != null) return hardcoded;
+//		}
+//
+//		return super.isEntryAlreadyRegistered(entrySetId, blockId, blockType, registry);
+//	}
+//
+//	public static class CustomHardcodedBlockType extends HardcodedBlockType {
+//
+//		public static @Nullable Boolean isWoodBlockAlreadyRegistered(String entrySetId, String blockName, WoodType woodType, String ModId) {
+//			woodTypeFromMod = woodType.getNamespace();
+//			woodidentify = woodType.getId().toString();
+//			supportedMod = ModId;
+//			supportedBlockName = blockName;
+//
+//			//if (isWoodFrom(GuitaWoodworks.MOD_ID, "", "minecraft:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|bamboo|crimson|warped)", ".*")) {
+//			//	return false;
+//			//}
+//
+//			return null;
+//		}
+//	}
 }
