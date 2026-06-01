@@ -1,1 +1,1 @@
-- Add ru_ru [#9](https://github.com/macuguita/woodworks/pull/9)
+- Updated to support new every compat version
