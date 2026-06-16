@@ -26,6 +26,9 @@ package com.macuguita.woodworks.fabric.datagen;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
+import com.macuguita.woodworks.common.reg.GWBlocks;
+import com.macuguita.woodworks.common.reg.GWItems;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -33,8 +36,6 @@ import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-
-import com.macuguita.woodworks.common.reg.GWObjects;
 
 public class GWLangProvider extends FabricLanguageProvider {
 
@@ -44,55 +45,55 @@ public class GWLangProvider extends FabricLanguageProvider {
 
 	@Override
 	public void generateTranslations(HolderLookup.Provider wrapperLookup, TranslationBuilder translationBuilder) {
-		generateItemTranslations(translationBuilder, GWObjects.SECATEURS.get());
-		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
+		generateItemTranslations(translationBuilder, GWItems.SECATEURS.get());
+		GWBlocks.STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
 			generateBlockTranslations(translationBuilder, regEntry.get());
 			generateItemTranslations(translationBuilder, regEntry.get().asItem());
 		});
-		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get());
-		generateItemTranslations(translationBuilder, GWObjects.MUSHROOM_STUMP.get().asItem());
-		generateBlockTranslations(translationBuilder, GWObjects.CARVED_MUSHROOM_STEM.get());
-		generateItemTranslations(translationBuilder, GWObjects.CARVED_MUSHROOM_STEM.get().asItem());
-		generateBlockTranslations(translationBuilder, GWObjects.MUSHROOM_BEAM.get());
-		generateItemTranslations(translationBuilder, GWObjects.MUSHROOM_BEAM.get().asItem());
-		generateBlockTranslations(translationBuilder, GWObjects.HOLLOW_MUSHROOM_STEM.get());
-		generateItemTranslations(translationBuilder, GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem());
+		generateBlockTranslations(translationBuilder, GWBlocks.MUSHROOM_STUMP.get());
+		generateItemTranslations(translationBuilder, GWBlocks.MUSHROOM_STUMP.get().asItem());
+		generateBlockTranslations(translationBuilder, GWBlocks.CARVED_MUSHROOM_STEM.get());
+		generateItemTranslations(translationBuilder, GWBlocks.CARVED_MUSHROOM_STEM.get().asItem());
+		generateBlockTranslations(translationBuilder, GWBlocks.MUSHROOM_BEAM.get());
+		generateItemTranslations(translationBuilder, GWBlocks.MUSHROOM_BEAM.get().asItem());
+		generateBlockTranslations(translationBuilder, GWBlocks.HOLLOW_MUSHROOM_STEM.get());
+		generateItemTranslations(translationBuilder, GWBlocks.HOLLOW_MUSHROOM_STEM.get().asItem());
 
 		translationBuilder.add("block_type.gwoodworks.stump", "%s Stump");
 		translationBuilder.add("block_type.gwoodworks.stripped_stump", "Stripped %s Stump");

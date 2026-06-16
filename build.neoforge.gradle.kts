@@ -102,7 +102,11 @@ neoForge {
 dependencies {
     // macu lib
     if (hasProperty("deps.macu_lib")) {
-        implementation("com.macuguita:macu_lib-neoforge:${property("deps.macu_lib")}")
+		if (stonecutter.current.parsed > "26.1") {
+			implementation("com.macuguita:macu_lib:${property("deps.macu_lib")}")
+		} else {
+			implementation("com.macuguita:macu_lib-neoforge:${property("deps.macu_lib")}")
+		}
     }
     compileOnly("org.jspecify:jspecify:1.0.0")
 
@@ -117,6 +121,12 @@ dependencies {
     }
 }
 
+stonecutter {
+	replacements.string {
+		direction = eval(current.version, ">26.1")
+		replace("com.macuguita.lib.reg", "com.macuguita.lib.api.reg")
+	}
+}
 
 tasks {
     processResources {
@@ -141,13 +151,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 }
 
-val additionalVersionsStr = findProperty("publish.additionalVersions") as String?
-val additionalVersions: List<String> = additionalVersionsStr
-    ?.split(",")
-    ?.map { it.trim() }
-    ?.filter { it.isNotEmpty() }
-    ?: emptyList()
-
 publishMods {
     file = tasks.jar.map { it.archiveFile.get() }
     additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
@@ -161,8 +164,14 @@ publishMods {
     modrinth {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
+		minecraftVersions.add(property("deps.minecraft").toString())
+		minecraftVersions.addAll(
+			(findProperty("publish.mr_additionalVersions") as String?)
+				?.split(",")
+				?.map { it.trim() }
+				?.filter { it.isNotEmpty() }
+				?: emptyList()
+		)
         requires("macu-lib")
         optional("mcqoy")
         optional("qomc")
@@ -171,8 +180,13 @@ publishMods {
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
+		minecraftVersions.addAll(
+			(findProperty("publish.cf_mcVersions") as String?)
+				?.split(",")
+				?.map { it.trim() }
+				?.filter { it.isNotEmpty() }
+				?: emptyList()
+		)
         requires("macu-lib")
         optional("mcqoy")
         optional("qomc")

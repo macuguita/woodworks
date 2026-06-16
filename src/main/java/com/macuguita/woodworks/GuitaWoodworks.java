@@ -22,6 +22,10 @@
 
 package com.macuguita.woodworks;
 
+import com.macuguita.woodworks.common.reg.GWBlocks;
+
+import com.macuguita.woodworks.common.reg.GWItems;
+
 import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import java.util.Map;
@@ -36,14 +40,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import com.macuguita.lib.reg.GuitaRegistry;
-import com.macuguita.lib.reg.GuitaRegistryEntry;
+import com.macuguita.lib.api.reg.GuitaRegistry;
+import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.common.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.common.block.ResizableBeamBlock;
 import com.macuguita.woodworks.common.block.StumpSeatBlock;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 import com.macuguita.woodworks.common.reg.GWItemGroups;
-import com.macuguita.woodworks.common.reg.GWObjects;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 
 public final class GuitaWoodworks {
@@ -80,29 +83,30 @@ public final class GuitaWoodworks {
 	}
 
 	public static void init() {
-		GWObjects.init();
+		GWBlocks.init();
+		GWItems.init();
 		GWEntityTypes.init();
 		GWItemGroups.init();
 	}
 
 	public static void commonSetup() {
 		if (CONFIG.enableStumps) {
-			registerFuelAndRegisterStripped(GWObjects.STUMP_BLOCKS, GWObjects.STRIPPED_STUMP_BLOCKS, StumpSeatBlock.STRIPPED_STUMPS, 150);
+			registerFuelAndRegisterStripped(GWBlocks.STUMP_BLOCKS, GWBlocks.STRIPPED_STUMP_BLOCKS, StumpSeatBlock.STRIPPED_STUMPS, 150);
 		}
 		if (CONFIG.enableCarvedLogs) {
-			registerFuelAndRegisterStripped(GWObjects.CARVED_LOG_BLOCKS, GWObjects.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
+			registerFuelAndRegisterStripped(GWBlocks.CARVED_LOG_BLOCKS, GWBlocks.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
 		}
 		if (CONFIG.enableBeams) {
-			registerFuelAndRegisterStripped(GWObjects.BEAM_BLOCKS, GWObjects.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
+			registerFuelAndRegisterStripped(GWBlocks.BEAM_BLOCKS, GWBlocks.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
 		}
 		if (CONFIG.enableHollowLogs) {
-			registerFuelAndRegisterStripped(GWObjects.HOLLOW_LOG_BLOCKS, GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOGS, 150);
+			registerFuelAndRegisterStripped(GWBlocks.HOLLOW_LOG_BLOCKS, GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOGS, 150);
 		}
 		if (CONFIG.enableSupports) {
-			registerFuel(GWObjects.SUPPORT_BLOCKS, null, 150);
+			registerFuel(GWBlocks.SUPPORT_BLOCKS, null, 150);
 		}
 		if (CONFIG.enableShutters) {
-			registerFuel(GWObjects.SHUTTER_BLOCKS, null, 150);
+			registerFuel(GWBlocks.SHUTTER_BLOCKS, null, 150);
 		}
 	}
 

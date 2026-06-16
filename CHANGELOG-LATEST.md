@@ -1,1 +1,1 @@
-- Merge [#10](https://github.com/macuguita/woodworks/pull/10) Enhance seat block interactions and prevent item pickup in Seat entity by @kalive-dev
+- Fix [#8](https://github.com/macuguita/woodworks/issues/8)

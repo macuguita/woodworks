@@ -25,7 +25,9 @@ package com.macuguita.woodworks.common.entity;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.Pose;
+
+import net.minecraft.world.item.SpawnEggItem;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -61,16 +63,15 @@ import net.minecraft.world.phys.Vec3;
 import com.macuguita.woodworks.common.block.SittableBlock;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 
+@SuppressWarnings("resource")
 public class Seat extends Entity {
 
-	public static final Multimap<ResourceKey<Level>, BlockPos> SITTING_POSITIONS = ArrayListMultimap.create();
-
-	private AABB shape;
+	private @Nullable AABB shape;
 	private boolean remove;
 	private static final EntityDataAccessor<Boolean> CAN_ROTATE = SynchedEntityData.defineId(Seat.class, EntityDataSerializers.BOOLEAN);
 
-	public Seat(EntityType<? extends Entity> type, Level world) {
-		super(type, world);
+	public Seat(EntityType<? extends Entity> type, Level level) {
+		super(type, level);
 		this.setLevelCallback(EntityInLevelCallback.NULL);
 	}
 
@@ -90,7 +91,8 @@ public class Seat extends Entity {
 			entity.setCanRotate(true);
 		}
 
-		entity.setPosRaw(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+
 		entity.shape = copyBox(shape);
 		return entity;
 	}
@@ -106,6 +108,11 @@ public class Seat extends Entity {
 
 	private static AABB copyBox(AABB box) {
 		return new AABB(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose pose) {
+		return EntityDimensions.fixed(0.001f, 0.001f);
 	}
 
 	@Override
@@ -177,7 +184,7 @@ public class Seat extends Entity {
 		super.tick();
 		if (this.level() instanceof ServerLevel serverWorld &&
 			(!(serverWorld.getBlockState(blockPosition()).getBlock() instanceof SittableBlock) || remove)) {
-			removeSeat();
+			discard();
 		}
 	}
 
@@ -199,14 +206,8 @@ public class Seat extends Entity {
 		}
 	}
 
-	public void removeSeat() {
-		SITTING_POSITIONS.get(this.level().dimension()).remove(blockPosition());
-		discard();
-	}
-
 	@Override
 	protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dims, float partialTick) {
-		if (shape == null) return super.getPassengerAttachmentPoint(entity, dims, partialTick);
 		return new Vec3(0, (float) (shape.getYsize() * 0.75) + 0.2f, 0);
 	}
 
@@ -246,22 +247,16 @@ public class Seat extends Entity {
 
 		@Override
 		public void onMove() {
-			if (delegate != null) {
-				delegate.onMove();
-				Block block = Seat.this.level().getBlockState(blockPosition()).getBlock();
-				if (block instanceof SittableBlock seat) {
-					shape = seat.getSeatSize(Seat.this.level().getBlockState(blockPosition()));
-				}
-			} else {
-				shape = null;
+			delegate.onMove();
+			Block block = Seat.this.level().getBlockState(blockPosition()).getBlock();
+			if (block instanceof SittableBlock seat) {
+				shape = seat.getSeatSize(Seat.this.level().getBlockState(blockPosition()));
 			}
 		}
 
 		@Override
 		public void onRemove(RemovalReason reason) {
-			if (delegate != null) {
-				delegate.onRemove(reason);
-			}
+			delegate.onRemove(reason);
 		}
 	}
 }

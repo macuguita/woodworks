@@ -28,9 +28,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-import com.macuguita.lib.reg.GuitaRegistries;
-import com.macuguita.lib.reg.GuitaRegistry;
-import com.macuguita.lib.reg.GuitaRegistryEntry;
+import com.macuguita.lib.api.reg.GuitaRegistries;
+import com.macuguita.lib.api.reg.GuitaRegistry;
+import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.common.entity.Seat;
 

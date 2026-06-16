@@ -25,13 +25,21 @@ package com.macuguita.woodworks.fabric.datagen;
 //? fabric {
 import java.util.concurrent.CompletableFuture;
 
+import com.macuguita.lib.api.reg.GuitaRegistryEntry;
+
+import com.macuguita.woodworks.common.reg.GWItemIds;
+import com.macuguita.woodworks.common.reg.GWItems;
+
 import net.minecraft.core.HolderLookup;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
 import com.macuguita.woodworks.common.reg.GWItemTags;
-import com.macuguita.woodworks.common.reg.GWObjects;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public class GWItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
@@ -39,46 +47,75 @@ public class GWItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 		super(output, completableFuture);
 	}
 
+	//~ if >26.1 'valueLookupBuilder' -> 'tag' {
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		valueLookupBuilder(GWItemTags.SECATEURS)
-			.add(GWObjects.SECATEURS.get())
+		tag(GWItemTags.SECATEURS)
+			.add(/*?>26.1{*/GWItemIds/*?}else{*//*GWItems*//*?}*/.SECATEURS/*?<=26.1{*//*.get()*//*?}*/)
 			.addOptionalTag(GWItemTags.KNIVES);
 
-		GWObjects.STUMP_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.STUMP).add(regEntry.get());
+		GWItems.STUMP_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.STUMP).add(res(regEntry));
 		});
-		GWObjects.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.STUMP).add(regEntry.get());
+
+		GWItems.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.STUMP).add(res(regEntry));
 		});
-		GWObjects.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+
+		GWItems.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.CARVED_LOG).add(res(regEntry));
 		});
-		GWObjects.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.CARVED_LOG).add(regEntry.get());
+
+		GWItems.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.CARVED_LOG).add(res(regEntry));
 		});
-		GWObjects.BEAM_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.BEAM).add(regEntry.get());
+
+		GWItems.BEAM_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.BEAM).add(res(regEntry));
 		});
-		GWObjects.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.BEAM).add(regEntry.get());
+
+		GWItems.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.BEAM).add(res(regEntry));
 		});
-		GWObjects.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+
+		GWItems.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.HOLLOW_LOG).add(res(regEntry));
 		});
-		GWObjects.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(regEntry.get());
+
+		GWItems.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.HOLLOW_LOG).add(res(regEntry));
 		});
-		GWObjects.SUPPORT_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.SUPPORT).add(regEntry.get());
+
+		GWItems.SUPPORT_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.SUPPORT).add(res(regEntry));
 		});
-		GWObjects.SHUTTER_ITEMS.stream().forEach(regEntry -> {
-			valueLookupBuilder(GWItemTags.SHUTTER).add(regEntry.get());
+
+		GWItems.SHUTTER_ITEMS.stream().forEach(regEntry -> {
+			tag(GWItemTags.SHUTTER).add(res(regEntry));
 		});
-		valueLookupBuilder(GWItemTags.STUMP).add(GWObjects.MUSHROOM_STUMP.get().asItem());
-		valueLookupBuilder(GWItemTags.CARVED_LOG).add(GWObjects.CARVED_MUSHROOM_STEM.get().asItem());
-		valueLookupBuilder(GWItemTags.BEAM).add(GWObjects.MUSHROOM_BEAM.get().asItem());
-		valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(GWObjects.HOLLOW_MUSHROOM_STEM.get().asItem());
+
+		tag(GWItemTags.STUMP)
+			.add(res(GWItems.MUSHROOM_STUMP));
+
+		tag(GWItemTags.CARVED_LOG)
+			.add(res(GWItems.CARVED_MUSHROOM_STEM));
+
+		tag(GWItemTags.BEAM)
+			.add(res(GWItems.MUSHROOM_BEAM));
+
+		tag(GWItemTags.HOLLOW_LOG)
+			.add(res(GWItems.HOLLOW_MUSHROOM_STEM));
 	}
+	//~}
+
+	//? if >26.1 {
+	private static ResourceKey<Item> res(GuitaRegistryEntry<Item> entry) {
+		return ResourceKey.create(BuiltInRegistries.ITEM.key(), entry.getId());
+	}
+	//?} else {
+	/*private static Item res(GuitaRegistryEntry<Item> entry) {
+		return entry.get();
+	}
+	*///?}
 }
 //?}

@@ -83,9 +83,15 @@ dependencies {
     compileOnly("org.jspecify:jspecify:1.0.0")
 
     if (hasProperty("deps.macu_lib")) {
-        implementation("com.macuguita:macu_lib-fabric:${property("deps.macu_lib")}") {
-            exclude(group = "net.fabricmc.fabric-api")
-        }
+		if (stonecutter.current.parsed > "26.1") {
+			implementation("com.macuguita:macu_lib:${property("deps.macu_lib")}") {
+				exclude(group = "net.fabricmc.fabric-api")
+			}
+		} else {
+			implementation("com.macuguita:macu_lib-fabric:${property("deps.macu_lib")}") {
+				exclude(group = "net.fabricmc.fabric-api")
+			}
+		}
     }
 
     if (hasProperty("deps.mcqoy")) {
@@ -107,12 +113,12 @@ configurations.all {
     }
 }
 
-//stonecutter {
-//    replacements.string {
-//        direction = eval(current.version, ">1.21.10")
-//        replace("ResourceLocation", "Identifier")
-//    }
-//}
+stonecutter {
+    replacements.string {
+        direction = eval(current.version, ">26.1")
+        replace("com.macuguita.lib.reg", "com.macuguita.lib.api.reg")
+    }
+}
 
 tasks {
     processResources {
@@ -145,13 +151,6 @@ java {
     targetCompatibility = javaCompat
 }
 
-val additionalVersionsStr = findProperty("publish.additionalVersions") as String?
-val additionalVersions: List<String> = additionalVersionsStr
-    ?.split(",")
-    ?.map { it.trim() }
-    ?.filter { it.isNotEmpty() }
-    ?: emptyList()
-
 publishMods {
     file = tasks.jar.map { it.archiveFile.get() }
     additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
@@ -168,7 +167,13 @@ publishMods {
         projectId = property("publish.modrinth") as String
         accessToken = env.MODRINTH_API_KEY.orNull()
         minecraftVersions.add(property("deps.minecraft").toString())
-        minecraftVersions.addAll(additionalVersions)
+        minecraftVersions.addAll(
+			(findProperty("publish.mr_additionalVersions") as String?)
+				?.split(",")
+				?.map { it.trim() }
+				?.filter { it.isNotEmpty() }
+				?: emptyList()
+		)
         requires("fabric-api")
         requires("macu-lib")
         optional("modmenu")
@@ -179,8 +184,13 @@ publishMods {
     curseforge {
         projectId = property("publish.curseforge") as String
         accessToken = env.CURSEFORGE_API_KEY.orNull()
-        minecraftVersions.add(stonecutter.current.version)
-        minecraftVersions.addAll(additionalVersions)
+        minecraftVersions.addAll(
+			(findProperty("publish.cf_mcVersions") as String?)
+				?.split(",")
+				?.map { it.trim() }
+				?.filter { it.isNotEmpty() }
+				?: emptyList()
+		)
         requires("fabric-api")
         requires("macu-lib")
         optional("modmenu")

@@ -22,6 +22,8 @@
 
 package com.macuguita.woodworks.common.block;
 
+import com.macuguita.woodworks.GuitaWoodworks;
+
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -36,22 +38,14 @@ import com.macuguita.woodworks.common.entity.Seat;
 
 public interface SittableBlock {
 
-	default boolean sitOn(Level world, BlockPos pos, Player player, @Nullable Direction dir) {
-		if (world instanceof ServerLevel serverWorld && !Seat.SITTING_POSITIONS.get(world.dimension()).contains(pos)) {
-			Seat entity = Seat.of(serverWorld, pos, dir);
-			if (entity != null) {
-				if (serverWorld.addFreshEntity(entity)) {
-					if (player.startRiding(entity)) {
-						Seat.SITTING_POSITIONS.put(world.dimension(), pos);
-						return true;
-					}
-					entity.removeSeat();
-				} else {
-					entity.removeSeat();
-				}
-			}
-		}
-		return false;
+	default boolean sitOn(Level level, BlockPos pos, Player player, @Nullable Direction dir) {
+		Seat entity = Seat.of(level, pos, dir);
+		if (entity == null) return false;
+
+		entity.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity.getYRot(), entity.getXRot());
+
+		level.addFreshEntity(entity);
+		return player.startRiding(entity);
 	}
 
 	AABB getSeatSize(BlockState state);

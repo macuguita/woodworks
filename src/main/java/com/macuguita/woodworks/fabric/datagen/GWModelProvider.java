@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.macuguita.woodworks.common.reg.GWBlocks;
+
+import com.macuguita.woodworks.common.reg.GWItems;
+
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -67,7 +71,6 @@ import com.macuguita.woodworks.common.block.ShutterBlock;
 import com.macuguita.woodworks.common.block.SupportBlock;
 import com.macuguita.woodworks.common.block.property.NoCornerModularSeatProperty;
 import com.macuguita.woodworks.common.block.property.SupportFaceShapeProperty;
-import com.macuguita.woodworks.common.reg.GWObjects;
 import com.macuguita.woodworks.common.utils.GWUtils;
 
 public class GWModelProvider extends FabricModelProvider {
@@ -78,22 +81,22 @@ public class GWModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
-		GWObjects.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.STUMP_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerStump(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top")));
 		});
-		GWObjects.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerStump(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top")));
 		});
-		GWObjects.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerCarvedLog(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
@@ -102,8 +105,8 @@ public class GWModelProvider extends FabricModelProvider {
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
 					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")));
 		});
-		GWObjects.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerCarvedLog(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
@@ -112,8 +115,8 @@ public class GWModelProvider extends FabricModelProvider {
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
 					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(block, "_inside")));
 		});
-		GWObjects.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.BEAM_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerBeamBlock(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)),
@@ -125,8 +128,8 @@ public class GWModelProvider extends FabricModelProvider {
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_12x12")),
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_14x14")));
 		});
-		GWObjects.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerBeamBlock(blockStateModelGenerator, block,
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)),
@@ -138,8 +141,8 @@ public class GWModelProvider extends FabricModelProvider {
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_12x12")),
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_14x14")));
 		});
-		GWObjects.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerHollowLog(blockStateModelGenerator, block,
 				new TextureMapping()
@@ -147,8 +150,8 @@ public class GWModelProvider extends FabricModelProvider {
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
 					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
 		});
-		GWObjects.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWObjects.WOOD_ASSOCIATIONS.get(regEntry.get());
+		GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
 			var block = regEntry.get();
 			registerHollowLog(blockStateModelGenerator, block,
 				new TextureMapping()
@@ -156,14 +159,14 @@ public class GWModelProvider extends FabricModelProvider {
 					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
 					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
 		});
-		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
 			var block = regEntry.get();
 			registerSupportBlock(blockStateModelGenerator, block,
 				new TextureMapping()
 					.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
 					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side")));
 		});
-		GWObjects.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+		GWBlocks.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
 			var block = regEntry.get();
 			Identifier id = regEntry.getId();
 			String basePath = id.getPath().replace("_shutter", "_support");
@@ -175,18 +178,18 @@ public class GWModelProvider extends FabricModelProvider {
 					.put(TextureSlot.SIDE, sideId));
 		});
 
-		registerStump(blockStateModelGenerator, GWObjects.MUSHROOM_STUMP.get(),
+		registerStump(blockStateModelGenerator, GWBlocks.MUSHROOM_STUMP.get(),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
 				.put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))));
 
-		registerCarvedLog(blockStateModelGenerator, GWObjects.CARVED_MUSHROOM_STEM.get(),
+		registerCarvedLog(blockStateModelGenerator, GWBlocks.CARVED_MUSHROOM_STEM.get(),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
-				.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")),
+				.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWBlocks.CARVED_MUSHROOM_STEM.get(), "_inside")),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
 				.put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")))
-				.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWObjects.CARVED_MUSHROOM_STEM.get(), "_inside")));
+				.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWBlocks.CARVED_MUSHROOM_STEM.get(), "_inside")));
 
-		registerBeamBlock(blockStateModelGenerator, GWObjects.MUSHROOM_BEAM.get(),
+		registerBeamBlock(blockStateModelGenerator, GWBlocks.MUSHROOM_BEAM.get(),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))),
@@ -196,7 +199,7 @@ public class GWModelProvider extends FabricModelProvider {
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))),
 			new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM)).put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside"))));
 
-		registerHollowLog(blockStateModelGenerator, GWObjects.HOLLOW_MUSHROOM_STEM.get(),
+		registerHollowLog(blockStateModelGenerator, GWBlocks.HOLLOW_MUSHROOM_STEM.get(),
 			new TextureMapping()
 				.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(Blocks.MUSHROOM_STEM))
 				.put(TextureSlot.TOP, new Material(ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside")))
@@ -205,8 +208,8 @@ public class GWModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
-		itemModelGenerator.generateFlatItem(GWObjects.SECATEURS.get(), ModelTemplates.FLAT_ITEM);
-		GWObjects.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+		itemModelGenerator.generateFlatItem(GWItems.SECATEURS.get(), ModelTemplates.FLAT_ITEM);
+		GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
 			var block = regEntry.get();
 			var tm = new TextureMapping()
 				.put(TextureSlot.END, TextureMapping.getBlockTexture(block, "_end"))
