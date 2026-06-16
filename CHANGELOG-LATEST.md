@@ -1,1 +1,1 @@
-- Fix [#8](https://github.com/macuguita/woodworks/issues/8)
+- Fix some stuff with block ids and blocks not being separate

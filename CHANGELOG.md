@@ -1,3 +1,6 @@
+1.2.9
+- Fix some stuff with block ids and blocks not being separate
+---
 1.2.8
 - Fix [#8](https://github.com/macuguita/woodworks/issues/8)
 ---
