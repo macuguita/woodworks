@@ -24,7 +24,6 @@ package com.macuguita.woodworks.common.block;
 
 import org.jspecify.annotations.Nullable;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -52,6 +51,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import com.macuguita.woodworks.common.utils.GWUtils;
 
+//? <26.3 {
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+//?}
+
 public class ShutterBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -59,7 +63,9 @@ public class ShutterBlock extends HorizontalDirectionalBlock implements SimpleWa
 	public static final EnumProperty<DoorHingeSide> SIDE = BlockStateProperties.DOOR_HINGE;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final VoxelShape VOXEL_SHAPE = Block.box(0.0, 0.0, 13.0, 8.0, 16.0, 16.0);
+	//? <26.3 {
 	public static final MapCodec<ShutterBlock> CODEC = simpleCodec(ShutterBlock::new);
+	//?}
 
 	public ShutterBlock(Properties properties) {
 		super(properties);
@@ -167,8 +173,10 @@ public class ShutterBlock extends HorizontalDirectionalBlock implements SimpleWa
 		builder.add(FACING, WATERLOGGED, OPEN, SIDE, POWERED);
 	}
 
+	//? <26.3 {
 	@Override
 	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
 		return CODEC;
 	}
+	//?}
 }

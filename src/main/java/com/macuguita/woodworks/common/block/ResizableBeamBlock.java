@@ -68,7 +68,7 @@ import com.macuguita.woodworks.common.reg.GWItemTags;
 
 public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock {
 
-	public static final Map<Block, Block> STRIPPED_BEAM_BLOCKS = new HashMap<>();
+	public static final Map<Block, Block> STRIPPED_BEAMS = new HashMap<>();
 
 	private static final Direction[] FACINGS = Direction.values();
 
@@ -207,7 +207,7 @@ public class ResizableBeamBlock extends Block implements SimpleWaterloggedBlock 
 		ItemStack stack = player.getItemInHand(hand);
 		Item item = stack.getItem();
 		if (stack.is(ItemTags.AXES)) {
-			Block stripped = STRIPPED_BEAM_BLOCKS.get(state.getBlock());
+			Block stripped = STRIPPED_BEAMS.get(state.getBlock());
 			if (stripped != null) {
 				if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player, hand);
 				if (!level.isClientSide()) player.awardStat(Stats.ITEM_USED.get(item));

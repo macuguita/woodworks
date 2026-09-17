@@ -5,7 +5,6 @@ import org.jspecify.annotations.Nullable;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -21,6 +20,10 @@ import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.common.item.TooltippedBlockItem;
 import com.macuguita.woodworks.common.utils.BlockItemId;
+
+//? <26.3 {
+import net.minecraft.client.Minecraft;
+//?}
 
 public class GWItems {
 
@@ -428,7 +431,13 @@ public class GWItems {
 	}
 
 	public static GuitaRegistryEntry<Item> createStump(BlockItemId res, GuitaRegistryEntry<Block> blockEntry) {
-		return registerBlockItem(res, blockEntry, new Item.Properties(), STUMP_ITEMS);
+		var toReturn = registerBlockItem(res, blockEntry, new Item.Properties(), STUMP_ITEMS);
+		if (!res.item().identifier().getPath().matches(".*(crimson|warped).*")) {
+			//? >=26.3 {
+			//var itemProps = new Item.Properties().cookingFuel(GWContextIntProviders.COOKING_TIME_STUMP);
+			//?}
+		}
+		return toReturn;
 	}
 
 	public static GuitaRegistryEntry<Item> createStrippedStump(BlockItemId res, GuitaRegistryEntry<Block> blockEntry) {
@@ -445,7 +454,11 @@ public class GWItems {
 
 	public static GuitaRegistryEntry<Item> createBeam(BlockItemId res, GuitaRegistryEntry<Block> blockEntry) {
 		return register(res, prop -> new TooltippedBlockItem(blockEntry.get(), prop, (itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag) -> {
-			if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)) {
+			if (InputConstants.isKeyDown(
+				//? <26.3 {
+				Minecraft.getInstance().getWindow(),
+				//?}
+				InputConstants.KEY_LSHIFT)) {
 				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition1").withStyle(ChatFormatting.GRAY));
 				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior1").withStyle(ChatFormatting.DARK_AQUA));
 				consumer.accept(Component.literal(""));
@@ -463,7 +476,11 @@ public class GWItems {
 
 	public static GuitaRegistryEntry<Item> createStrippedBeam(BlockItemId res, GuitaRegistryEntry<Block> blockEntry) {
 		return register(res, prop -> new TooltippedBlockItem(blockEntry.get(), prop, (itemStack, tooltipContext, tooltipDisplay, consumer, tooltipFlag) -> {
-			if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)) {
+			if (InputConstants.isKeyDown(
+				//? <26.3 {
+				Minecraft.getInstance().getWindow(),
+				//?}
+				InputConstants.KEY_LSHIFT)) {
 				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.condition1").withStyle(ChatFormatting.GRAY));
 				consumer.accept(Component.translatable("tooltip.gwoodworks.beam.behavior1").withStyle(ChatFormatting.DARK_AQUA));
 				consumer.accept(Component.literal(""));

@@ -23,19 +23,18 @@
 package com.macuguita.woodworks.common.utils;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import com.macuguita.woodworks.mixin.AxeItemAccessor;
+//import com.macuguita.woodworks.mixin.AxeItemAccessor;
 
 public class GWUtils {
 
-	public static Block getStrippedBlockOrSelf(Block block) {
-		Block stripped = AxeItemAccessor.gwoodworks$getStrippedBlocksMap().get(block);
-		return stripped == null ? block : stripped;
-	}
+//	public static Block getStrippedBlockOrSelf(Block block) {
+//		Block stripped = AxeItemAccessor.gwoodworks$getStrippedBlocksMap().get(block);
+//		return stripped == null ? block : stripped;
+//	}
 
 	public static VoxelShape rotateVoxelShape(VoxelShape shape, Direction.Axis axis, int degrees) {
 		int times = ((degrees % 360) + 360) % 360 / 90;

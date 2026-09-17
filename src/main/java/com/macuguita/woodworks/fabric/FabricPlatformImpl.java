@@ -25,12 +25,20 @@ package com.macuguita.woodworks.fabric;
 //? fabric {
 import java.nio.file.Path;
 
-import net.minecraft.world.level.ItemLike;
-
-import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.loader.api.FabricLoader;
 
 import com.macuguita.woodworks.Platform;
+
+//? <26.3 {
+import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.registry.FuelValueEvents;
+//?} else {
+/*import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
+
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+*///?}
 
 public class FabricPlatformImpl implements Platform {
 
@@ -54,12 +62,20 @@ public class FabricPlatformImpl implements Platform {
 		return FabricLoader.getInstance().isDevelopmentEnvironment();
 	}
 
+	//? <26.3 {
 	@Override
 	public void registerFuel(int tickTime, ItemLike item) {
 		FuelValueEvents.BUILD.register((builder, context) -> {
 			builder.add(item, tickTime);
 		});
 	}
+	//?}
 
+	//? >=26.3 {
+	/*@Override
+	public void registerStrip(BlockPredicate fromBlockPredicate, BlockStateProvider toBlockState) {
+		BlockTransformerHelper.registerStripping(fromBlockPredicate, toBlockState);
+	}
+	*///?}
 }
 //?}

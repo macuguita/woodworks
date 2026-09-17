@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -46,6 +45,10 @@ import com.macuguita.woodworks.common.reg.GWEntityTypes;
 import com.macuguita.woodworks.common.reg.GWItemGroups;
 import com.macuguita.woodworks.common.reg.GWItems;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
+
+//? <26.3 {
+import net.minecraft.world.item.Item;
+//?}
 
 public final class GuitaWoodworks {
 
@@ -95,24 +98,54 @@ public final class GuitaWoodworks {
 			registerFuelAndRegisterStripped(GWBlocks.CARVED_LOG_BLOCKS, GWBlocks.STRIPPED_CARVED_LOG_BLOCKS, CarvedLogSeatBlock.STRIPPED_CARVED_LOGS, 250);
 		}
 		if (CONFIG.enableBeams) {
-			registerFuelAndRegisterStripped(GWBlocks.BEAM_BLOCKS, GWBlocks.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
+			registerFuelAndRegisterStripped(GWBlocks.BEAM_BLOCKS, GWBlocks.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAMS, 75);
 		}
 		if (CONFIG.enableHollowLogs) {
 			registerFuelAndRegisterStripped(GWBlocks.HOLLOW_LOG_BLOCKS, GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS, HollowLogBlock.STRIPPED_HOLLOW_LOGS, 150);
 		}
 		if (CONFIG.enableSupports) {
+			//? <26.3
 			registerFuel(GWBlocks.SUPPORT_BLOCKS, null, 150);
+			registerFlammable(GWBlocks.SUPPORT_BLOCKS, null);
 		}
 		if (CONFIG.enableShutters) {
+			//? <26.3
 			registerFuel(GWBlocks.SHUTTER_BLOCKS, null, 150);
+			registerFlammable(GWBlocks.SHUTTER_BLOCKS, null);
+		}
+	}
+
+	private static void registerFlammable(GuitaRegistry<Block> blockReg, @Nullable GuitaRegistry<Block> strippedBlockReg) {
+		int index = 0;
+		for (GuitaRegistryEntry<Block> regEntry : blockReg.getEntries()) {
+			Identifier id = regEntry.getId();
+			Block block = regEntry.get();
+
+			Optional<GuitaRegistryEntry<Block>> optionalEntry = strippedBlockReg != null
+				? strippedBlockReg.stream().skip(index).findFirst()
+				: Optional.empty();
+
+			if (!id.getPath().matches(".*(crimson|warped).*")) {
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+
+				if (optionalEntry.isPresent()) {
+					Block strippedBlock = optionalEntry.get().get();
+					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
+				}
+			}
+			index++;
 		}
 	}
 
 	private static void registerFuelAndRegisterStripped(GuitaRegistry<Block> blockReg, GuitaRegistry<Block> strippedBlockReg, Map<Block, Block> strippedMap, int fuelTime) {
+		//? <26.3 {
 		registerFuel(blockReg, strippedBlockReg, fuelTime);
 		registerStripped(blockReg, strippedBlockReg, strippedMap);
+		//?}
+		registerFlammable(blockReg, strippedBlockReg);
 	}
 
+	//? <26.3 {
 	private static void registerFuel(GuitaRegistry<Block> blockReg, @Nullable GuitaRegistry<Block> strippedBlockReg, int fuelTime) {
 		int index = 0;
 		for (GuitaRegistryEntry<Block> regEntry : blockReg.getEntries()) {
@@ -126,13 +159,11 @@ public final class GuitaWoodworks {
 
 			if (!id.getPath().matches(".*(crimson|warped).*")) {
 				Platform.INSTANCE.registerFuel(fuelTime, item);
-				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
 
 				if (optionalEntry.isPresent()) {
 					Block strippedBlock = optionalEntry.get().get();
 					Item strippedItem = strippedBlock.asItem();
 					Platform.INSTANCE.registerFuel(fuelTime, strippedItem);
-					((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(strippedBlock, 5, 5);
 				}
 			}
 			index++;
@@ -155,6 +186,7 @@ public final class GuitaWoodworks {
 			index++;
 		}
 	}
+	//?}
 
 	public static Identifier id(String name) {
 		return Identifier.fromNamespaceAndPath(MOD_ID, name);

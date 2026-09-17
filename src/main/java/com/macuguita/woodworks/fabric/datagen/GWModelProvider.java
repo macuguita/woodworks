@@ -141,24 +141,24 @@ public class GWModelProvider extends FabricModelProvider {
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_12x12")),
 				new TextureMapping().put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log)).put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top_14x14")));
 		});
-		GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
-			var block = regEntry.get();
-			registerHollowLog(blockStateModelGenerator, block,
-				new TextureMapping()
-					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
-					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
-					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
-		});
-		GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
-			var block = regEntry.get();
-			registerHollowLog(blockStateModelGenerator, block,
-				new TextureMapping()
-					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
-					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
-					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
-		});
+//		GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+//			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
+//			var block = regEntry.get();
+//			registerHollowLog(blockStateModelGenerator, block,
+//				new TextureMapping()
+//					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+//					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+//					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
+//		});
+//		GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+//			var log = GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get());
+//			var block = regEntry.get();
+//			registerHollowLog(blockStateModelGenerator, block,
+//				new TextureMapping()
+//					.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(log))
+//					.put(TextureSlot.TOP, TextureMapping.getBlockTexture(log, "_top"))
+//					.put(TextureSlot.INSIDE, TextureMapping.getBlockTexture(GWUtils.getStrippedBlockOrSelf(log))));
+//		});
 		GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
 			var block = regEntry.get();
 			registerSupportBlock(blockStateModelGenerator, block,

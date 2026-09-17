@@ -25,24 +25,22 @@ package com.macuguita.woodworks.common.block;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -55,11 +53,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import com.macuguita.woodworks.common.reg.GWItemTags;
 import com.macuguita.woodworks.common.utils.GWUtils;
 
+//? <26.3 {
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+//?}
+
 public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements SittableBlock {
 
 	public static final Map<Block, Block> STRIPPED_CARVED_LOGS = new HashMap<>();
 	public static final AABB SEAT = new AABB(0.125, 0, 0.125, 0.875, 0.5, 0.875);
-	public static final MapCodec<CarvedLogSeatBlock> CODEC = simpleCodec(CarvedLogSeatBlock::new);
 	protected static final VoxelShape VOXEL_SHAPE = Shapes.join(
 		Shapes.block(),
 		Shapes.or(
@@ -68,6 +70,9 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		BooleanOp.ONLY_FIRST
 	);
 	private final boolean strippable;
+	//? <26.3 {
+	public static final MapCodec<CarvedLogSeatBlock> CODEC = simpleCodec(CarvedLogSeatBlock::new);
+	//?}
 
 	public CarvedLogSeatBlock(Properties settings) {
 		this(settings, true);
@@ -81,7 +86,7 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 	@Override
 	protected InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 		Item item = itemStack.getItem();
-		if (itemStack.getItem() instanceof AxeItem && strippable) {
+		if (itemStack.is(ItemTags.AXES) && strippable) {
 			Block strippedBlock = STRIPPED_CARVED_LOGS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().instabuild)
@@ -150,8 +155,10 @@ public class CarvedLogSeatBlock extends NoCornerModularSeatBlock implements Sitt
 		return SEAT;
 	}
 
+	//? <26.3 {
 	@Override
 	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
 		return CODEC;
 	}
+	//?}
 }
