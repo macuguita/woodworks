@@ -51,59 +51,59 @@ public class GWBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
 		GWBlocks.STUMP_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.STUMP).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.STUMP).add(res(regEntry));
 		});
 
 		GWBlocks.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.STUMP).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.STUMP).add(res(regEntry));
 		});
 
 		GWBlocks.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.CARVED_LOG).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(res(regEntry));
 		});
 
 		GWBlocks.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.CARVED_LOG).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.CARVED_LOG).add(res(regEntry));
 		});
 
 		GWBlocks.BEAM_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.BEAM).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.BEAM).add(res(regEntry));
 		});
 
 		GWBlocks.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.BEAM).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.BEAM).add(res(regEntry));
 		});
 
 		GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.SUPPORT).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.SUPPORT).add(res(regEntry));
 		});
 
 		GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-			tag(GWBlockTags.SHUTTER).add(res(regEntry));
+			valueLookupBuilder(GWBlockTags.SHUTTER).add(res(regEntry));
 		});
 
 		//~ if >26.1 'GWBlocks' -> 'GWBlockItemIds' {
-		tag(GWBlockTags.STUMP)
-			.add(GWBlockItemIds.MUSHROOM_STUMP/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/);
+		valueLookupBuilder(GWBlockTags.STUMP)
+			.add(GWBlocks.MUSHROOM_STUMP/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/);
 
-		tag(GWBlockTags.CARVED_LOG)
-			.add(GWBlockItemIds.CARVED_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/);
+		valueLookupBuilder(GWBlockTags.CARVED_LOG)
+			.add(GWBlocks.CARVED_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/);
 
-		tag(GWBlockTags.BEAM)
-			.add(GWBlockItemIds.MUSHROOM_BEAM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/);
+		valueLookupBuilder(GWBlockTags.BEAM)
+			.add(GWBlocks.MUSHROOM_BEAM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/);
 
-		tag(GWBlockTags.HOLLOW_LOG)
-			.add(GWBlockItemIds.HOLLOW_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/);
+		valueLookupBuilder(GWBlockTags.HOLLOW_LOG)
+			.add(GWBlocks.HOLLOW_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/);
 
-		tag(GWBlockTags.CONNECTING_MUSHROOM)
-			.add(GWBlockItemIds.CARVED_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/)
-			.add(GWBlockItemIds.HOLLOW_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/);
+		valueLookupBuilder(GWBlockTags.CONNECTING_MUSHROOM)
+			.add(GWBlocks.CARVED_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/)
+			.add(GWBlocks.HOLLOW_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/);
 
-		tag(BlockTags.MINEABLE_WITH_AXE)
-			.add(GWBlockItemIds.MUSHROOM_STUMP/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/)
-			.add(GWBlockItemIds.CARVED_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/)
-			.add(GWBlockItemIds.MUSHROOM_BEAM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/)
-			.add(GWBlockItemIds.HOLLOW_MUSHROOM_STEM/*?<=26.1{*//*.get()*//*?}else{*/.block()/*?}*/)
+		valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE)
+			.add(GWBlocks.MUSHROOM_STUMP/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/)
+			.add(GWBlocks.CARVED_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/)
+			.add(GWBlocks.MUSHROOM_BEAM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/)
+			.add(GWBlocks.HOLLOW_MUSHROOM_STEM/*? <=26.1 {*/.get()/*?} else {*//*.block()*//*?}*/)
 			.addTag(GWBlockTags.STUMP)
 			.addTag(GWBlockTags.CARVED_LOG)
 			.addTag(GWBlockTags.BEAM)
@@ -115,13 +115,13 @@ public class GWBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
 	//~}
 
 	//? if >26.1 {
-	private static ResourceKey<Block> res(GuitaRegistryEntry<Block> entry) {
+	/*private static ResourceKey<Block> res(GuitaRegistryEntry<Block> entry) {
 		return ResourceKey.create(BuiltInRegistries.BLOCK.key(), entry.getId());
 	}
-	//?} else {
-	/*private static Block res(GuitaRegistryEntry<Block> entry) {
+	*///?} else {
+	private static Block res(GuitaRegistryEntry<Block> entry) {
 		return entry.get();
 	}
-	*///?}
+	//?}
 }
 //?}

@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -21,6 +20,7 @@ import com.macuguita.lib.api.reg.GuitaRegistry;
 import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.common.item.TooltippedBlockItem;
+import com.macuguita.woodworks.common.utils.BlockItemId;
 
 public class GWItems {
 

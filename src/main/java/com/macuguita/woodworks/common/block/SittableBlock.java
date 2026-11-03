@@ -22,13 +22,10 @@
 
 package com.macuguita.woodworks.common.block;
 
-import com.macuguita.woodworks.GuitaWoodworks;
-
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

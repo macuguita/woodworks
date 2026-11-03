@@ -6,7 +6,6 @@ import java.util.function.Function;
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -23,6 +22,7 @@ import com.macuguita.woodworks.common.block.ResizableBeamBlock;
 import com.macuguita.woodworks.common.block.ShutterBlock;
 import com.macuguita.woodworks.common.block.StumpSeatBlock;
 import com.macuguita.woodworks.common.block.SupportBlock;
+import com.macuguita.woodworks.common.utils.BlockItemId;
 
 public class GWBlocks {
 

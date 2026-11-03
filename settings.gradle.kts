@@ -1,31 +1,31 @@
 pluginManagement {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        maven("https://maven.fabricmc.net/") { name = "Fabric" }
-        maven("https://maven.neoforged.net/releases/") { name = "NeoForged" }
-        maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie" }
-        maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
-        maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
-    }
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		gradlePluginPortal()
+		maven("https://maven.fabricmc.net/") { name = "Fabric" }
+		maven("https://maven.neoforged.net/releases/") { name = "NeoForged" }
+		maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie" }
+		maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
+		maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+	}
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("dev.kikugie.stonecutter") version "0.10-alpha.2"
+	id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+	id("dev.kikugie.stonecutter") version "0.10-beta.2"
 }
 
 stonecutter {
-    create(rootProject) {
-        fun match(version: String, vararg loaders: String) = loaders
-            .forEach { loader ->
-                version("$version-$loader", version).buildscript = "build.$loader.gradle.kts"
-            }
+	create(rootProject) {
+		fun match(version: String, vararg loaders: String) = loaders
+			.forEach { loader ->
+				version("$version-$loader", version).buildscript = "build.$loader.gradle.kts"
+			}
 
-        match("26.1", "fabric", "neoforge")
-        match("26.2", "fabric", "neoforge")
+		match("26.1", "fabric", "neoforge")
+		match("26.2", "fabric", "neoforge")
 
-        vcsVersion = "26.1-fabric"
-    }
+		vcsVersion = "26.1-fabric"
+	}
 }

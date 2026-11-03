@@ -1,3 +1,6 @@
+1.2.10
+- Update dependencies
+---
 1.2.9
 - Fix some stuff with block ids and blocks not being separate
 ---

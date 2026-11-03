@@ -22,15 +22,16 @@
 
 package com.macuguita.woodworks;
 
+import java.nio.file.Path;
+
+import net.minecraft.world.level.ItemLike;
+
 //? fabric {
 import com.macuguita.woodworks.fabric.FabricPlatformImpl;
 //?}
 //? neoforge {
-/*import com.macuguita.woodworks.neoforge.NeoForgePlatformImpl;
- *///?}
-import java.nio.file.Path;
-
-import net.minecraft.world.level.ItemLike;
+//import com.macuguita.woodworks.neoforge.NeoForgePlatformImpl;
+ //?}
 
 public interface Platform {
 
@@ -38,8 +39,8 @@ public interface Platform {
 	Platform INSTANCE = new FabricPlatformImpl();
 	//?}
 	//? neoforge {
-	/*Platform INSTANCE = new NeoForgePlatformImpl();
-	 *///?}
+	//Platform INSTANCE = new NeoForgePlatformImpl();
+	//?}
 
 
 	boolean isModLoaded(String modid);

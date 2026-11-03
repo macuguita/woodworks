@@ -1,11 +1,11 @@
 package com.macuguita.woodworks.common.reg;
 
-import com.macuguita.woodworks.GuitaWoodworks;
-
 import net.minecraft.core.registries.Registries;
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+
+import com.macuguita.woodworks.GuitaWoodworks;
+import com.macuguita.woodworks.common.utils.BlockItemId;
 
 public class GWBlockItemIds {
 

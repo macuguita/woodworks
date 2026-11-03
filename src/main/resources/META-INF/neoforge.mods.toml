@@ -1,15 +1,22 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
 license = "MIT"
+issueTrackerURL = "https://github.com/macuguita/woodworks/issues"
 
 [[mods]]
 modId = "gwoodworks"
-displayName = "guita's Woodworks"
 version = "${version}"
-displayURL = ""
-logoFile = "assets/icon.png"
-authors = "macuguita"
+displayName = "guita's Woodworks"
 description = '''Decorations that have some sort of chopped charm!'''
+authors = "macuguita"
+logoFile = "assets/gwoodworks/logo.png"
+logoBlur = false
+displayURL = "https://macuguita.com"
+issueTrackerURL = "https://github.com/macuguita/woodworks/issues"
+updateJSONURL = "https://api.modrinth.com/updates/NTFyR6MX/forge_updates.json?neoforge=only"
+
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"
 
 [[mixins]]
 config = "gwoodworks.mixins.json"
@@ -25,3 +32,11 @@ side = "BOTH"
 modId = "minecraft"
 type = "required"
 versionRange = "${minecraft}"
+
+[[dependencies.gwoodworks]]
+modId = "macu_lib"
+type = "required"
+versionRange = "${macu_lib_ver}"
+
+[modproperties.macu_lib]
+catalogueImageIcon = "assets/gwoodworks/logo.png"

@@ -1,5 +1,6 @@
-package net.minecraft.references;
+package com.macuguita.woodworks.common.utils;
 
+// Source: <https://mcsrc.dev/2/26.2/net/minecraft/references/BlockItemId>
 //? if <26.2 {
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

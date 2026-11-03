@@ -50,72 +50,72 @@ public class GWItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 	//~ if >26.1 'valueLookupBuilder' -> 'tag' {
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		tag(GWItemTags.SECATEURS)
-			.add(/*?>26.1{*/GWItemIds/*?}else{*//*GWItems*//*?}*/.SECATEURS/*?<=26.1{*//*.get()*//*?}*/)
+		valueLookupBuilder(GWItemTags.SECATEURS)
+			.add(/*? >26.1 {*//*GWItemIds*//*?} else {*/GWItems/*?}*/.SECATEURS/*? <=26.1 {*/.get()/*?}*/)
 			.addOptionalTag(GWItemTags.KNIVES);
 
 		GWItems.STUMP_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.STUMP).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.STUMP).add(res(regEntry));
 		});
 
 		GWItems.STRIPPED_STUMP_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.STUMP).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.STUMP).add(res(regEntry));
 		});
 
 		GWItems.CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.CARVED_LOG).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.CARVED_LOG).add(res(regEntry));
 		});
 
 		GWItems.STRIPPED_CARVED_LOG_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.CARVED_LOG).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.CARVED_LOG).add(res(regEntry));
 		});
 
 		GWItems.BEAM_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.BEAM).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.BEAM).add(res(regEntry));
 		});
 
 		GWItems.STRIPPED_BEAM_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.BEAM).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.BEAM).add(res(regEntry));
 		});
 
 		GWItems.HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.HOLLOW_LOG).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(res(regEntry));
 		});
 
 		GWItems.STRIPPED_HOLLOW_LOG_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.HOLLOW_LOG).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.HOLLOW_LOG).add(res(regEntry));
 		});
 
 		GWItems.SUPPORT_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.SUPPORT).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.SUPPORT).add(res(regEntry));
 		});
 
 		GWItems.SHUTTER_ITEMS.stream().forEach(regEntry -> {
-			tag(GWItemTags.SHUTTER).add(res(regEntry));
+			valueLookupBuilder(GWItemTags.SHUTTER).add(res(regEntry));
 		});
 
-		tag(GWItemTags.STUMP)
+		valueLookupBuilder(GWItemTags.STUMP)
 			.add(res(GWItems.MUSHROOM_STUMP));
 
-		tag(GWItemTags.CARVED_LOG)
+		valueLookupBuilder(GWItemTags.CARVED_LOG)
 			.add(res(GWItems.CARVED_MUSHROOM_STEM));
 
-		tag(GWItemTags.BEAM)
+		valueLookupBuilder(GWItemTags.BEAM)
 			.add(res(GWItems.MUSHROOM_BEAM));
 
-		tag(GWItemTags.HOLLOW_LOG)
+		valueLookupBuilder(GWItemTags.HOLLOW_LOG)
 			.add(res(GWItems.HOLLOW_MUSHROOM_STEM));
 	}
 	//~}
 
 	//? if >26.1 {
-	private static ResourceKey<Item> res(GuitaRegistryEntry<Item> entry) {
+	/*private static ResourceKey<Item> res(GuitaRegistryEntry<Item> entry) {
 		return ResourceKey.create(BuiltInRegistries.ITEM.key(), entry.getId());
 	}
-	//?} else {
-	/*private static Item res(GuitaRegistryEntry<Item> entry) {
+	*///?} else {
+	private static Item res(GuitaRegistryEntry<Item> entry) {
 		return entry.get();
 	}
-	*///?}
+	//?}
 }
 //?}

@@ -25,13 +25,11 @@ package com.macuguita.woodworks.client;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 
-import com.macuguita.woodworks.GuitaWoodworks;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 
 public class GuitaWoodworksClient {
 
 	public static void init() {
-		GuitaWoodworks.LOGGER.info("Initializing {} Client", GuitaWoodworks.MOD_ID);
 		registerEntityRenderers();
 	}
 

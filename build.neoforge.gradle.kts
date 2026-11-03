@@ -1,169 +1,174 @@
 plugins {
-    id("net.neoforged.moddev")
-    id("dev.kikugie.postprocess.jsonlang")
-    id("me.modmuss50.mod-publish-plugin")
-    id("maven-publish")
+	id("net.neoforged.moddev")
+	id("dev.kikugie.postprocess.jsonlang")
+	id("me.modmuss50.mod-publish-plugin")
+	id("maven-publish")
 }
 
 tasks.named<ProcessResources>("processResources") {
-    fun prop(name: String) = project.property(name) as String
+	fun prop(name: String) = project.property(name) as String
 
-    val props = HashMap<String, String>().apply {
-        this["version"] = prop("mod.version") + "+" + prop("deps.minecraft")
-        this["minecraft"] = prop("mod.mc_dep_forgelike")
-    }
+	val props = HashMap<String, String>().apply {
+		this["version"] = prop("mod.version") + "+" + prop("deps.minecraft")
+		this["minecraft"] = prop("mod.mc_dep_forgelike")
+		this["macu_lib_ver"] = prop("mod.macu_lib_dep_forgelike")
+	}
 
-    filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
-        expand(props)
-    }
+	filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
+		expand(props)
+	}
 }
 
 version = "${property("mod.version")}+${property("deps.minecraft")}-neoforge"
 base.archivesName = property("mod.id") as String
 
 jsonlang {
-    languageDirectories = listOf("assets/${property("mod.id")}/lang")
-    prettyPrint = true
+	languageDirectories = listOf("assets/${property("mod.id")}/lang")
+	prettyPrint = true
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    val exclusiveRepos: List<Triple<String, String, List<String>>> = listOf(
-        Triple("macuguita Maven", "https://maven.macuguita.com/releases/", listOf("com.macuguita", "folk.sisby", "org.quiltmc")),
-        Triple("Minecraft Forge", "https://maven.minecraftforge.net", emptyList()),
-        Triple("shedaniel (Cloth Config)", "https://maven.shedaniel.me/", listOf("me.shedaniel")),
-        Triple("Xander Maven", "https://maven.isxander.dev/releases/", listOf("dev.isxander")),
-        Triple("Terraformers (Mod Menu)", "https://maven.terraformersmc.com/releases/", listOf("com.terraformersmc", "dev.emi")),
-        Triple("Wisp Forest Maven", "https://maven.wispforest.io/releases/", listOf("io.wispforest")),
-        Triple("Modrinth", "https://api.modrinth.com/maven", listOf("maven.modrinth")),
-        Triple("Parchment Mappings", "https://maven.parchmentmc.org", listOf("org.parchmentmc")),
-    )
+	mavenLocal()
+	mavenCentral()
+	val exclusiveRepos: List<Triple<String, String, List<String>>> = listOf(
+		Triple(
+			"macuguita Maven",
+			"https://maven.macuguita.com/releases/",
+			listOf("com.macuguita", "folk.sisby", "org.quiltmc")
+		),
+		Triple("Minecraft Forge", "https://maven.minecraftforge.net", emptyList()),
+		Triple("shedaniel (Cloth Config)", "https://maven.shedaniel.me/", listOf("me.shedaniel")),
+		Triple("Xander Maven", "https://maven.isxander.dev/releases/", listOf("dev.isxander")),
+		Triple(
+			"Terraformers (Mod Menu)",
+			"https://maven.terraformersmc.com/releases/",
+			listOf("com.terraformersmc", "dev.emi")
+		),
+		Triple("Wisp Forest Maven", "https://maven.wispforest.io/releases/", listOf("io.wispforest")),
+		Triple("Modrinth", "https://api.modrinth.com/maven", listOf("maven.modrinth")),
+		Triple("Parchment Mappings", "https://maven.parchmentmc.org", listOf("org.parchmentmc")),
+	)
 
-    exclusiveRepos.forEach { (name, url, groups) ->
-        if (groups.isNotEmpty()) {
-            exclusiveContent {
-                forRepository {
-                    maven {
-                        this.name = name
-                        setUrl(url)
-                    }
-                }
-                filter {
-                    groups.forEach { includeGroupAndSubgroups(it) }
-                }
-            }
-        } else {
-            maven {
-                this.name = name
-                setUrl(url)
-            }
-        }
-    }
+	exclusiveRepos.forEach { (name, url, groups) ->
+		if (groups.isNotEmpty()) {
+			exclusiveContent {
+				forRepository {
+					maven {
+						this.name = name
+						setUrl(url)
+					}
+				}
+				filter {
+					groups.forEach { includeGroupAndSubgroups(it) }
+				}
+			}
+		} else {
+			maven {
+				this.name = name
+				setUrl(url)
+			}
+		}
+	}
 }
 
 val localRuntime by configurations.creating
 
 configurations {
-    runtimeClasspath {
-        extendsFrom(localRuntime)
-    }
+	runtimeClasspath {
+		extendsFrom(localRuntime)
+	}
 }
 
 neoForge {
-    version = property("deps.neoforge") as String
-    validateAccessTransformers = true
+	version = property("deps.neoforge") as String
+	validateAccessTransformers = true
 
-    if (hasProperty("deps.parchment")) parchment {
-        val (mc, ver) = (property("deps.parchment") as String).split(':')
-        mappingsVersion = ver
-        minecraftVersion = mc
-    }
+	if (hasProperty("deps.parchment")) parchment {
+		val (mc, ver) = (property("deps.parchment") as String).split(':')
+		mappingsVersion = ver
+		minecraftVersion = mc
+	}
 
-    runs {
-        register("client") {
-            gameDirectory = file("run/")
-            client()
-        }
-        register("server") {
-            gameDirectory = file("run/")
-            server()
-        }
-    }
+	runs {
+		register("client") {
+			gameDirectory = file("run/")
+			client()
+		}
+		register("server") {
+			gameDirectory = file("run/")
+			server()
+		}
+	}
 
-    mods {
-        register(property("mod.id") as String) {
-            sourceSet(sourceSets["main"])
-        }
-    }
-    sourceSets["main"].resources.srcDir("src/main/generated")
+	mods {
+		register(property("mod.id") as String) {
+			sourceSet(sourceSets["main"])
+		}
+	}
+	sourceSets["main"].resources.srcDir("src/main/generated")
 }
 
 dependencies {
-    // macu lib
-    if (hasProperty("deps.macu_lib")) {
-		if (stonecutter.current.parsed > "26.1") {
-			implementation("com.macuguita:macu_lib:${property("deps.macu_lib")}")
-		} else {
-			implementation("com.macuguita:macu_lib-neoforge:${property("deps.macu_lib")}")
-		}
-    }
-    compileOnly("org.jspecify:jspecify:1.0.0")
+	// macu lib
+	if (hasProperty("deps.macu_lib")) {
+		implementation("com.macuguita:macu_lib:${property("deps.macu_lib")}")
+	}
+	compileOnly("org.jspecify:jspecify:1.0.0")
 
-    //McQoy
-    if (hasProperty("deps.mcqoy")) {
-        localRuntime("maven.modrinth:mcqoy:${property("deps.mcqoy")}")
-    }
+	//McQoy
+	if (hasProperty("deps.mcqoy")) {
+		localRuntime("maven.modrinth:mcqoy:${property("deps.mcqoy")}")
+	}
 
-    // YACL  - required by McQoy
-    if (hasProperty("deps.yacl")) {
-        localRuntime("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-neoforge")
-    }
+	// YACL  - required by McQoy
+	if (hasProperty("deps.yacl")) {
+		localRuntime("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-neoforge")
+	}
 }
 
 stonecutter {
 	replacements.string {
 		direction = eval(current.version, ">26.1")
-		replace("com.macuguita.lib.reg", "com.macuguita.lib.api.reg")
+		replace("com.macuguita.woodworks.common.utils.BlockItemId", "net.minecraft.references.BlockItemId")
 	}
 }
 
 tasks {
-    processResources {
-        exclude("**/fabric.mod.json", "**/*.accesswidener", "**/mods.toml")
-    }
+	processResources {
+		exclude("**/fabric.mod.json", "**/*.accesswidener", "**/*.classtweaker", "**/mods.toml")
+	}
 
-    named("createMinecraftArtifacts") {
-        dependsOn("stonecutterGenerate")
-    }
+	named("createMinecraftArtifacts") {
+		dependsOn("stonecutterGenerate")
+	}
 
-    register<Copy>("buildAndCollect") {
-        group = "build"
-        from(jar.map { it.archiveFile })
-        into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
-        dependsOn("build")
-    }
+	register<Copy>("buildAndCollect") {
+		group = "build"
+		from(jar.map { it.archiveFile })
+		into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+		dependsOn("build")
+	}
 }
 
 java {
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 publishMods {
-    file = tasks.jar.map { it.archiveFile.get() }
-    additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
+	file = tasks.jar.map { it.archiveFile.get() }
+	additionalFiles.from(tasks.named<org.gradle.jvm.tasks.Jar>("sourcesJar").map { it.archiveFile.get() })
 
-    type = STABLE
-    displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} NeoForge"
-    version = "${property("mod.version")}+${property("deps.minecraft")}-neoforge"
-    changelog = provider { rootProject.file("CHANGELOG-LATEST.md").readText() }
-    modLoaders.add("neoforge")
+	type = STABLE
+	displayName = "${property("mod.name")} ${property("mod.version")} for ${stonecutter.current.version} NeoForge"
+	version = "${property("mod.version")}+${property("deps.minecraft")}-neoforge"
+	changelog = provider { rootProject.file("CHANGELOG-LATEST.md").readText() }
+	modLoaders.add("neoforge")
 
-    modrinth {
-        projectId = property("publish.modrinth") as String
-        accessToken = env.MODRINTH_API_KEY.orNull()
+	modrinth {
+		projectId = property("publish.modrinth") as String
+		accessToken = env.MODRINTH_API_KEY.orNull()
 		minecraftVersions.add(property("deps.minecraft").toString())
 		minecraftVersions.addAll(
 			(findProperty("publish.mr_additionalVersions") as String?)
@@ -172,14 +177,14 @@ publishMods {
 				?.filter { it.isNotEmpty() }
 				?: emptyList()
 		)
-        requires("macu-lib")
-        optional("mcqoy")
-        optional("qomc")
-    }
+		requires("macu-lib")
+		optional("mcqoy")
+		optional("qomc")
+	}
 
-    curseforge {
-        projectId = property("publish.curseforge") as String
-        accessToken = env.CURSEFORGE_API_KEY.orNull()
+	curseforge {
+		projectId = property("publish.curseforge") as String
+		accessToken = env.CURSEFORGE_API_KEY.orNull()
 		minecraftVersions.addAll(
 			(findProperty("publish.cf_mcVersions") as String?)
 				?.split(",")
@@ -187,31 +192,31 @@ publishMods {
 				?.filter { it.isNotEmpty() }
 				?: emptyList()
 		)
-        requires("macu-lib")
-        optional("mcqoy")
-        optional("qomc")
-    }
+		requires("macu-lib")
+		optional("mcqoy")
+		optional("qomc")
+	}
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            groupId = property("mod.group") as String
-            artifactId = (property("mod.id") as String) + "-neoforge"
-            version = (property("mod.version") as String) + "+${property("deps.minecraft")}"
-            from(components["java"])
-        }
-    }
-    repositories {
-        mavenLocal()
-        maven {
-            name = "macuguita"
-            url = uri("https://maven.macuguita.com/releases")
+	publications {
+		create<MavenPublication>("mavenJava") {
+			groupId = property("mod.group") as String
+			artifactId = (property("mod.id") as String) + "-neoforge"
+			version = (property("mod.version") as String) + "+${property("deps.minecraft")}"
+			from(components["java"])
+		}
+	}
+	repositories {
+		mavenLocal()
+		maven {
+			name = "macuguita"
+			url = uri("https://maven.macuguita.com/releases")
 
-            credentials {
-                username = env.MAVEN_USERNAME.orNull()
-                password = env.MAVEN_KEY.orNull()
-            }
-        }
-    }
+			credentials {
+				username = env.MAVEN_USERNAME.orNull()
+				password = env.MAVEN_KEY.orNull()
+			}
+		}
+	}
 }

@@ -3,13 +3,20 @@
   "id": "gwoodworks",
   "name": "guita's Woodworks",
   "version": "${version}",
-  "authors": ["macuguita"],
+  "authors": [
+    {
+      "name": "macuguita",
+      "contact": {
+        "homepage": "https://macuguita.com"
+      }
+    }
+  ],
   "contact": {
-    "sources": "",
-    "issues": ""
+    "sources": "https://github.com/macuguita/woodworks",
+    "issues": "https://github.com/macuguita/woodworks/issues"
   },
   "description": "Decorations that have some sort of chopped charm!",
-  "icon": "assets/icon.png",
+  "icon": "assets/gwoodworks/logo.png",
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
@@ -26,7 +33,18 @@
   "mixins": [
     "gwoodworks.mixins.json"
   ],
+  "accessWidener": "gwoodworks.classtweaker",
   "depends": {
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "macu_lib": "${macu_lib_ver}"
+  },
+  "custom": {
+    "modmenu": {
+      "update_checker": true,
+      "links": {
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/guitas-woodworks",
+        "modmenu.modrinth": "https://modrinth.com/mod/guitas-woodworks"
+      }
+    }
   }
 }

@@ -22,10 +22,6 @@
 
 package com.macuguita.woodworks;
 
-import com.macuguita.woodworks.common.reg.GWBlocks;
-
-import com.macuguita.woodworks.common.reg.GWItems;
-
 import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import java.util.Map;
@@ -33,7 +29,6 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static com.macuguita.woodworks.common.block.HollowLogBlock.STRIPPED_HOLLOW_LOGS;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -43,10 +38,13 @@ import net.minecraft.world.level.block.Blocks;
 import com.macuguita.lib.api.reg.GuitaRegistry;
 import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.common.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.common.block.HollowLogBlock;
 import com.macuguita.woodworks.common.block.ResizableBeamBlock;
 import com.macuguita.woodworks.common.block.StumpSeatBlock;
+import com.macuguita.woodworks.common.reg.GWBlocks;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 import com.macuguita.woodworks.common.reg.GWItemGroups;
+import com.macuguita.woodworks.common.reg.GWItems;
 import com.macuguita.woodworks.mixin.FireBlockAccessor;
 
 public final class GuitaWoodworks {
@@ -100,7 +98,7 @@ public final class GuitaWoodworks {
 			registerFuelAndRegisterStripped(GWBlocks.BEAM_BLOCKS, GWBlocks.STRIPPED_BEAM_BLOCKS, ResizableBeamBlock.STRIPPED_BEAM_BLOCKS, 75);
 		}
 		if (CONFIG.enableHollowLogs) {
-			registerFuelAndRegisterStripped(GWBlocks.HOLLOW_LOG_BLOCKS, GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS, STRIPPED_HOLLOW_LOGS, 150);
+			registerFuelAndRegisterStripped(GWBlocks.HOLLOW_LOG_BLOCKS, GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS, HollowLogBlock.STRIPPED_HOLLOW_LOGS, 150);
 		}
 		if (CONFIG.enableSupports) {
 			registerFuel(GWBlocks.SUPPORT_BLOCKS, null, 150);

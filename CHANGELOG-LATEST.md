@@ -1,1 +1,1 @@
-- Fix some stuff with block ids and blocks not being separate
+- Update dependencies

@@ -486,8 +486,8 @@ public class GWModelProvider extends FabricModelProvider {
 	}
 
 	private void registerBeamBlock(BlockModelGenerators blockStateModelGenerator, Block block,
-	                               TextureMapping tmCore, TextureMapping tmSide2x2, TextureMapping tmSide4x4, TextureMapping tmSide6x6,
-	                               TextureMapping tmSide8x8, TextureMapping tmSide10x10, TextureMapping tmSide12x12, TextureMapping tmSide14x14) {
+								   TextureMapping tmCore, TextureMapping tmSide2x2, TextureMapping tmSide4x4, TextureMapping tmSide6x6,
+								   TextureMapping tmSide8x8, TextureMapping tmSide10x10, TextureMapping tmSide12x12, TextureMapping tmSide14x14) {
 		Map<Integer, TextureMapping> textureMapSideMap = Map.of(
 			1, tmSide2x2,
 			2, tmSide4x4,

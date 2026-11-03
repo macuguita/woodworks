@@ -25,23 +25,25 @@ package com.macuguita.woodworks.common.reg;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import com.macuguita.lib.api.reg.GuitaHolderRegistryEntry;
 import com.macuguita.lib.api.reg.GuitaRegistries;
 import com.macuguita.lib.api.reg.GuitaRegistry;
-import com.macuguita.lib.api.reg.GuitaRegistryEntry;
 import com.macuguita.woodworks.GuitaWoodworks;
 
 public class GWItemGroups {
 
 	public static final GuitaRegistry<CreativeModeTab> ITEM_GROUPS = GuitaRegistries.create(BuiltInRegistries.CREATIVE_MODE_TAB, GuitaWoodworks.MOD_ID);
 
-	public static final GuitaRegistryEntry<CreativeModeTab> GW_TAB = ITEM_GROUPS.register("gwoodworks", () ->
+	@SuppressWarnings("ConstantValue")
+	public static final GuitaHolderRegistryEntry<CreativeModeTab> GW_TAB = ITEM_GROUPS.registerForHolder("gwoodworks", () ->
 		CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
 			.title(Component.translatable("itemGroup." + GuitaWoodworks.MOD_ID + ".gwoodworks"))
-			.icon(() -> new ItemStack(GWItems.OAK_STUMP.get()))
-			.displayItems((itemDisplayParameters, output) ->
-				GWItems.ITEMS.stream().map(item -> item.get().getDefaultInstance()).forEach(output::accept)
+			.icon(() -> new ItemStack(GWItems.OAK_STUMP.get() == null ? GWItems.SECATEURS.get() : GWItems.OAK_STUMP.get()))
+			.displayItems((_, output) ->
+				GWItems.ITEMS.boundStream().map(Item::getDefaultInstance).forEach(output::accept)
 			).build());
 
 	public static void init() {
