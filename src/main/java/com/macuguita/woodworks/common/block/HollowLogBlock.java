@@ -31,11 +31,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -100,7 +100,7 @@ public class HollowLogBlock extends RotatedPillarBlock implements SimpleWaterlog
 	@Override
 	protected InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 		Item item = itemStack.getItem();
-		if (itemStack.getItem() instanceof AxeItem && strippable) {
+		if (itemStack.is(ItemTags.AXES) && strippable) {
 			Block strippedBlock = STRIPPED_HOLLOW_LOGS.get(this);
 			if (strippedBlock != null) {
 				if (!player.getAbilities().instabuild)

@@ -47,7 +47,10 @@ public class SupportBlockItem extends SwitchableBlockItem {
 
 	@Override
 	public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
-		if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)) {
+		if (InputConstants.isKeyDown(
+			//? <26.3
+			Minecraft.getInstance().getWindow(),
+			InputConstants.KEY_LSHIFT)) {
 			consumer.accept(Component.translatable("tooltip.gwoodworks.support.condition1").withStyle(ChatFormatting.GRAY));
 			consumer.accept(Component.translatable("tooltip.gwoodworks.support.behavior1").withStyle(ChatFormatting.DARK_AQUA));
 			consumer.accept(Component.literal(""));

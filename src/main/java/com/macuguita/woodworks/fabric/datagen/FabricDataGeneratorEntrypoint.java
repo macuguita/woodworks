@@ -23,8 +23,16 @@
 package com.macuguita.woodworks.fabric.datagen;
 
 //? fabric {
+
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+
+//? >=26.3 {
+/*//import com.macuguita.woodworks.common.reg.GWContextIntProviders;
+
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+*///?}
 
 public class FabricDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
 
@@ -40,5 +48,11 @@ public class FabricDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
 		pack.addProvider(GWRecipeProvider::new);
 	}
 
+	//? >=26.3 {
+	/*@Override
+	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+		registryBuilder.add(Registries.CONTEXT_INT_PROVIDER, GWContextIntProviders::bootstrap);
+	}
+    *///?}
 }
 //?}

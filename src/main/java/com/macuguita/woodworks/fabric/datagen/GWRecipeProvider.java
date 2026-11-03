@@ -28,13 +28,16 @@ import java.util.concurrent.CompletableFuture;
 import com.macuguita.woodworks.common.reg.GWBlocks;
 import com.macuguita.woodworks.common.reg.GWItems;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -48,112 +51,132 @@ public class GWRecipeProvider extends FabricRecipeProvider {
 	}
 
 	@Override
-	protected RecipeProvider createRecipeProvider(HolderLookup.Provider wrapperLookup, RecipeOutput recipeExporter) {
-		return new RecipeProvider(wrapperLookup, recipeExporter) {
-			@Override
-			public void buildRecipes() {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.TOOLS, GWItems.SECATEURS.get(), 1)
-					.pattern("#$")
-					.pattern(" #")
-					.define('#', Items.IRON_NUGGET)
-					.define('$', Items.SHEARS)
-					.unlockedBy(getHasName(Items.IRON_NUGGET), has(Items.IRON_NUGGET))
-					.unlockedBy(getHasName(Items.SHEARS), has(Items.SHEARS))
-					.save(recipeExporter);
+		//? >=26.3 {
+	//protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+		//?} else {
+	protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput recipes) {
+		//?}
+		//? >=26.3 {
+		//return new Provider(recipes, advancements);
+		//?} else {
+		return new Provider(registries, recipes);
+		//?}
+	}
 
-				GWBlocks.STUMP_BLOCKS.stream().forEach(regEntry -> {
-					createStumpRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
-					createStumpRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-					createCarvedLogRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
-					createCarvedLogRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.BEAM_BLOCKS.stream().forEach(regEntry -> {
-					createBeamRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
-					createBeamRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-					createHollowLogRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
-					createHollowLogRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
-					createSupportRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				GWBlocks.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
-					createShutterRecipe(recipeExporter, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
-				});
-				createStumpRecipe(recipeExporter, GWBlocks.MUSHROOM_STUMP.get(), Blocks.MUSHROOM_STEM);
-				createCarvedLogRecipe(recipeExporter, GWBlocks.CARVED_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
-				createBeamRecipe(recipeExporter, GWBlocks.MUSHROOM_BEAM.get(), Blocks.MUSHROOM_STEM);
-				createHollowLogRecipe(recipeExporter, GWBlocks.HOLLOW_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
-			}
+	private static class Provider extends RecipeProvider {
+		//? >=26.3 {
+		/*protected Provider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+			super(recipeOutput, advancementOutput);
+		}
+		*///?} else {
+		protected Provider(HolderLookup.Provider registries, RecipeOutput output) {
+			super(registries, output);
+		}
+		//?}
 
-			private void createStumpRecipe(RecipeOutput exporter, Block stump, Block log) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, stump, 6)
-					.pattern("###")
-					.define('#', log)
-					.unlockedBy(getHasName(log), has(log))
-					.save(exporter);
-			}
+		@Override
+		public void buildRecipes() {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.TOOLS, GWItems.SECATEURS.get(), 1)
+				.pattern("#$")
+				.pattern(" #")
+				.define('#', Items.IRON_NUGGET)
+				.define('$', Items.SHEARS)
+				.unlockedBy(getHasName(Items.IRON_NUGGET), has(Items.IRON_NUGGET))
+				.unlockedBy(getHasName(Items.SHEARS), has(Items.SHEARS))
+				.save(output);
 
-			private void createCarvedLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 6)
-					.pattern("#  ")
-					.pattern("#  ")
-					.pattern("###")
-					.define('#', log)
-					.unlockedBy(getHasName(log), has(log))
-					.save(exporter);
-			}
+			GWBlocks.STUMP_BLOCKS.stream().forEach(regEntry -> {
+				createStumpRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.STRIPPED_STUMP_BLOCKS.stream().forEach(regEntry -> {
+				createStumpRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+				createCarvedLogRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.STRIPPED_CARVED_LOG_BLOCKS.stream().forEach(regEntry -> {
+				createCarvedLogRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.BEAM_BLOCKS.stream().forEach(regEntry -> {
+				createBeamRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.STRIPPED_BEAM_BLOCKS.stream().forEach(regEntry -> {
+				createBeamRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+				createHollowLogRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.STRIPPED_HOLLOW_LOG_BLOCKS.stream().forEach(regEntry -> {
+				createHollowLogRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.SUPPORT_BLOCKS.stream().forEach(regEntry -> {
+				createSupportRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			GWBlocks.SHUTTER_BLOCKS.stream().forEach(regEntry -> {
+				createShutterRecipe(output, regEntry.get(), GWBlocks.WOOD_ASSOCIATIONS.get(regEntry.get()));
+			});
+			createStumpRecipe(output, GWBlocks.MUSHROOM_STUMP.get(), Blocks.MUSHROOM_STEM);
+			createCarvedLogRecipe(output, GWBlocks.CARVED_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
+			createBeamRecipe(output, GWBlocks.MUSHROOM_BEAM.get(), Blocks.MUSHROOM_STEM);
+			createHollowLogRecipe(output, GWBlocks.HOLLOW_MUSHROOM_STEM.get(), Blocks.MUSHROOM_STEM);
+		}
 
-			private void createBeamRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 12)
-					.pattern("#")
-					.pattern("#")
-					.pattern("#")
-					.define('#', log)
-					.unlockedBy(getHasName(log), has(log))
-					.save(exporter);
-			}
+		private void createStumpRecipe(RecipeOutput exporter, Block stump, Block log) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, stump, 6)
+				.pattern("###")
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
+		}
 
-			private void createHollowLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 12)
-					.pattern("# #")
-					.pattern("# #")
-					.pattern("# #")
-					.define('#', log)
-					.unlockedBy(getHasName(log), has(log))
-					.save(exporter);
-			}
+		private void createCarvedLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 6)
+				.pattern("#  ")
+				.pattern("#  ")
+				.pattern("###")
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
+		}
 
-			private void createSupportRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
-					.pattern("##")
-					.pattern("# ")
-					.define('#', plank)
-					.unlockedBy(getHasName(plank), has(plank))
-					.save(exporter);
-			}
+		private void createBeamRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 12)
+				.pattern("#")
+				.pattern("#")
+				.pattern("#")
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
+		}
 
-			private void createShutterRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
-				ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
-					.pattern("#")
-					.pattern("#")
-					.pattern("#")
-					.define('#', plank)
-					.unlockedBy(getHasName(plank), has(plank))
-					.save(exporter);
-			}
-		};
+		private void createHollowLogRecipe(RecipeOutput exporter, Block carvedLog, Block log) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, carvedLog, 12)
+				.pattern("# #")
+				.pattern("# #")
+				.pattern("# #")
+				.define('#', log)
+				.unlockedBy(getHasName(log), has(log))
+				.save(exporter);
+		}
+
+		private void createSupportRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
+				.pattern("##")
+				.pattern("# ")
+				.define('#', plank)
+				.unlockedBy(getHasName(plank), has(plank))
+				.save(exporter);
+		}
+
+		private void createShutterRecipe(RecipeOutput exporter, Block supportBlock, Block plank) {
+			ShapedRecipeBuilder.shaped(BuiltInRegistries.ITEM, RecipeCategory.DECORATIONS, supportBlock, 6)
+				.pattern("#")
+				.pattern("#")
+				.pattern("#")
+				.define('#', plank)
+				.unlockedBy(getHasName(plank), has(plank))
+				.save(exporter);
+		}
 	}
 
 	@Override

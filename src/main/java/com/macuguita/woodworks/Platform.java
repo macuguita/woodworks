@@ -28,17 +28,19 @@ import net.minecraft.world.level.ItemLike;
 
 //? fabric {
 import com.macuguita.woodworks.fabric.FabricPlatformImpl;
-//?}
-//? neoforge {
+//?} neoforge {
 //import com.macuguita.woodworks.neoforge.NeoForgePlatformImpl;
- //?}
+//?}
+//? >=26.3 {
+/*import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+*///?}
 
 public interface Platform {
 
 	//? fabric {
 	Platform INSTANCE = new FabricPlatformImpl();
-	//?}
-	//? neoforge {
+	//?} neoforge {
 	//Platform INSTANCE = new NeoForgePlatformImpl();
 	//?}
 
@@ -51,6 +53,11 @@ public interface Platform {
 
 	boolean isDevelopment();
 
+	//? <26.3 {
 	void registerFuel(int tickTime, ItemLike item);
+	//?}
 
+	//? >=26.3 {
+	//void registerStrip(BlockPredicate fromBlockPredicate, BlockStateProvider toBlockState);
+	//?}
 }

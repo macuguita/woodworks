@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
@@ -58,6 +57,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import com.macuguita.woodworks.common.block.property.SupportFaceShapeProperty;
 import com.macuguita.woodworks.common.item.SwitchableBlockItem;
 
+//? <26.3 {
+import com.mojang.serialization.MapCodec;
+//?}
+
 public class SupportBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
 
 	private static final double BOTTOM_HEIGHT = 3D;
@@ -86,8 +89,10 @@ public class SupportBlock extends HorizontalDirectionalBlock implements SimpleWa
 
 	private static final Map<Direction, VoxelShape> VERTICAL_LARGE = new EnumMap<>(Direction.class);
 	private static final Map<Direction, VoxelShape> VERTICAL_SMALL = new EnumMap<>(Direction.class);
-	public static final MapCodec<SupportBlock> CODEC = simpleCodec(SupportBlock::new);
 	private final ImmutableMap<BlockState, VoxelShape> shapeCache;
+	//? <26.3 {
+	public static final MapCodec<SupportBlock> CODEC = simpleCodec(SupportBlock::new);
+	//?}
 
 	public SupportBlock(Properties properties) {
 		super(properties);
@@ -249,10 +254,12 @@ public class SupportBlock extends HorizontalDirectionalBlock implements SimpleWa
 		return false;
 	}
 
+	//? <26.3 {
 	@Override
 	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
 		return CODEC;
 	}
+	//?}
 
 	static {
 		for (Direction dir : Direction.Plane.HORIZONTAL) {

@@ -22,6 +22,7 @@
 
 package com.macuguita.woodworks.mixin;
 
+//? <26.3 {
 import java.util.Map;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,3 +39,4 @@ public interface AxeItemAccessor {
 		throw new AssertionError();
 	}
 }
+//?}
