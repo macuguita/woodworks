@@ -42,7 +42,6 @@ import com.macuguita.woodworks.common.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.common.block.HollowLogBlock;
 import com.macuguita.woodworks.common.block.ResizableBeamBlock;
 import com.macuguita.woodworks.common.block.StumpSeatBlock;
-import com.macuguita.woodworks.common.compat.GWWoodGoodModule;
 import com.macuguita.woodworks.common.reg.GWBlocks;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 import com.macuguita.woodworks.common.reg.GWItemGroups;
@@ -167,6 +166,10 @@ public final class GuitaWoodworks {
 		if (!Platform.INSTANCE.isModLoaded("everycomp")) return;
 
 		try {
+			Class<?> moduleClass = Class.forName(
+				"com.macuguita.woodworks.common.compat.GWWoodGoodModule"
+			);
+
 			Class<?> everyCompat = Class.forName(
 				"net.mehvahdjukaar.every_compat.EveryCompat"
 			);
@@ -178,9 +181,11 @@ public final class GuitaWoodworks {
 			).invoke(
 				null,
 				"everycomp",
-				(Supplier<?>) () -> GWWoodGoodModule.class
+				(Supplier<?>) () -> moduleClass
 			);
 
+		} catch (ClassNotFoundException ignored) {
+			// Every Compat or our compatibility module is unavailable.
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to register Every Compat module", e);
 		}

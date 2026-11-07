@@ -185,6 +185,7 @@ publishMods {
 	modrinth {
 		projectId = property("publish.modrinth") as String
 		accessToken = env.MODRINTH_API_KEY.orNull()
+		environment = CLIENT_AND_SERVER
 		minecraftVersions.add(property("deps.minecraft").toString())
 		minecraftVersions.addAll(
 			(findProperty("publish.mr_additionalVersions") as String?)
@@ -196,11 +197,16 @@ publishMods {
 		requires("macu-lib")
 		optional("mcqoy")
 		optional("qomc")
+		if (hasProperty("deps.every-compat")) {
+			optional("every-compat")
+		}
 	}
 
 	curseforge {
 		projectId = property("publish.curseforge") as String
 		accessToken = env.CURSEFORGE_API_KEY.orNull()
+		client = true
+		server = true
 		minecraftVersions.addAll(
 			(findProperty("publish.cf_mcVersions") as String?)
 				?.split(",")
@@ -211,6 +217,9 @@ publishMods {
 		requires("macu-lib")
 		optional("mcqoy")
 		optional("qomc")
+		if (hasProperty("deps.every-compat")) {
+			optional("every-compat")
+		}
 	}
 }
 

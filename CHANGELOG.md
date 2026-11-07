@@ -1,5 +1,8 @@
-1.2.10
+1.2.11
 - Update dependencies
+---
+1.2.10
+- Add every compat module again for 26.1.2 versions
 ---
 1.2.9
 - Fix some stuff with block ids and blocks not being separate
