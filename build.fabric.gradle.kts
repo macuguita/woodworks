@@ -41,7 +41,6 @@ jsonlang {
 }
 
 repositories {
-	mavenLocal()
 	mavenCentral()
 	val exclusiveRepos: List<Triple<String, String, List<String>>> = listOf(
 		Triple(
@@ -60,17 +59,23 @@ repositories {
 		Triple("Wisp Forest Maven", "https://maven.wispforest.io/releases/", listOf("io.wispforest")),
 		Triple("Modrinth", "https://api.modrinth.com/maven", listOf("maven.modrinth")),
 		Triple("Parchment Mappings", "https://maven.parchmentmc.org", listOf("org.parchmentmc")),
+		Triple(
+			"Something Catchy",
+			"https://registry.somethingcatchy.net/repository/maven-releases/",
+			listOf("net.mehvahdjukaar")
+		),
 	)
 
 	exclusiveRepos.forEach { (name, url, groups) ->
 		if (groups.isNotEmpty()) {
 			exclusiveContent {
-				forRepository {
+				forRepositories(
 					maven {
 						this.name = name
 						setUrl(url)
-					}
-				}
+					},
+					mavenLocal()
+				)
 				filter {
 					groups.forEach { includeGroupAndSubgroups(it) }
 				}
@@ -107,6 +112,16 @@ dependencies {
 
 	if (hasProperty("deps.yacl")) {
 		localRuntime("dev.isxander:yet-another-config-lib:${property("deps.yacl")}-fabric")
+	}
+
+	if (hasProperty("deps.every-compat")) {
+		compileOnly("net.mehvahdjukaar:everycomp-fabric:${property("deps.every-compat")}:fabric") { isTransitive = false }
+		runtimeOnly("net.mehvahdjukaar:everycomp-fabric:${property("deps.every-compat")}:fabric") { isTransitive = false }
+	}
+
+	if (hasProperty("deps.moonlight")) {
+		compileOnly("net.mehvahdjukaar:moonlight-fabric:${property("deps.moonlight")}") { isTransitive = false }
+		runtimeOnly("net.mehvahdjukaar:moonlight-fabric:${property("deps.moonlight")}") { isTransitive = false }
 	}
 }
 

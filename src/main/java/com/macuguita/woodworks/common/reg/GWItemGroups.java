@@ -23,7 +23,9 @@
 package com.macuguita.woodworks.common.reg;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +39,9 @@ public class GWItemGroups {
 
 	public static final GuitaRegistry<CreativeModeTab> ITEM_GROUPS = GuitaRegistries.create(BuiltInRegistries.CREATIVE_MODE_TAB, GuitaWoodworks.MOD_ID);
 
+	public static final ResourceKey<CreativeModeTab> GW_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GuitaWoodworks.id("gwoodworks"));
 	@SuppressWarnings("ConstantValue")
-	public static final GuitaHolderRegistryEntry<CreativeModeTab> GW_TAB = ITEM_GROUPS.registerForHolder("gwoodworks", () ->
+	public static final GuitaHolderRegistryEntry<CreativeModeTab> GW_TAB = ITEM_GROUPS.registerForHolder(GW_TAB_KEY.identifier().getPath(), () ->
 		CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
 			.title(Component.translatable("itemGroup." + GuitaWoodworks.MOD_ID + ".gwoodworks"))
 			.icon(() -> new ItemStack(GWItems.OAK_STUMP.get() == null ? GWItems.SECATEURS.get() : GWItems.OAK_STUMP.get()))

@@ -26,6 +26,7 @@ import folk.sisby.kaleido.api.WrappedConfig;
 import folk.sisby.kaleido.lib.quiltconfig.api.annotations.Comment;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ import com.macuguita.woodworks.common.block.CarvedLogSeatBlock;
 import com.macuguita.woodworks.common.block.HollowLogBlock;
 import com.macuguita.woodworks.common.block.ResizableBeamBlock;
 import com.macuguita.woodworks.common.block.StumpSeatBlock;
+import com.macuguita.woodworks.common.compat.GWWoodGoodModule;
 import com.macuguita.woodworks.common.reg.GWBlocks;
 import com.macuguita.woodworks.common.reg.GWEntityTypes;
 import com.macuguita.woodworks.common.reg.GWItemGroups;
@@ -85,6 +87,7 @@ public final class GuitaWoodworks {
 		GWItems.init();
 		GWEntityTypes.init();
 		GWItemGroups.init();
+		addEveryCompatModule();
 	}
 
 	public static void commonSetup() {
@@ -158,6 +161,29 @@ public final class GuitaWoodworks {
 
 	public static Identifier id(String name) {
 		return Identifier.fromNamespaceAndPath(MOD_ID, name);
+	}
+
+	public static void addEveryCompatModule() {
+		if (!Platform.INSTANCE.isModLoaded("everycomp")) return;
+
+		try {
+			Class<?> everyCompat = Class.forName(
+				"net.mehvahdjukaar.every_compat.EveryCompat"
+			);
+
+			everyCompat.getMethod(
+				"addOptionalModule",
+				String.class,
+				Supplier.class
+			).invoke(
+				null,
+				"everycomp",
+				(Supplier<?>) () -> GWWoodGoodModule.class
+			);
+
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to register Every Compat module", e);
+		}
 	}
 
 }

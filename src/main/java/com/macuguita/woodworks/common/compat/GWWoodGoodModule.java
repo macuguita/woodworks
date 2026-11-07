@@ -1,0 +1,614 @@
+/*
+ * Copyright (c) 2026 macuguita
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package com.macuguita.woodworks.common.compat;
+
+//? if <26.2 {
+import com.macuguita.woodworks.GuitaWoodworks;
+
+import com.macuguita.woodworks.Platform;
+import com.macuguita.woodworks.common.block.CarvedLogSeatBlock;
+import com.macuguita.woodworks.common.block.HollowLogBlock;
+import com.macuguita.woodworks.common.block.ResizableBeamBlock;
+import com.macuguita.woodworks.common.block.ShutterBlock;
+import com.macuguita.woodworks.common.block.StumpSeatBlock;
+import com.macuguita.woodworks.common.block.SupportBlock;
+import com.macuguita.woodworks.common.item.SupportBlockItem;
+import com.macuguita.woodworks.common.reg.GWBlockTags;
+import com.macuguita.woodworks.common.reg.GWBlocks;
+import com.macuguita.woodworks.common.reg.GWItemGroups;
+
+import com.macuguita.woodworks.common.reg.GWItemTags;
+
+import com.macuguita.woodworks.mixin.FireBlockAccessor;
+
+import net.mehvahdjukaar.every_compat.EveryCompat;
+import net.mehvahdjukaar.every_compat.api.CompatModuleClient;
+import net.mehvahdjukaar.every_compat.api.PaletteStrategies;
+import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
+import net.mehvahdjukaar.every_compat.api.SimpleModuleClient;
+import net.mehvahdjukaar.every_compat.misc.CompatSpritesHelper;
+import net.mehvahdjukaar.every_compat.modules.EveryCompatModule;
+import net.mehvahdjukaar.moonlight.api.resources.BlockTypeResTransformer;
+import net.mehvahdjukaar.moonlight.api.resources.RPUtils;
+import net.mehvahdjukaar.moonlight.api.resources.pack.ResourceGenTask;
+import net.mehvahdjukaar.moonlight.api.resources.textures.Respriter;
+import net.mehvahdjukaar.moonlight.api.resources.textures.TextureCollager;
+import net.mehvahdjukaar.moonlight.api.resources.textures.TextureImage;
+import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
+import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
+
+import net.mehvahdjukaar.moonlight.api.util.Utils;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
+import java.util.function.Consumer;
+
+public class GWWoodGoodModule extends EveryCompatModule {
+
+	public final SimpleEntrySet<WoodType, Block> stump, strippedStump;
+	public final SimpleEntrySet<WoodType, Block> carvedLog, strippedCarvedLog;
+	public final SimpleEntrySet<WoodType, Block> beam, strippedBeam;
+	public final SimpleEntrySet<WoodType, Block> hollowLog, strippedHollowLog;
+	public final SimpleEntrySet<WoodType, Block> supportBlock;
+	public final SimpleEntrySet<WoodType, Block> shutterBlock;
+
+	public GWWoodGoodModule() {
+		super(GuitaWoodworks.MOD_ID, "gww");
+		ResourceKey<CreativeModeTab> tab = GWItemGroups.GW_TAB_KEY;
+
+		var config = GuitaWoodworks.CONFIG;
+		stump = SimpleEntrySet.builder(WoodType.class, "stump",
+				GWBlocks.OAK_STUMP, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new StumpSeatBlock(p)
+			)
+			//TEXTURE: log
+			.addTexture(modRes("block/oak_stump_top"), PaletteStrategies.LOG_SIDE_STANDARD)
+			.addTag(GWItemTags.STUMP, Registries.ITEM)
+			.addTag(GWBlockTags.STUMP, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableStumps)
+			this.addEntry(stump);
+
+		strippedStump = SimpleEntrySet.builder(WoodType.class, "stump", "stripped",
+				GWBlocks.STRIPPED_OAK_STUMP, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new StumpSeatBlock(p)
+			)
+			//TEXTURE: stripped_log
+			.requiresChildren("stripped_log")
+			.addTexture(modRes("block/stripped_oak_stump_top"), PaletteStrategies.STRIPPED_LOG_SIDE_STANDARD)
+			.addTag(GWItemTags.STUMP, Registries.ITEM)
+			.addTag(GWBlockTags.STUMP, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableStumps)
+			this.addEntry(strippedStump);
+
+		carvedLog = SimpleEntrySet.builder(WoodType.class, "log", "carved",
+				GWBlocks.CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new CarvedLogSeatBlock(p)
+			)
+			//TEXTURE: log
+			//TEXTURE: manually generated texture below (carved_oak_log_inside.png)
+			.addTag(GWItemTags.CARVED_LOG, Registries.ITEM)
+			.addTag(GWBlockTags.CARVED_LOG, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableCarvedLogs)
+			this.addEntry(carvedLog);
+
+		strippedCarvedLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_carved",
+				GWBlocks.STRIPPED_CARVED_OAK_LOG, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new CarvedLogSeatBlock(p)
+			)
+			//TEXTURE: stripped_log
+			.requiresChildren("stripped_log")
+			//TEXTURE: manually generated texture below (stripped_carved_oak_log_inside.png)
+			.addTag(GWItemTags.CARVED_LOG, Registries.ITEM)
+			.addTag(GWBlockTags.CARVED_LOG, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableCarvedLogs)
+			this.addEntry(strippedCarvedLog);
+
+		beam = SimpleEntrySet.builder(WoodType.class, "beam",
+				GWBlocks.OAK_BEAM, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new ResizableBeamBlock(p)
+			)
+			.addTag(GWItemTags.BEAM, Registries.ITEM)
+			.addTag(GWBlockTags.BEAM, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.includeModelsBlock(true, GuitaWoodworks.id("block/oak_beam"))
+			.defaultRecipe()
+			.build();
+		if (config.enableBeams)
+			this.addEntry(beam);
+
+		strippedBeam = SimpleEntrySet.builder(WoodType.class, "beam", "stripped",
+				GWBlocks.STRIPPED_OAK_BEAM, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new ResizableBeamBlock(p)
+			)
+			//TEXTURE: stripped_log
+			.requiresChildren("stripped_log")
+			.addTag(GWItemTags.BEAM, Registries.ITEM)
+			.addTag(GWBlockTags.BEAM, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.includeModelsBlock(true, GuitaWoodworks.id("block/stripped_oak_beam"))
+			.defaultRecipe()
+			.build();
+		if (config.enableBeams)
+			this.addEntry(strippedBeam);
+
+		hollowLog = SimpleEntrySet.builder(WoodType.class, "log", "hollow",
+				GWBlocks.HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new HollowLogBlock(p)
+			)
+			//TEXTURE: stripped_log
+			.requiresChildren("stripped_log")
+			.addTag(GWItemTags.BEAM, Registries.ITEM)
+			.addTag(GWBlockTags.BEAM, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableHollowLogs)
+			this.addEntry(hollowLog);
+
+		strippedHollowLog = SimpleEntrySet.builder(WoodType.class, "log", "stripped_hollow",
+				GWBlocks.STRIPPED_HOLLOW_OAK_LOG, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new HollowLogBlock(p)
+			)
+			//TEXTURE: stripped_log
+			.requiresChildren("stripped_log")
+			.addTag(GWItemTags.BEAM, Registries.ITEM)
+			.addTag(GWBlockTags.BEAM, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.defaultRecipe()
+			.build();
+		if (config.enableHollowLogs)
+			this.addEntry(strippedHollowLog);
+
+		supportBlock = SimpleEntrySet.builder(WoodType.class, "support",
+				GWBlocks.OAK_SUPPORT, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new SupportBlock(p)
+			)
+			.addTexture(modRes("block/oak_support_end"), PaletteStrategies.SIGN_LIKE)
+			.addTexture(modRes("block/oak_support_side"), PaletteStrategies.SIGN_LIKE)
+			.addTag(GWItemTags.SUPPORT, Registries.ITEM)
+			.addTag(GWBlockTags.SUPPORT, Registries.BLOCK)
+			.addCustomItem((w, b, p) -> new SupportBlockItem(b, p))
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.includeModelsBlock(true,
+				GuitaWoodworks.id("block/oak_support_inventory"),
+				GuitaWoodworks.id("block/oak_support_inventory_upside_down")
+			)
+			.defaultRecipe()
+			.build();
+		if (config.enableSupports)
+			this.addEntry(supportBlock);
+
+		shutterBlock = SimpleEntrySet.builder(WoodType.class, "shutter",
+				GWBlocks.OAK_SHUTTER, () -> VanillaWoodTypes.OAK,
+				(w, p) -> new ShutterBlock(p)
+			)
+			.addTexture(modRes("block/oak_support_end"), PaletteStrategies.SIGN_LIKE)
+			.addTexture(modRes("block/oak_support_side"), PaletteStrategies.SIGN_LIKE)
+			.addTag(GWItemTags.SHUTTER, Registries.ITEM)
+			.addTag(GWBlockTags.SHUTTER, Registries.BLOCK)
+			.setTab(GWItemGroups.GW_TAB)
+			//REASON: take a look at their textures, you'll see why.
+			.excludeBlockTypes("natures_spirit", "joshua")
+			.excludeBlockTypes("natures_spirit", "coconut")
+			.excludeBlockTypes("terrestria", "sakura")
+			.excludeBlockTypes("terrestria", "yucca_palm")
+			.includeModelsBlock(true, GuitaWoodworks.id("block/oak_shutter_inventory"))
+			.defaultRecipe()
+			.build();
+		if (config.enableShutters)
+			this.addEntry(shutterBlock);
+	}
+
+	@Override
+	public void onModSetup() {
+		stump.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedStump.blocks.get(w);
+			Platform.INSTANCE.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				StumpSeatBlock.STRIPPED_STUMPS.put(block, stripped);
+				Platform.INSTANCE.registerFuel(150, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		carvedLog.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedCarvedLog.blocks.get(w);
+			Platform.INSTANCE.registerFuel(250, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				CarvedLogSeatBlock.STRIPPED_CARVED_LOGS.put(block, stripped);
+				Platform.INSTANCE.registerFuel(250, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		beam.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedBeam.blocks.get(w);
+			Platform.INSTANCE.registerFuel(75, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				ResizableBeamBlock.STRIPPED_BEAM_BLOCKS.put(block, stripped);
+				Platform.INSTANCE.registerFuel(75, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		hollowLog.blocks.forEach((w, block) -> {
+
+			Block stripped = strippedHollowLog.blocks.get(w);
+			Platform.INSTANCE.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+			if (stripped != null) {
+				HollowLogBlock.STRIPPED_HOLLOW_LOGS.put(block, stripped);
+				Platform.INSTANCE.registerFuel(150, stripped);
+				((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(stripped, 5, 5);
+			}
+		});
+		supportBlock.blocks.forEach((w, block) -> {
+
+			Platform.INSTANCE.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+		});
+		shutterBlock.blocks.forEach((w, block) -> {
+
+			Platform.INSTANCE.registerFuel(150, block);
+			((FireBlockAccessor) Blocks.FIRE).gwoodworks$registerFlammableBlock(block, 5, 5);
+		});
+	}
+
+	@Override
+	public CompatModuleClient<?> createClient() {
+		return new Client();
+	}
+
+	private class Client extends SimpleModuleClient<GWWoodGoodModule> {
+
+		public Client() {
+			super(GWWoodGoodModule.this);
+		}
+
+		@Override
+		public void addDynamicClientResources(Consumer<ResourceGenTask> executor) {
+			super.addDynamicClientResources(executor);
+			executor.accept((manager, sink) -> {
+				try {
+					stump.blocks.forEach((w, block) -> {
+						Identifier id = Utils.getID(block);
+
+						try (TextureImage topTexture = TextureImage.open(manager,
+							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+							Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/oak_stump_top", w, id, "oak"));
+
+							var newTop = topTexture.makeCopy();
+							generateStumpTexture(topTexture, newTop);
+
+							sink.addTextureIfNotPresent(manager, newId, () -> newTop);
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+				} catch (Exception e) {
+					GuitaWoodworks.LOGGER.error("Failed to open stump_top texture: ", e);
+				}
+				try {
+					strippedStump.blocks.forEach((w, block) -> {
+						Identifier id = Utils.getID(block);
+
+						try (TextureImage topTexture = TextureImage.open(manager,
+							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+							Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace("block/stripped_oak_stump_top", w, id, "oak"));
+
+							var newTop = topTexture.makeCopy();
+							generateStumpTexture(topTexture, newTop);
+
+							sink.addTextureIfNotPresent(manager, newId, () -> newTop);
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+				} catch (Exception e) {
+					GuitaWoodworks.LOGGER.error("Failed to open stump_top texture: ", e);
+				}
+
+				// gwoodworks/textures block/carved_log_inside_edge.png
+				try (TextureImage insideEdgeMask = TextureImage.open(manager, GuitaWoodworks.id("block/mask/carved_log_inside_edge"));
+					 TextureImage insideMask = TextureImage.open(manager, GuitaWoodworks.id("block/mask/carved_log_inside"))
+				) {
+					carvedLog.blocks.forEach((woodType, block) -> {
+						Identifier id = Utils.getID(block);
+						String texturePath = "block/carved_oak_log_inside";
+
+						try (TextureImage carvedOakLogInsideTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
+							 TextureImage logSideTexture = TextureImage.open(manager,
+								 RPUtils.findFirstBlockTextureLocation(manager, woodType.log, CompatSpritesHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
+							 TextureImage planksTexture = TextureImage.open(manager,
+								 RPUtils.findFirstBlockTextureLocation(manager, woodType.planks))
+						) {
+
+							Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, woodType, id, "oak"));
+
+							TextureImage finishedTexture = generateCarvedLogInsideTexture(carvedOakLogInsideTexture,
+								logSideTexture, planksTexture, insideEdgeMask, insideMask);
+
+							sink.addTextureIfNotPresent(manager, newId, () -> finishedTexture);
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+
+					strippedCarvedLog.blocks.forEach((w, block) -> {
+						Identifier id = Utils.getID(block);
+						String texturePath = "block/stripped_carved_oak_log_inside";
+
+						try (TextureImage strippedCarvedLogTexture = TextureImage.open(manager, GuitaWoodworks.id(texturePath));
+							 TextureImage logSideTexture = TextureImage.open(manager,
+								 RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_SIDE_LOG_TEXTURE));
+							 TextureImage planksTexture = TextureImage.open(manager,
+								 RPUtils.findFirstBlockTextureLocation(manager, w.planks))
+						) {
+
+							Identifier newId = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(texturePath, w, id, "oak"));
+
+							TextureImage finishedTexture = generateCarvedLogInsideTexture(strippedCarvedLogTexture, logSideTexture, planksTexture, insideEdgeMask, insideMask);
+
+							sink.addTextureIfNotPresent(manager, newId, () -> finishedTexture);
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+				} catch (Exception e) {
+					GuitaWoodworks.LOGGER.error("Failed to open the mask texture: ", e);
+				}
+
+				try {
+					beam.blocks.forEach((w, block) -> {
+						Identifier id = Utils.getID(block);
+						String baseTexturePath = "block/oak_beam_top";
+
+						try (TextureImage topTexture = TextureImage.open(manager,
+							RPUtils.findFirstBlockTextureLocation(manager, w.log, CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+							Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+							Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+							Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+							Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+							Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+							Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+							Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+							Identifier[] newIds = {
+								newId2x2,
+								newId4x4,
+								newId6x6,
+								newId8x8,
+								newId10x10,
+								newId12x12,
+								newId14x14
+							};
+
+							var newTop2x2 = topTexture.makeCopy();
+							var newTop4x4 = topTexture.makeCopy();
+							var newTop6x6 = topTexture.makeCopy();
+							var newTop8x8 = topTexture.makeCopy();
+							var newTop10x10 = topTexture.makeCopy();
+							var newTop12x12 = topTexture.makeCopy();
+							var newTop14x14 = topTexture.makeCopy();
+							TextureImage[] newTopTextures = {
+								newTop2x2,
+								newTop4x4,
+								newTop6x6,
+								newTop8x8,
+								newTop10x10,
+								newTop12x12,
+								newTop14x14
+							};
+							for (int i = 0; i < 7; ++i) {
+								var newTopTexture = newTopTextures[i];
+								generateBeamTexture(topTexture, newTopTexture, i);
+								sink.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+							}
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+				} catch (Exception e) {
+					GuitaWoodworks.LOGGER.error("Failed to open the beam textures: ", e);
+				}
+
+				try {
+					strippedBeam.blocks.forEach((w, block) -> {
+						Identifier id = Utils.getID(block);
+						String baseTexturePath = "block/stripped_oak_beam_top";
+
+						try (TextureImage topTexture = TextureImage.open(manager,
+							RPUtils.findFirstBlockTextureLocation(manager, w.getBlockOfThis("stripped_log"), CompatSpritesHelper.LOOKS_LIKE_TOP_LOG_TEXTURE))) {
+
+							Identifier newId2x2 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_2x2", w, id, "oak"));
+							Identifier newId4x4 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_4x4", w, id, "oak"));
+							Identifier newId6x6 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_6x6", w, id, "oak"));
+							Identifier newId8x8 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_8x8", w, id, "oak"));
+							Identifier newId10x10 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_10x10", w, id, "oak"));
+							Identifier newId12x12 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_12x12", w, id, "oak"));
+							Identifier newId14x14 = EveryCompat.res(BlockTypeResTransformer.replaceTypeNoNamespace(baseTexturePath + "_14x14", w, id, "oak"));
+							Identifier[] newIds = {
+								newId2x2,
+								newId4x4,
+								newId6x6,
+								newId8x8,
+								newId10x10,
+								newId12x12,
+								newId14x14
+							};
+
+							var newTop2x2 = topTexture.makeCopy();
+							var newTop4x4 = topTexture.makeCopy();
+							var newTop6x6 = topTexture.makeCopy();
+							var newTop8x8 = topTexture.makeCopy();
+							var newTop10x10 = topTexture.makeCopy();
+							var newTop12x12 = topTexture.makeCopy();
+							var newTop14x14 = topTexture.makeCopy();
+							TextureImage[] newTopTextures = {
+								newTop2x2,
+								newTop4x4,
+								newTop6x6,
+								newTop8x8,
+								newTop10x10,
+								newTop12x12,
+								newTop14x14
+							};
+							for (int i = 0; i < 7; ++i) {
+								var newTopTexture = newTopTextures[i];
+								generateBeamTexture(topTexture, newTopTexture, i);
+								sink.addTextureIfNotPresent(manager, newIds[i], () -> newTopTexture);
+							}
+
+						} catch (Exception e) {
+							GuitaWoodworks.LOGGER.error("Failed to generate texture for {} : {}", block, e);
+						}
+					});
+				} catch (Exception e) {
+					GuitaWoodworks.LOGGER.error("Failed to open the beam textures: ", e);
+				}
+			});
+		}
+
+		private void generateStumpTexture(TextureImage original, TextureImage target) {
+			TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+				.copyFrom(0, 0, 16, 1).to(0, 2, 16, 1) // Top border
+				.copyFrom(0, 15, 16, 1).to(0, 13, 16, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(2, 0, 1, 16) // Left border
+				.copyFrom(15, 0, 1, 16).to(13, 0, 1, 16) // Right border
+				.build();
+
+			collager.apply(original, target);
+
+
+			target.forEachPixel((pixel) -> {
+				if (!((pixel.frameX() >= 2 && pixel.frameX() <= 13) && (pixel.frameY() >= 2 && pixel.frameY() <= 13))) {
+					pixel.setValue(0);
+				}
+			});
+		}
+
+		private TextureImage generateCarvedLogInsideTexture(TextureImage mainTexture, TextureImage logSideTexture, TextureImage planksTexture,
+															TextureImage insideEdgeMask, TextureImage insideMask) {
+			Respriter targetEdge = Respriter.masked(mainTexture, insideMask);
+
+			TextureImage recoloredEdge = targetEdge.recolorWithAnimationOf(logSideTexture);
+
+			Respriter targetInside = Respriter.masked(recoloredEdge, insideEdgeMask);
+
+			return targetInside.recolorWithAnimationOf(planksTexture);
+		}
+
+		private void generateBeamTexture(TextureImage original, TextureImage target, int radius) {
+			int boxSize = ++radius * 2;
+			int offset = (16 - boxSize) / 2;
+
+			TextureCollager collager = TextureCollager.builder(16, 16, 16, 16)
+				.copyFrom(0, 0, 16, 1).to(offset, offset, boxSize, 1) // Top border
+				.copyFrom(15, 0, 1, 16).to(offset + boxSize - 1, offset, 1, boxSize) // Right border
+				.copyFrom(0, 15, 16, 1).to(offset, offset + boxSize - 1, boxSize, 1) // Bottom border
+				.copyFrom(0, 0, 1, 16).to(offset, offset, 1, boxSize) // Left border
+				.build();
+
+			collager.apply(original, target);
+
+			target.forEachPixel((pixel) -> {
+				if (!((pixel.frameX() >= offset && pixel.frameX() < offset + boxSize) &&
+					(pixel.frameY() >= offset && pixel.frameY() < offset + boxSize))) {
+					pixel.setValue(0);
+				}
+			});
+		}
+	}
+}
+//?}
